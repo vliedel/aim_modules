@@ -53,7 +53,13 @@ private:
 	Ft mSweepWidth;
 
 //	Ft getPerpendicularLine(Polygon& poly, int startSegment);
-	Ft getMaxDistance(Polygon& poly, Segment& startSegment, Ft norm, const Direction& perpendicularDir);
+	Ft getMaxDistance(const Polygon& poly, const Segment& startSegment,
+			const Ft& norm, const Direction& perpendicularDir);
+
+	Segment parallelSegment(const Polygon& poly, const Segment& startSegment, const Ft& offset,
+			const Ft& norm, const Direction& perpendicularDir);
+
+	void getSweepPoly(const Polygon& poly, const int sweepDirectionIndex, const Ft& sweepWidth, Polygon &sweepPoly);
 };
 }
 
