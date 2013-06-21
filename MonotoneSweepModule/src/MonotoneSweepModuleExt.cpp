@@ -1,6 +1,6 @@
 /**
  * @file MonotoneSweepModuleExt.cpp
- * @brief MonotoneSweepModule extension
+ * @brief Create a sweep path, given a sweep width and a monotone polygon w.r.t. given edge index.
  *
  * This file is created at Almende B.V. It is open-source software and part of the Common 
  * Hybrid Agent Platform (CHAP). A toolbox with a lot of open-source tools, ranging from 
@@ -12,12 +12,12 @@
  * bio-industry, for animal experimentation, or anything that violates the Universal
  * Declaration of Human Rights.
  *
- * Copyright © 2013 Your Name <your@email>
+ * Copyright © 2013 Bart van Vliet <bart@almende.org>
  *
- * @author	Your Name
- * @date	Current date
- * @company	Your Company
- * @project	Specific Software Project
+ * @author	Bart van Vliet
+ * @date	17-06-2013
+ * @company	Almende B.V.
+ * @project	Artificial Intelligence Framework
  */
 
 #include <MonotoneSweepModuleExt.h>
@@ -35,8 +35,6 @@ typedef boost::shared_ptr<Polygon>         PolygonPtr;
 typedef boost::shared_ptr<Ss>              SsPtr;
 typedef std::vector<PolygonPtr>            PolygonPtrVector;
 
-// Given a monotone polygon and an edge for sweep direction: create sweep path
-// Parameters: sweep width
 
 void MonotoneSweepModuleExt::Init(std::string &name) {
 	MonotoneSweepModule::Init(name);
@@ -125,7 +123,7 @@ Segment MonotoneSweepModuleExt::parallelSegment(const Polygon& poly, const Segme
 		if (const CGAL::Point_2<Kernel> *iPoint = CGAL::object_cast<CGAL::Point_2<Kernel> >(&result)) {
 			// Intersection with a point: *ipoint.
 			std::cout << "Intersection at point: " << *iPoint << std::endl;
-			// TODO: check if j < 2
+			assert(j < 2);
 			if (j>0) {
 				// If the intersection is exactly at a vertex of the polygon, it may be found twice
 				if (intersectionPoints[0] != *iPoint)

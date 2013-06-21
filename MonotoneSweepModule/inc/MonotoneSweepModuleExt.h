@@ -1,6 +1,6 @@
 /**
- * @file MonotoneSweepModuleExt.cpp
- * @brief MonotoneSweepModule extension
+ * @file MonotoneSweepModuleExt.h
+ * @brief Create a sweep path, given a sweep width and a monotone polygon w.r.t. given edge index.
  *
  * This file is created at Almende B.V. It is open-source software and part of the Common 
  * Hybrid Agent Platform (CHAP). A toolbox with a lot of open-source tools, ranging from 
@@ -12,12 +12,12 @@
  * bio-industry, for animal experimentation, or anything that violates the Universal
  * Declaration of Human Rights.
  *
- * Copyright © 2012 Anne van Rossum <anne@almende.com>
+ * Copyright © 2013 Bart van Vliet <bart@almende.org>
  *
- * @author  ...
- * @date    ...
+ * @author  Bart van Vliet
+ * @date    17-06-2013
  * @company Almende B.V.
- * @case    Artificial Intelligence Framework
+ * @project Artificial Intelligence Framework
  */
 
 #include <MonotoneSweepModule.h>
@@ -52,7 +52,6 @@ private:
 	Polygon mPoly;
 	Ft mSweepWidth;
 
-//	Ft getPerpendicularLine(Polygon& poly, int startSegment);
 	Ft getMaxDistance(const Polygon& poly, const Segment& startSegment,
 			const Ft& norm, const Direction& perpendicularDir);
 
