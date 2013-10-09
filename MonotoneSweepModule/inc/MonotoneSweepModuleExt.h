@@ -28,6 +28,9 @@
 #include <CGAL/Exact_predicates_inexact_constructions_kernel.h>
 #include <CGAL/Polygon_2.h>
 
+
+namespace rur {
+
 typedef CGAL::Exact_predicates_inexact_constructions_kernel Kernel;
 typedef Kernel::FT                        Ft;
 typedef Kernel::Point_2                   Point;
@@ -37,7 +40,6 @@ typedef Kernel::Line_2                    Line;
 typedef Kernel::Vector_2                  Vector;
 typedef CGAL::Polygon_2<Kernel>           Polygon;
 
-namespace rur {
 
 class MonotoneSweepModuleExt: public MonotoneSweepModule {
 public:

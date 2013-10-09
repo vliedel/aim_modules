@@ -39,9 +39,6 @@ interface MonotoneSweepModule {
   // A command to one of the wheels
   void LeftWheel(out long output);
 
-  // A command to one of the wheels
-  void RightWheels(out long_seq output);
-
 };
 
 };

@@ -47,6 +47,10 @@ public:
 
 	// As soon as Stop() returns "true", the MonotoneDecompositionModuleMain will stop the module
 	bool Stop();
+
+private:
+	//Ft altitude(const Polygon& poly, const Segment& startSegment, Point* point=NULL);
+	float altitude(const Polygon& poly, const Segment& startSegment);
 };
 
 }

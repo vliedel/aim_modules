@@ -16,8 +16,18 @@
 
 #include <string>
 #include <vector>
-#include <string>
-#include <vector>
+#include <deque>
+#include <pthread.h>
+// ros specific headers
+#include <ros/ros.h>
+#include <std_msgs/Float64MultiArray.h>
+#include <std_msgs/Int32MultiArray.h>
+#include <std_msgs/Int16.h>
+#include <std_msgs/Int16MultiArray.h>
+#include <std_msgs/Float32MultiArray.h>
+#include <std_msgs/Int32.h>
+#include <std_msgs/Float64.h>
+#include <std_msgs/Float32.h>
 
 namespace rur {
 
@@ -32,11 +42,34 @@ class MonotoneDecompositionModule {
 private:
   Param *cliParam;
   
-  long_seq dummyAudio;
-  int dummyInfrared;
+  ros::Subscriber portAudioSub;
+  std::deque<long_seq> portAudioBuf;
+  long_seq portAudioVal;
+  pthread_mutex_t portAudioMutex;
+  
+  ros::Subscriber portInfraredSub;
+  std::deque<int> portInfraredBuf;
+  int portInfraredVal;
+  pthread_mutex_t portInfraredMutex;
+  
+  ros::Publisher portLeftWheelPub;
+  
+  void portAudioCB(const std_msgs::Int32MultiArray::ConstPtr& msg);
+  void portInfraredCB(const std_msgs::Int32::ConstPtr& msg);
 protected:
   static const int channel_count = 3;
   const char* channel[3];
+  // Read from this function and assume it means something
+  // Remark: caller is responsible for evoking vector->clear()
+  long_seq *readAudio(bool blocking=false);
+  
+  // Read from this function and assume it means something
+  // Remark: check if result is not NULL
+  int *readInfrared(bool blocking=false);
+  
+  // Write to this function and assume it ends up at some receiving module
+  bool writeLeftWheel(const int output);
+  
 public:
   MonotoneDecompositionModule();
   
@@ -54,14 +87,6 @@ public:
   // Overwrite this function with your own code
   bool Stop() { return false; }
   
-  // Read from this function and assume it means something
-  // Remark: caller is responsible for evoking vector->clear()
-  long_seq *readAudio(bool blocking=false);
-  // Read from this function and assume it means something
-  // Remark: check if result is not NULL
-  int *readInfrared(bool blocking=false);
-  // Write to this function and assume it ends up at some receiving module
-  bool writeLeftWheel(const int output);
 };
 } // End of namespace
 

@@ -197,6 +197,7 @@ void MonotoneSweepModuleExt::getSweepPoly(const Polygon& poly, const int sweepDi
 
 //! Replace with your own functionality
 void MonotoneSweepModuleExt::Tick() {
+	writeLeftWheel(2);
 	sleep(1);
 }
 
