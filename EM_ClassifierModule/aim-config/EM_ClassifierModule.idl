@@ -1,0 +1,57 @@
+/**
+ * IDL description of the EM_ClassifierModule
+ *
+ * This file is automatically parsed by the rurbuilder backends for the omniidl compiler. The names of the functions
+ * will become port identifiers. The names of the function variables are not used. 
+ *
+ * The syntax of the IDL file also allows for "inout", but not all middlewares will accept this yet.
+ */
+
+#pragma author               Bart van Vliet
+#pragma copyright            Almende B.V.
+#pragma date                 okt 25, 2013
+#pragma license              LGPLv3
+
+// Recommended namespace "rur"
+module rur {
+
+// The command-line parameter (this struct is required)
+struct Param {
+  // multiple modules can be addressed in parallel, killed, etc. using "module_id"
+  string module_id;
+};
+
+// Typedef for array of integers
+typedef sequence<long> long_seq;
+typedef sequence<float> float_seq;
+typedef sequence<char> char_seq;
+
+// The public interface of EM_ClassifierModule
+interface EM_ClassifierModule {
+
+	// Input samples
+	// First number defines the number of samples
+	// Each sample starts with the class number (class numbers must range from 0 to N-1)
+	void Sample(in float_seq samples);
+	
+	// Send 1 to train the model
+	void Train(in long input);
+
+	// When the gmm is trained, the means, weights and covariance matrices are returned
+	void Model(out float_seq output);
+
+	// Sample that should be classified, first number is sample ID, result will be written back
+	void Classify(in float_seq input);
+
+	// Classified sample, first number is sample ID, following are probabilities of each class
+	void Classified(out float_seq output);
+	
+	// Get and set parameters, defined somewhere
+	// backend standard
+	void GetParameters(out float_seq output);
+	// backend standard
+	void SetParameters(in float_seq input);
+
+};
+
+};
