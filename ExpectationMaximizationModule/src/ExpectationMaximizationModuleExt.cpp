@@ -22,7 +22,7 @@
 
 #include <ExpectationMaximizationModuleExt.h>
 #include <Print.hpp>
-#include <unistd.h>
+#include <unistd.h> // To use usleep()
 #include <fstream>
 #include <stdint.h>
 #include <iomanip> // To use std::setw()
@@ -37,13 +37,15 @@ ExpectationMaximizationModuleExt::ExpectationMaximizationModuleExt():
 //	Model = new cv::ExpectationMaximization;
 	mModel = new cv::EM;
 	mSamples = new cv::Mat(0, 0, CV_32FC1);
+#ifdef CLUSTER_EVALUATE
 	mGroundTruth = new cv::Mat(0, 0, CV_16SC1);
+#endif
 }
 
 ExpectationMaximizationModuleExt::~ExpectationMaximizationModuleExt()
 {
 	delete mModel;
-//	delete Samples;
+//	delete mSamples;
 }
 
 //! Add your own functionality, don't forget to call parent init
@@ -232,7 +234,9 @@ void ExpectationMaximizationModuleExt::Tick() {
 		std::cout << "read train: " << *readInt << std::endl;
 		Train();
 		WriteModel();
+#ifdef CLUSTER_EVALUATE
 		Evaluate();
+#endif
 	}
 
 	readVec = readClassify(false);
@@ -253,7 +257,7 @@ void ExpectationMaximizationModuleExt::Tick() {
 		readVec->clear();
 	}
 
-	usleep(100);
+	usleep(1000);
 }
 
 //! Replace with your own functionality
@@ -265,38 +269,58 @@ void ExpectationMaximizationModuleExt::AddSample(std::vector<float> &sample) {
 //	std::cout << "add sample: ";
 //	dobots::print(sample.begin(), sample.end());
 //		std::cout << "Samples size=" << Samples->rows << "x" << Samples->cols << std::endl;
-	int r = mSamples->rows;
-	if (r == 0 || mSamples->cols == sample.size()-1) {
-		if (r == 0) {
+
+	int sampleRows = sample.front();
+	int sampleCols = (sample.size() - 1) / sampleRows;
+#ifdef CLUSTER_EVALUATE
+	sampleCols -= 1;
+#endif
+
+	int rows = mSamples->rows;
+
+	if (rows == 0 || mSamples->cols == sampleCols) {
+		if (rows == 0) {
 			delete mSamples;
+			mSamples = new cv::Mat(sampleRows, sampleCols, CV_32FC1);
+#ifdef CLUSTER_EVALUATE
 			delete mGroundTruth;
-			mSamples = new cv::Mat(1, sample.size()-1, CV_32FC1);
-			mGroundTruth = new cv::Mat(1, 1, CV_16SC1);
+			mGroundTruth = new cv::Mat(sampleRows, 1, CV_16SC1);
+#endif
 			mTrained = false;
 		}
 		else {
-			mSamples->resize(r+1);
-			mGroundTruth->resize(r+1);
+			mSamples->resize(rows+sampleRows);
+#ifdef CLUSTER_EVALUATE
+			mGroundTruth->resize(rows+sampleRows);
+#endif
 		}
 
-		float* sampleRow = mSamples->ptr<float>(r);
+		for (int r = rows; r < rows+sampleRows; ++r) {
+			float* sampleRow = mSamples->ptr<float>(r);
+			// Last number of the vector is the class
+			for (int c=0; c<sampleCols; ++c) {
+#ifdef CLUSTER_EVALUATE
+				sampleRow[c] = sample.at(1+r*(sampleCols+1)+c);
+#else
+				sampleRow[c] = sample.at(1+r*sampleCols+c);
+#endif
+			}
 
-		// Last number of the vector is the class
-		for (int j=0; j<sample.size()-1; ++j)
-			sampleRow[j] = sample.at(j);
-
-		int16_t* labelRow = mGroundTruth->ptr<int16_t>(r);
-		labelRow[0]=sample.back();
-
+#ifdef CLUSTER_EVALUATE
+			int16_t* labelRow = mGroundTruth->ptr<int16_t>(r);
+			labelRow[0]=sample.at(1+r*(sampleCols+1)+(sampleCols));
+#endif
 
 //				Samples->at<float>(r,j) = readVec->at(j);
 		//Samples->push_back(*readVec);
 //			std::cout << "Added sample" << std::endl;
+		}
 	}
 }
 
 void ExpectationMaximizationModuleExt::Train() {
 
+#ifdef CLUSTER_EVALUATE
 	// Find the number of unique labels
 	std::vector<int> labels;
 	bool found;
@@ -327,7 +351,7 @@ void ExpectationMaximizationModuleExt::Train() {
 	}
 //	std::cout << "mLabels: ";
 //	dobots::print(mLabels.begin(), mLabels.end());
-
+#endif
 
 
 	if (mSamples->rows > mModel->get<int>("nclusters"))
@@ -382,6 +406,7 @@ bool ExpectationMaximizationModuleExt::WriteModel()
 	return writeModel(write);
 }
 
+#ifdef CLUSTER_EVALUATE
 void ExpectationMaximizationModuleExt::Evaluate() {
 	if (!mTrained)
 		return;
@@ -443,6 +468,7 @@ void ExpectationMaximizationModuleExt::Evaluate() {
 	float quality = (a+b) / float(a+b+c+d);
 	std::cout << "Rand index is " << quality << std::endl;
 }
+#endif
 
 void ExpectationMaximizationModuleExt::Load(std::string &file) {
 	long startTime = get_cur_1ms();
@@ -452,15 +478,17 @@ void ExpectationMaximizationModuleExt::Load(std::string &file) {
 	int cols, rows;
 	fs >> cols >> rows;
 	std::cout << "rows=" << rows << " cols=" << cols << std::endl;
-	std::vector<float> sample(cols);
+	std::vector<float> samples(cols*rows+1);
 
+	float_seq::iterator it = samples.begin();
+	*it++ = rows;
 	for (int r=0; r < rows; ++r) {
-		for (float_seq::iterator it = sample.begin(); it != sample.end(); ++it) {
+		for (; it != samples.end(); ++it) {
 			fs >> *it;
 			//std::cout << *it << " ";
 		}
-		AddSample(sample);
 	}
+	AddSample(samples);
 	fs.close();
 	long readTime = get_cur_1ms();
 	std::cout << "Reading data took " << readTime - startTime << " ms" << std::endl;
@@ -473,9 +501,11 @@ void ExpectationMaximizationModuleExt::Load(std::string &file) {
 	long writeTime = get_cur_1ms();
 	std::cout << "Writing took " << writeTime - trainTime << " ms" << std::endl;
 
+#ifdef CLUSTER_EVALUATE
 	Evaluate();
 	long evalTime = get_cur_1ms();
 	std::cout << "Evaluating took " << evalTime - writeTime << " ms" << std::endl;
+#endif
 
 	std::cout << "All took: " << get_cur_1ms() - startTime << " ms" << std::endl;
 }

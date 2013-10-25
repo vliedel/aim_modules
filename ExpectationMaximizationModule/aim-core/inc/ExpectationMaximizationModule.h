@@ -31,12 +31,13 @@ namespace rur {
 
 struct Param {
   std::string module_id;
-  int parameter;
 };
 
 typedef std::vector<int> long_seq;
 
 typedef std::vector<float> float_seq;
+
+typedef std::vector<char> char_seq;
 
 class ExpectationMaximizationModule {
 private:
@@ -76,16 +77,18 @@ protected:
   bool writeClassified(const float_seq &output);
   
   // Write to this function and assume it ends up at some receiving module
-  bool writeGetParameters(const float_seq &output);
+  bool writeGetParameters(const char_seq &output);
   
   // Read from this function and assume it means something
   // Remark: caller is responsible for evoking vector->clear()
   float_seq *readSetParameters(bool blocking=false);
   
 public:
+  // Default constructor
   ExpectationMaximizationModule();
   
-  ~ExpectationMaximizationModule();
+  // Default destructor
+  virtual ~ExpectationMaximizationModule();
   
   // Extend this with your own code, first call ExpectationMaximizationModule::Init(name);
   void Init(std::string& name);
@@ -94,7 +97,7 @@ public:
   inline Param *GetParam() { return cliParam; }
   
   // Overwrite this function with your own code
-  virtual void Tick() {}
+  virtual void Tick() = 0;
   
   // Overwrite this function with your own code
   bool Stop() { return false; }

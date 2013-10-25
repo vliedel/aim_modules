@@ -23,38 +23,15 @@
 #include <ExpectationMaximizationModule.h>
 #include "opencv2/ml/ml.hpp"
 //#include "/opt/ros/hydro/include/opencv2/ml/ml.hpp"
+
+//#define CLUSTER_EVALUATE
+
 namespace rur {
 
 class ExpectationMaximizationModuleExt: public ExpectationMaximizationModule {
-private:
-	//std::vector<cv::ExpectationMaximization::CvEM*> Models;
-//		cv::ExpectationMaximization* Model;
-	cv::EM* mModel;
-	cv::Mat* mSamples;
-	cv::Mat* mGroundTruth;
-	std::vector<int> mLabels;
-//		cv::InputArray Samples;
-//		cv::EMParams Params;
-	bool mTrained;
-
-	// Write the gmm to the output port
-	bool WriteModel();
-
-	// Train the model
-	void Train();
-
-	// Evaluate how similar the model is to the ground truth (labels)
-	void Evaluate();
-
-	// Add a sample, last number in the vector is the label
-	void AddSample(std::vector<float> &sample);
-
-	// Set the number of clusters
-	void SetNumClusters(int num);
-
 public:
 	ExpectationMaximizationModuleExt();
-	~ExpectationMaximizationModuleExt();
+	virtual ~ExpectationMaximizationModuleExt();
 	void Init(std::string & name);
 
 	// The tick function will be called from the ExpectationMaximizationModuleMain file
@@ -67,6 +44,37 @@ public:
 	// First like of the file should be: nr_of_columns nr_of_rows
 	// Next nr_of_rows lines should contain nr_of_columns numbers separated by a space
 	void Load(std::string &file);
+
+
+private:
+	//std::vector<cv::ExpectationMaximization::CvEM*> Models;
+//		cv::ExpectationMaximization* Model;
+	cv::EM* mModel;
+	cv::Mat* mSamples;
+#ifdef CLUSTER_EVALUATE
+	cv::Mat* mGroundTruth;
+	std::vector<int> mLabels;
+#endif
+//		cv::InputArray Samples;
+//		cv::EMParams Params;
+	bool mTrained;
+
+	// Write the gmm to the output port
+	bool WriteModel();
+
+	// Train the model
+	void Train();
+
+#ifdef CLUSTER_EVALUATE
+	// Evaluate how similar the model is to the ground truth (labels)
+	void Evaluate();
+#endif
+
+	// Add a sample, last number in the vector is the label
+	void AddSample(std::vector<float> &sample);
+
+	// Set the number of clusters
+	void SetNumClusters(int num);
 };
 
 }

@@ -130,25 +130,7 @@ bool ExpectationMaximizationModule::writeClassified(const float_seq &output) {
   return true;
 }
 
-bool ExpectationMaximizationModule::writeGetParameters(const float_seq &output) {
+bool ExpectationMaximizationModule::writeGetParameters(const char_seq &output) {
   Bottle &outputPrepare = portGetParameters->prepare();
   outputPrepare.clear();
   for (int i = 0; i < output.size(); ++i) {
-    outputPrepare.addDouble(output[i]);
-  }
-  bool forceStrict = true; // wait till previous sends are complete
-  portGetParameters->write(forceStrict);
-  return true;
-}
-
-float_seq* ExpectationMaximizationModule::readSetParameters(bool blocking) {
-  Bottle *b = portSetParameters->read(blocking);
-  if (b != NULL) {
-    for (int i = 0; i < b->size(); ++i) {
-      portSetParametersBuf.push_back(b->get(i).asDouble());
-    }
-  }
-  return &portSetParametersBuf;
-}
-
-} // namespace

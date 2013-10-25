@@ -9,7 +9,8 @@ include aim-core/middleware_default.aim
 -include aim-devel/middleware_local.aim
 
 middleware_build=$(build_folder)/$(middleware)
-CMAKE_FLAGS=-DCMAKE_BUILD_TYPE=Debug
+#CMAKE_FLAGS=-DCMAKE_BUILD_TYPE=Debug
+CMAKE_FLAGS=-DCMAKE_BUILD_TYPE=Release
 
 all: 
 	@mkdir -p $(middleware_build)
