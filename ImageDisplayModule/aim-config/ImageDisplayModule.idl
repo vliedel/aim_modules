@@ -1,0 +1,35 @@
+/**
+ * IDL description of the ImageDisplayModule
+ *
+ * This file is automatically parsed by the rurbuilder backends for the omniidl compiler. The names of the functions
+ * will become port identifiers. The names of the function variables are not used. 
+ *
+ * The syntax of the IDL file also allows for "inout", but not all middlewares will accept this yet.
+ */
+
+#pragma author               Homer J. Simpson
+#pragma copyright            Springfield Power Company
+#pragma date                 nov 14, 2013
+#pragma license              State
+
+// Recommended namespace "rur"
+module rur {
+
+// The command-line parameter (this struct is required)
+struct Param {
+  // multiple modules can be addressed in parallel, killed, etc. using "module_id"
+  string module_id;
+};
+
+// Typedef for array of integers
+typedef sequence<long> long_seq;
+
+// The public interface of ImageDisplayModule
+interface ImageDisplayModule {
+
+  // Input image (bitmap)
+  void Image(in long_seq bpm);
+
+};
+
+};
