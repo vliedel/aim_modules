@@ -12,13 +12,13 @@
 			"name":"jpg",
 			"dir":"in",
 			"type":"std::string",
-			"middleware":"standard"
+			"middleware":"default"
 		},
 		{
 			"name":"bmp",
 			"dir":"out",
 			"type":"intarray",
-			"middleware":"standard"
+			"middleware":"default"
 		}
 	]
 }

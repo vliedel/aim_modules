@@ -36,6 +36,6 @@ Follow the instructions on [AIM website](http://dobots.github.com/aim-bzr/).
 ## Copyrights
 The copyrights of this module (2013) belong to:
 
-- Author: Homer J. Simpson
-- Springfield Power Company
+- Author: Bart van Vliet
+- DoBots
 

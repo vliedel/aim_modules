@@ -12,13 +12,13 @@
 			"name":"inimage",
 			"dir":"in",
 			"type":"intarray",
-			"middleware":"standard"
+			"middleware":"default"
 		},
 		{
 			"name":"outimage",
 			"dir":"out",
 			"type":"intarray",
-			"middleware":"standard"
+			"middleware":"default"
 		}
 	]
 }

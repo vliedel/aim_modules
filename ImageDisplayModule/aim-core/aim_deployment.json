@@ -1,7 +1,7 @@
 {
 	"name":"ImageDisplayModule",
 	"type":"background",
-	"description":"Performs amazing functions",
+	"description":"Displays an image",
 	"enable":"true",
 	"android": {
 		"package":"com.dobots.imagedisplaymodule",
@@ -12,7 +12,7 @@
 			"name":"image",
 			"dir":"in",
 			"type":"intarray",
-			"middleware":"standard"
+			"middleware":"default"
 		}
 	]
 }
