@@ -10,3 +10,9 @@
 #######################################################################################################################
 
 # Your own changes to the CMake build system such as for example FindEigen to support matrix manipulations
+
+#FIND_PACKAGE(CGAL REQUIRED)
+FIND_PACKAGE(CGAL QUIET COMPONENTS Core )
+MESSAGE(STATUS ${CGAL_USE_FILE})
+INCLUDE(${CGAL_USE_FILE})
+SET(LIBS ${LIBS} ${CGAL_LIBRARIES})

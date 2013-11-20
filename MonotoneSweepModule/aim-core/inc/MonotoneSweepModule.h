@@ -9,10 +9,10 @@
  * bio-industry, for animal experimentation, or anything that violates the Universal
  * Declaration of Human Rights.
  *
- * @author You
- * @copyright Your Company
- * @date 21 Jun. 2013
- * @license LGPLv3
+ * @author               Bart van Vliet
+ * @copyright            DoBots
+ * @date                 nov 20, 2013
+ * @license              GNU General Lesser Public Licence
  */
 
 #ifndef MONOTONESWEEPMODULE_H_
@@ -58,13 +58,11 @@ private:
   
   ros::Publisher portLeftWheelPub;
   
-  ros::Publisher portRightWheelsPub;
-  
   void portAudioCB(const std_msgs::Int32MultiArray::ConstPtr& msg);
   void portInfraredCB(const std_msgs::Int32::ConstPtr& msg);
 protected:
-  static const int channel_count = 4;
-  const char* channel[4];
+  static const int channel_count = 3;
+  const char* channel[3];
   // Read from this function and assume it means something
   // Remark: caller is responsible for evoking vector->clear()
   long_seq *readAudio(bool blocking=false);
@@ -76,13 +74,12 @@ protected:
   // Write to this function and assume it ends up at some receiving module
   bool writeLeftWheel(const int output);
   
-  // Write to this function and assume it ends up at some receiving module
-  bool writeRightWheels(const long_seq &output);
-  
 public:
+  // Default constructor
   MonotoneSweepModule();
   
-  ~MonotoneSweepModule();
+  // Default destructor
+  virtual ~MonotoneSweepModule();
   
   // Extend this with your own code, first call MonotoneSweepModule::Init(name);
   void Init(std::string& name);
@@ -91,7 +88,7 @@ public:
   inline Param *GetParam() { return cliParam; }
   
   // Overwrite this function with your own code
-  virtual void Tick() {}
+  virtual void Tick() = 0;
   
   // Overwrite this function with your own code
   bool Stop() { return false; }

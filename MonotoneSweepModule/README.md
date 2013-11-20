@@ -36,7 +36,6 @@ Follow the instructions on [AIM website](http://dobots.github.com/aim-bzr/).
 ## Copyrights
 The copyrights of this module (2013) belong to:
 
-- Author: Your Name
-- Your company or institute
-- Your address
+- Author: Bart van Vliet
+- DoBots
 

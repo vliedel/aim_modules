@@ -9,10 +9,10 @@
  * bio-industry, for animal experimentation, or anything that violates the Universal
  * Declaration of Human Rights.
  *
- * @author You
- * @copyright Your Company
- * @date 21 Jun. 2013
- * @license LGPLv3
+ * @author               Bart van Vliet
+ * @copyright            DoBots
+ * @date                 nov 20, 2013
+ * @license              GNU General Lesser Public Licence
  */
 
 #include "MonotoneSweepModule.h"
@@ -26,7 +26,7 @@ MonotoneSweepModule::MonotoneSweepModule():
   portInfraredVal(0),
   cliParam(0)
 {
-  const char* const channel[4] = {"readAudio", "readInfrared", "writeLeftWheel", "writeRightWheels"};
+  const char* const channel[3] = {"readAudio", "readInfrared", "writeLeftWheel"};
   cliParam = new Param();
   pthread_mutex_init(&portAudioMutex, NULL);
   pthread_mutex_init(&portInfraredMutex, NULL);
@@ -48,7 +48,6 @@ void MonotoneSweepModule::Init(std::string & name) {
   portAudioSub = rosHandle.subscribe< std_msgs::Int32MultiArray>("portaudio", 1000, boost::bind(&MonotoneSweepModule::portAudioCB, this, _1));
   portInfraredSub = rosHandle.subscribe< std_msgs::Int32>("portinfrared", 1000, boost::bind(&MonotoneSweepModule::portInfraredCB, this, _1));
   portLeftWheelPub = rosPrivHandle.advertise< std_msgs::Int32>("portleftwheel", 1000);
-  portRightWheelsPub = rosPrivHandle.advertise< std_msgs::Int32MultiArray>("portrightwheels", 1000);
 }
 
 long_seq* MonotoneSweepModule::readAudio(bool blocking) {
@@ -96,16 +95,6 @@ bool MonotoneSweepModule::writeLeftWheel(const int output) {
   std_msgs::Int32 msg;
   msg.data = output;
   portLeftWheelPub.publish(msg);
-  return true;
-}
-
-bool MonotoneSweepModule::writeRightWheels(const long_seq &output) {
-  std_msgs::Int32MultiArray msg;
-  long_seq::const_iterator it;
-  for (it=output.begin(); it!=output.end(); ++it) {
-    msg.data.push_back(*it);
-  }
-  portRightWheelsPub.publish(msg);
   return true;
 }
 
