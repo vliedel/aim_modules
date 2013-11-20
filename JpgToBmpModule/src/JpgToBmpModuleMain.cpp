@@ -2,15 +2,15 @@
  * @file JpgToBmpModuleMain.cpp
  * @brief Entry function for JpgToBmpModule
  *
- * This file is created at "Springfield Power Company". It is open-source software and part of "Project Bootstrap". 
- * This software is published under the State license (TR8OR).
+ * This file is created at "DoBots". It is open-source software and part of "AI". 
+ * This software is published under the GNU General Lesser Public Licence license (GPLv3).
  *
- * Copyright © 2013 Homer J. Simpson <chunkylover53@aol.com>
+ * Copyright © 2013 Bart van Vliet <bart@almende.org>
  *
- * @author                   Homer J. Simpson
- * @date                     nov 12, 2013
- * @organisation             Springfield Power Company
- * @project                  Project Bootstrap
+ * @author                   Bart van Vliet
+ * @date                     nov 20, 2013
+ * @organisation             DoBots
+ * @project                  AI
  */
  
 #include <JpgToBmpModuleExt.h>
