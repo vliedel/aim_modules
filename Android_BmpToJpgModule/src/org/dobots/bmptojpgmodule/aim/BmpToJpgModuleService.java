@@ -29,7 +29,6 @@ public class BmpToJpgModuleService extends Service {
 	boolean mMsgServiceIsBound;
 
 	Messenger mPortBmpInMessenger = new Messenger(new PortBmpMessengerHandler());
-	//  private List<vector_int> mPortBmpInBuffer = new ArrayList<vector_int>(0);
 	Messenger mPortJpgOutMessenger = null;
 
 	class PortBmpMessengerHandler extends Handler {
@@ -53,8 +52,7 @@ public class BmpToJpgModuleService extends Service {
 //					}
 //				}
 				
-				// Correct?
-				Log.i(TAG,  "height=" + height + " width=" + width + " channels=" + channels);
+				Log.d(TAG,  "height=" + height + " width=" + width + " channels=" + channels);
 				for (int i=0, j=0; i < height*width*channels; i+=3, j++) {
 					int r = readVal[4+i+0]; int g = readVal[4+i+1]; int b = readVal[4+i+2];
 //					Log.i(TAG, "i=" + i + " r=" + r + " g=" + g + " b=" + b);
@@ -165,7 +163,7 @@ public class BmpToJpgModuleService extends Service {
 	public void onDestroy() {
 		super.onDestroy();
 		unbindFromMsgService();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 	}
 
 	@Override

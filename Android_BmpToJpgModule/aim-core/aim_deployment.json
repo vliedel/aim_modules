@@ -1,0 +1,24 @@
+{
+	"name":"BmpToJpgModule",
+	"type":"background",
+	"description":"Transforms a bitmap to a jpeg as base64 string",
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.bmptojpgmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.bmptojpgmodule"
+	},
+	"ports": [
+		{
+			"name":"Bmp",
+			"dir":"in",
+			"type":"intarray",
+			"middleware":"android"
+		},
+		{
+			"name":"Jpg",
+			"dir":"out",
+			"type":"string",
+			"middleware":"android"
+		}
+	]
+}

@@ -1,8 +1,5 @@
 package org.dobots.pictureselectmodule;
 
-//import org.dobots.dodedodo.XMPPService;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,7 +8,6 @@ import org.dobots.pictureselectmodule.R;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -25,18 +21,13 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.CompressFormat;
 import android.graphics.BitmapFactory;
 import android.support.v4.view.GestureDetectorCompat;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
-import android.view.MotionEvent.PointerCoords;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -72,7 +63,7 @@ public class MainActivity extends Activity {
 	@Override
 	public void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(TAG,"onCreate");
+		Log.d(TAG,"onCreate");
 		setContentView(R.layout.activity_main);
 		
 		mCallbackText = (TextView) findViewById(R.id.messageOutput);
@@ -93,20 +84,6 @@ public class MainActivity extends Activity {
 //		    }
 //		});
 		
-//		mButtonSend.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//		        sendMessage();
-//		    }
-//		});
-		
-//		mButtonLogin.setOnClickListener(new View.OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-////		        login();
-//		    }
-//		});
-		
 		mButtonImage.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -116,40 +93,37 @@ public class MainActivity extends Activity {
 		
 		mGestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
 		
-//		Intent intent = new Intent(this, LoginActivity.class);
-//		startActivityForResult(intent, LOGIN_REPLY);
-		
 		doBindService();
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.i(TAG,"onStart");
+		Log.d(TAG,"onStart");
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.i(TAG,"onResume");
+		Log.d(TAG,"onResume");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.i(TAG,"onPause");
+		Log.d(TAG,"onPause");
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.i(TAG,"onStop");
+		Log.d(TAG,"onStop");
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		Log.i(TAG, "onDestroy " + mMsgServiceIsBound);
+		Log.d(TAG, "onDestroy " + mMsgServiceIsBound);
 		doUnbindService();
 	}
 	
@@ -217,12 +191,8 @@ public class MainActivity extends Activity {
 		//bindService(new Intent(this, XMPPService.class), mConnection, Context.BIND_AUTO_CREATE);
 		
 		Intent intent = new Intent();
-//		intent.setComponent(new ComponentName("org.dobots.dodedodo", "org.dobots.dodedodo.XMPPService"));
 		intent.setClassName("org.dobots.dodedodo", "org.dobots.dodedodo.MsgService");
-//		intent.setClassName("org.dobots.dodedodo", "XMPPService");
 		bindService(intent, mMsgServiceConnection, Context.BIND_AUTO_CREATE);
-//		bindService(new Intent(this, XMPPService.class), mConnection, Context.BIND_AUTO_CREATE);
-//		Log.i(TAG, "binding to: " + XMPPService.class.toString());
 		mMsgServiceIsBound = true;
 		mCallbackText.setText("Binding to service.");
 	}
@@ -271,20 +241,6 @@ public class MainActivity extends Activity {
 		}
 	}
 
-	public void sendMessage() {
-		// Do something in response to button click
-//		String text = mEditText.getText().toString();
-//		if (TextUtils.isEmpty(text))
-//			return;
-//		Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
-//		Bundle bundle = new Bundle();
-//		bundle.putInt("datatype", AimProtocol.DATATYPE_STRING);
-//		bundle.putString("data", text);
-//		msg.setData(bundle);
-//		msgSend(mPortOutMessenger, msg);
-//		mEditText.getText().clear();
-	}
-
 	
 	////////////////////////////////////////////////////////////
 	//                     Select image                       //
@@ -325,23 +281,7 @@ public class MainActivity extends Activity {
 			File file = new File(filePath);
 			Bitmap scaledImage = decodeFile(file, 100*100); //  150*200 is possible for the messenger, but xmpp can't handle it
 			
-//			Bitmap selectedImageBitmap = BitmapFactory.decodeFile(filePath);
-//			mImageView.setImageBitmap(selectedImageBitmap);
-//			
-//			Bitmap scaledImage = Bitmap.createScaledBitmap(selectedImageBitmap, 64, 64, true);
 			mImageView.setImageBitmap(scaledImage);
-
-			
-//			ByteArrayOutputStream os = new ByteArrayOutputStream();
-//			scaledImage.compress(CompressFormat.JPEG, 100, os);
-//			byte[] bytes = os.toByteArray();
-//
-//			int[] msgData = new int[bytes.length + 2];
-//			msgData[0] = 1; // Ndims
-//			msgData[1] = bytes.length;
-//			for (int i=0; i<bytes.length; ++i) {
-//				msgData[i+2] = bytes[i] & 0xFF;
-//			}
 
 			int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];
 			scaledImage.getPixels(pixels, 0, scaledImage.getWidth(), 0, 0, scaledImage.getWidth(), scaledImage.getHeight());
@@ -356,7 +296,7 @@ public class MainActivity extends Activity {
 			msgData[2] = width; // size dim 2
 			msgData[3] = 3; // size dim 3 (rgb)
 			
-			Log.i(TAG, "height=" + height + "width=" + width);
+			Log.d(TAG, "height=" + height + "width=" + width);
 //			if (scaledImage.getConfig().equals(Bitmap.Config.RGB_565)) {
 //				for (int i=0, j=4; i<pixels.length; ++i, j+=3) {
 //					msgData[j] = ((pixels[i] >> 11) & 0x1F)*8; // 5 bits to 8 bits
@@ -372,11 +312,7 @@ public class MainActivity extends Activity {
 				msgData[j] = (pixels[i] >> 16) & 0xFF;
 				msgData[j+1] = (pixels[i] >> 8) & 0xFF;
 				msgData[j+2] = pixels[i] & 0xFF;
-				//Log.i(TAG, "j=" + j + " r=" + msgData[j] + " g=" + msgData[j+1] + " b=" + msgData[j+2]);
-				//Log.i(TAG, msgData[j] + " " + msgData[j+1] + " " + msgData[j+2]);
 			}
-			
-			
 			
 			Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
 			Bundle bundle = new Bundle();
@@ -384,11 +320,8 @@ public class MainActivity extends Activity {
 			bundle.putInt("datatype", AimProtocol.DATATYPE_INT_ARRAY);
 			msg.setData(bundle);
 			msgSend(mPortImageMessenger, msg);
-			
-			
-			//selectedImageBitmap.getPixels(pixels, offset, stride, x, y, width, height)
 
-			Log.i(TAG, "image: " + filePath + " rotation:" + rotation);
+			Log.d(TAG, "image: " + filePath + " rotation:" + rotation);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -436,7 +369,7 @@ public class MainActivity extends Activity {
 //			PointerCoords coords = new PointerCoords();
 //			event.getPointerCoords(0, coords);
 //			Log.i(TAG, coords.x + " " + coords.y);
-			Log.i(TAG, event.getX() + " " + event.getY());
+			Log.d(TAG, event.getX() + " " + event.getY());
 //			Log.i(TAG, event.toString());
 			
 			Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
@@ -454,15 +387,4 @@ public class MainActivity extends Activity {
 			return true;
 		}
 	}
-
-//	public void stopApp(View view) {
-//		// Do something in response to button click
-//		doUnbindService();
-//		Log.i(TAG, "stopping service..");
-//		stopService(new Intent(this, XMPPService.class));
-//	}
-	
-	
-
-
 }

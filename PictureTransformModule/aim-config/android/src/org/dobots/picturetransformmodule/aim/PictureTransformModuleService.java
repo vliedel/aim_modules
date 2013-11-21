@@ -41,7 +41,7 @@ public class PictureTransformModuleService extends Service {
           str.append(readVal[i]);
           str.append(" ");
         }
-        Log.i(TAG, str.toString());
+        Log.d(TAG, str.toString());
         synchronized(mPortInImageInBuffer) {
           mPortInImageInBuffer.add(bufVal);
         }
@@ -118,7 +118,7 @@ public class PictureTransformModuleService extends Service {
 		super.onDestroy();
 		mAIMRun.cancel(true);
 		unbindFromMsgService();
-		Log.i(TAG, "onDestroy");
+		Log.d(TAG, "onDestroy");
 	}
 	
 	@Override
@@ -234,7 +234,7 @@ public class PictureTransformModuleService extends Service {
             str.append(outputOutImage.getVal().get(i));
             str.append(" ");
           }
-          Log.i(TAG, str.toString());
+          Log.d(TAG, str.toString());
           Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
           Bundle bundle = new Bundle();
           bundle.putInt("datatype", AimProtocol.DATATYPE_INT_ARRAY);

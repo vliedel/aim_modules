@@ -1,0 +1,24 @@
+{
+	"name":"PictureSelectModule",
+	"type":"UI",
+	"description":"Select a picture on your phone",
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.pictureselectmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.pictureselectmodule"
+	},
+	"ports": [
+		{
+			"name":"position",
+			"dir":"out",
+			"type":"floatarray",
+			"middleware":"android"
+		},
+		{
+			"name":"image",
+			"dir":"out",
+			"type":"intarray",
+			"middleware":"android"
+		}
+	]
+}
