@@ -24,6 +24,7 @@ import android.util.Log;
 public class BmpToJpgModuleService extends Service {
 	private static final String TAG = "BmpToJpgModuleService";
 	private static final String MODULE_NAME = "BmpToJpgModule";
+	int mId = -1;
 	Messenger mToMsgService = null;
 	final Messenger mFromMsgService = new Messenger(new IncomingMsgHandler());
 	boolean mMsgServiceIsBound;
@@ -110,7 +111,7 @@ public class BmpToJpgModuleService extends Service {
 			Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
 			Bundle bundle = new Bundle();
 			bundle.putString("module", MODULE_NAME);
-			bundle.putInt("id", 0); // TODO: adjustable id, multiple modules
+			bundle.putInt("id", mId);
 			msg.setData(bundle);
 			msgSend(msg);
 			{
@@ -118,7 +119,7 @@ public class BmpToJpgModuleService extends Service {
 				msgPort.replyTo = mPortBmpInMessenger;
 				Bundle bundlePort = new Bundle();
 				bundlePort.putString("module", MODULE_NAME);
-				bundlePort.putInt("id", 0); // TODO: adjustable id, multiple modules
+				bundlePort.putInt("id", mId);
 				bundlePort.putString("port", "Bmp");
 				msgPort.setData(bundlePort);
 				msgSend(mToMsgService, msgPort);
@@ -153,11 +154,16 @@ public class BmpToJpgModuleService extends Service {
 		}
 	}
 
+	public void start() {
+		if (mId < 0)
+			return;
+		if (!mMsgServiceIsBound)
+			bindToMsgService();
+	}
 
 	public void onCreate() {
-		bindToMsgService();
-
-		Integer id = 0; // TODO: adjustable id, multiple modules
+		// mId is not set yet on create
+		//bindToMsgService();
 	}
 
 	public void onDestroy() {
@@ -183,6 +189,9 @@ public class BmpToJpgModuleService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 		//		handleStartCommand(intent);
+		mId = intent.getIntExtra("id", -1);
+		Log.d(TAG, "onStart " + mId);
+		start();
 	}
 
 	// Called each time a client uses startService()
@@ -190,6 +199,9 @@ public class BmpToJpgModuleService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		//	    handleStartCommand(intent);
 		// We want this service to continue running until it is explicitly stopped, so return sticky.
+		mId = intent.getIntExtra("id", -1);
+		Log.d(TAG, "onStartCommand " + mId);
+		start();
 		return START_STICKY;
 	}
 
@@ -210,7 +222,7 @@ public class BmpToJpgModuleService extends Service {
 				Message msg = Message.obtain(null, AimProtocol.MSG_UNREGISTER);
 				Bundle bundle = new Bundle();
 				bundle.putString("module", MODULE_NAME);
-				bundle.putInt("id", 0); // TODO: adjustable id, multiple modules
+				bundle.putInt("id", mId);
 				msg.setData(bundle);
 				msgSend(msg);
 			}

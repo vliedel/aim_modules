@@ -20,6 +20,7 @@ import android.util.Log;
 public class PictureTransformModuleService extends Service {
   private static final String TAG = "PictureTransformModuleService";
   private static final String MODULE_NAME = "PictureTransformModule";
+  private int mId = -1;
   Messenger mToMsgService = null;
   final Messenger mFromMsgService = new Messenger(new IncomingMsgHandler());
   boolean mMsgServiceIsBound;
@@ -60,7 +61,7 @@ public class PictureTransformModuleService extends Service {
       Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
       Bundle bundle = new Bundle();
       bundle.putString("module", MODULE_NAME);
-      bundle.putInt("id", 0); // TODO: adjustable id, multiple modules
+      bundle.putInt("id", mId);
       msg.setData(bundle);
       msgSend(msg);
       {
@@ -68,7 +69,7 @@ public class PictureTransformModuleService extends Service {
         msgPort.replyTo = mPortInImageInMessenger;
         Bundle bundlePort = new Bundle();
         bundlePort.putString("module", MODULE_NAME);
-        bundlePort.putInt("id", 0); // TODO: adjustable id, multiple modules
+        bundlePort.putInt("id", mId);
         bundlePort.putString("port", "InImage");
         msgPort.setData(bundlePort);
         msgSend(mToMsgService, msgPort);
@@ -106,12 +107,19 @@ public class PictureTransformModuleService extends Service {
 
 	AIMRun mAIMRun = null;
 	
+	public void start() {
+		if (mId < 0)
+			return;
+		if (!mMsgServiceIsBound)
+			bindToMsgService();
+		if (mAIMRun == null) {
+			mAIMRun = new AIMRun();
+			mAIMRun.execute(mId);
+		}
+	}
+	
 	public void onCreate() {
-		bindToMsgService();
-		
-		Integer id = 0; // TODO: adjustable id, multiple modules
-		mAIMRun = new AIMRun();
-		mAIMRun.execute(id);
+		// On create mId is unknown!
 	}
 	
 	public void onDestroy() {
@@ -138,14 +146,20 @@ public class PictureTransformModuleService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 //		handleStartCommand(intent);
+		mId = intent.getIntExtra("id", 0);
+		Log.d(TAG, "onStart " + mId);
+		start();
 	}
 	
 	// Called each time a client uses startService()
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-//	    handleStartCommand(intent);
-	    // We want this service to continue running until it is explicitly stopped, so return sticky.
-	    return START_STICKY;
+//		handleStartCommand(intent);
+		// We want this service to continue running until it is explicitly stopped, so return sticky.
+		mId = intent.getIntExtra("id", 0);
+		Log.d(TAG, "onStartCommand " + mId);
+		start();
+		return START_STICKY;
 	}
 	
 	void bindToMsgService() {
@@ -165,7 +179,7 @@ public class PictureTransformModuleService extends Service {
 				Message msg = Message.obtain(null, AimProtocol.MSG_UNREGISTER);
 				Bundle bundle = new Bundle();
 				bundle.putString("module", MODULE_NAME);
-				bundle.putInt("id", 0); // TODO: adjustable id, multiple modules
+				bundle.putInt("id", mId);
 				msg.setData(bundle);
 				msgSend(msg);
 			}
@@ -208,9 +222,9 @@ public class PictureTransformModuleService extends Service {
   // AsyncTask<Params, Progress, Result>
   private class AIMRun extends AsyncTask<Integer, Void, Boolean> {
     protected Boolean doInBackground(Integer... id) {
-      Log.i(TAG, "Starting AIMRun");
+      Log.i(TAG, "Starting AIMRun " + id);
       PictureTransformModuleExt aim = new PictureTransformModuleExt();
-      //aim.Init("0");
+      //aim.Init("0"); // TODO: pass on the id
       AndroidOutImageRead_t outputOutImage;
       
       while (true) {

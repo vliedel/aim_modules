@@ -98,6 +98,7 @@ protected void onCreate(Bundle savedInstanceState) {
 	private void startService() {
 		Intent intent = new Intent();
 		intent.setClassName("org.dobots.picturetransformmodule", "org.dobots.picturetransformmodule.aim.PictureTransformModuleService");
+		intent.putExtra("id", 0); // Default id
 		ComponentName name = startService(intent);
 		Log.i(TAG, "Starting: " + intent.toString());
 	}
