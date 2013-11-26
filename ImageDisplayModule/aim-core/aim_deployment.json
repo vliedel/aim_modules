@@ -1,7 +1,10 @@
 {
 	"name":"ImageDisplayModule",
 	"type":"background",
+	"category":"Image processing",
 	"description":"Displays an image",
+	"supported_middleware":[ "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "raspberrypi", "ubuntu" ],
 	"enable":"true",
 	"android": {
 		"package":"com.dobots.imagedisplaymodule",
