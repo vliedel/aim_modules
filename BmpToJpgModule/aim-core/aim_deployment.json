@@ -9,13 +9,13 @@
 	},
 	"ports": [
 		{
-			"name":"Bmp",
+			"name":"bmp",
 			"dir":"in",
 			"type":"intarray",
 			"middleware":"android"
 		},
 		{
-			"name":"Jpg",
+			"name":"jpg",
 			"dir":"out",
 			"type":"string",
 			"middleware":"android"

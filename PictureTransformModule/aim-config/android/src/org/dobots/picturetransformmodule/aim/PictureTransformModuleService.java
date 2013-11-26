@@ -36,6 +36,8 @@ public class PictureTransformModuleService extends Service {
       case AimProtocol.MSG_PORT_DATA:
         int[] readVal = msg.getData().getIntArray("data");
         vector_int bufVal = new vector_int(readVal.length);
+        
+        // Debug
         StringBuffer str = new StringBuffer("Read msg: ");
         for (int i=0; i<readVal.length; i++) {
           bufVal.set(i, readVal[i]);
@@ -43,6 +45,7 @@ public class PictureTransformModuleService extends Service {
           str.append(" ");
         }
         Log.d(TAG, str.toString());
+        
         synchronized(mPortInImageInBuffer) {
           mPortInImageInBuffer.add(bufVal);
         }
@@ -70,7 +73,7 @@ public class PictureTransformModuleService extends Service {
         Bundle bundlePort = new Bundle();
         bundlePort.putString("module", MODULE_NAME);
         bundlePort.putInt("id", mId);
-        bundlePort.putString("port", "InImage");
+        bundlePort.putString("port", "inimage");
         msgPort.setData(bundlePort);
         msgSend(mToMsgService, msgPort);
       }
@@ -91,7 +94,7 @@ public class PictureTransformModuleService extends Service {
     public void handleMessage(Message msg) {
       switch (msg.what) {
       case AimProtocol.MSG_SET_MESSENGER:
-        if (msg.getData().getString("port").equals("OutImage"))
+        if (msg.getData().getString("port").equals("outimage"))
           mPortOutImageOutMessenger = msg.replyTo;
         break;
       case AimProtocol.MSG_STOP:
@@ -213,7 +216,7 @@ public class PictureTransformModuleService extends Service {
 			//msg.replyTo = mFromMsgService;
 			messenger.send(msg);
 		} catch (RemoteException e) {
-			Log.i(TAG, "failed to send msg to service. " + e);
+			Log.i(TAG, "failed to send msg. " + e);
 			// There is nothing special we need to do if the service has crashed.
 		}
 	}
@@ -238,6 +241,8 @@ public class PictureTransformModuleService extends Service {
         aim.Tick();
         outputOutImage = aim.androidReadOutImage();
         if (outputOutImage.getSuccess()) {
+          
+          // Debug
           StringBuffer str = new StringBuffer();
           str.append("outputOutImage=");
           str.append(outputOutImage.getVal().toString());
@@ -249,6 +254,7 @@ public class PictureTransformModuleService extends Service {
             str.append(" ");
           }
           Log.d(TAG, str.toString());
+          
           Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
           Bundle bundle = new Bundle();
           bundle.putInt("datatype", AimProtocol.DATATYPE_INT_ARRAY);

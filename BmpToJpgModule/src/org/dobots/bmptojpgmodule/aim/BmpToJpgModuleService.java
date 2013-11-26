@@ -1,8 +1,6 @@
 package org.dobots.bmptojpgmodule.aim;
 
 import java.io.ByteArrayOutputStream;
-import java.util.ArrayList;
-import java.util.List;
 
 import android.app.Service;
 import android.content.ComponentName;
@@ -11,7 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.CompressFormat;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -120,7 +118,7 @@ public class BmpToJpgModuleService extends Service {
 				Bundle bundlePort = new Bundle();
 				bundlePort.putString("module", MODULE_NAME);
 				bundlePort.putInt("id", mId);
-				bundlePort.putString("port", "Bmp");
+				bundlePort.putString("port", "bmp");
 				msgPort.setData(bundlePort);
 				msgSend(mToMsgService, msgPort);
 			}
@@ -141,7 +139,7 @@ public class BmpToJpgModuleService extends Service {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case AimProtocol.MSG_SET_MESSENGER:
-				if (msg.getData().getString("port").equals("Jpg"))
+				if (msg.getData().getString("port").equals("jpg"))
 					mPortJpgOutMessenger = msg.replyTo;
 				break;
 			case AimProtocol.MSG_STOP:

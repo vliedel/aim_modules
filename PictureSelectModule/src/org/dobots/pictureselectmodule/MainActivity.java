@@ -325,7 +325,7 @@ public class MainActivity extends Activity {
 			msg.setData(bundle);
 			msgSend(mPortImageMessenger, msg);
 
-			Log.d(TAG, "image: " + filePath + " rotation:" + rotation);
+			Log.d(TAG, "image: " + filePath + " rotation:" + rotation + " to port: " + mPortImageMessenger);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
