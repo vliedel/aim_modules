@@ -1,0 +1,27 @@
+AIM deploy {
+        "name": "PictureSelectModule",
+        "type": "UI",
+        "git": "https://github.com/vliedel/PictureSelectModule_Android.git",
+        "android": {
+                "package": "org.dobots.pictureselectmodule",
+                "url": "https://dl.dropboxusercontent.com/u/56370/PictureSelectModule.apk"
+        },
+        "ports": [
+                {
+                        "name": "position",
+                        "dir": "out",
+                        "type": "floatarray"
+                },
+                {
+                        "name": "image",
+                        "dir": "out",
+                        "type": "intarray"
+                }
+        ]
+}
+
+sleep 5
+
+AIM start PictureSelectModule 0
+
+
