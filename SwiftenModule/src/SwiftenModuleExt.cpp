@@ -240,12 +240,12 @@ void SwiftenModuleExt::handleRosterReceived(Swift::ErrorPayload::ref error) {
 
 void SwiftenModuleExt::handlePresenceReceived(Swift::Presence::ref presence) {
 	std::cout << "Presence received" << std::endl;
-	if (presence->getType() == Swift::Presence::Subscribe) {
-		Swift::Presence::ref response = Swift::Presence::create();
-		response->setTo(presence->getFrom());
-		response->setType(Swift::Presence::Subscribed);
-		mClient->sendPresence(response);
-	}
+//	if (presence->getType() == Swift::Presence::Subscribe) {
+//		Swift::Presence::ref response = Swift::Presence::create();
+//		response->setTo(presence->getFrom());
+//		response->setType(Swift::Presence::Subscribed);
+//		mClient->sendPresence(response);
+//	}
 
 //	std::cout << "Writing message.." << std::endl;
 //	Swift::Message::ref message(new Swift::Message);
@@ -257,39 +257,39 @@ void SwiftenModuleExt::handlePresenceReceived(Swift::Presence::ref presence) {
 }
 
 void SwiftenModuleExt::handleCapsChanged(Swift::JID jid) {
-	boost::filesystem::path file("/home/vliedel/DO/aim_modules/README.md");
-	boost::shared_ptr<Swift::FileReadBytestream> fileStream = boost::make_shared<Swift::FileReadBytestream>(file);
-	Swift::OutgoingFileTransfer::ref ft = mClient->getFileTransferManager()->createOutgoingFileTransfer(
-			jid,
-			file,
-			"test",
-			fileStream
-			);
-	if (ft) {
-		std::cout << "Started file transfer" << std::endl;
-		ft->start();
-	} else {
-		std::cout << jid << " doesn't support any kind of file transfer" << std::endl;
-	}
+//	boost::filesystem::path file("/home/vliedel/DO/aim_modules/README.md");
+//	boost::shared_ptr<Swift::FileReadBytestream> fileStream = boost::make_shared<Swift::FileReadBytestream>(file);
+//	Swift::OutgoingFileTransfer::ref ft = mClient->getFileTransferManager()->createOutgoingFileTransfer(
+//			jid,
+//			file,
+//			"test",
+//			fileStream
+//			);
+//	if (ft) {
+//		std::cout << "Started file transfer" << std::endl;
+//		ft->start();
+//	} else {
+//		std::cout << jid << " doesn't support any kind of file transfer" << std::endl;
+//	}
 }
 
 void SwiftenModuleExt::handleMessageReceived(Swift::Message::ref message) {
 	if (message->getBody().size() > 0) {
 		std::cout << "Message received: " << message->getBody() << std::endl;
 
-		boost::filesystem::path file("/home/vliedel/DO/aim_modules/README.md");
-		boost::shared_ptr<Swift::FileReadBytestream> fileStream = boost::make_shared<Swift::FileReadBytestream>(file);
-		Swift::OutgoingFileTransfer::ref ft = mClient->getFileTransferManager()->createOutgoingFileTransfer(
-				message->getFrom(),
-				file,
-				"test",
-				fileStream
-				);
-		if (ft) {
-			std::cout << "Started file transfer to " << message->getFrom() << std::endl;
-			ft->start();
-		} else {
-			std::cout << message->getFrom() << " doesn't support any kind of file transfer" << std::endl;
-		}
+//		boost::filesystem::path file("/home/vliedel/DO/aim_modules/README.md");
+//		boost::shared_ptr<Swift::FileReadBytestream> fileStream = boost::make_shared<Swift::FileReadBytestream>(file);
+//		Swift::OutgoingFileTransfer::ref ft = mClient->getFileTransferManager()->createOutgoingFileTransfer(
+//				message->getFrom(),
+//				file,
+//				"test",
+//				fileStream
+//				);
+//		if (ft) {
+//			std::cout << "Started file transfer to " << message->getFrom() << std::endl;
+//			ft->start();
+//		} else {
+//			std::cout << message->getFrom() << " doesn't support any kind of file transfer" << std::endl;
+//		}
 	}
 }
