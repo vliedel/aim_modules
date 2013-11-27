@@ -160,7 +160,10 @@ void SwiftenModuleExt::handleRosterReceived(Swift::ErrorPayload::ref error) {
 				sleep(seconds);
 		}
 		else {
-			body += buffer + "\n";
+			if (body.size() == 0)
+				body = buffer;
+			else
+				body += "\n" + buffer;
 		}
 	}
 
