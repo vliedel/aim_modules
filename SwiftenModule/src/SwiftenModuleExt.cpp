@@ -146,7 +146,10 @@ void SwiftenModuleExt::handleRosterReceived(Swift::ErrorPayload::ref error) {
 	std::cout << "Start reading file" << std::endl;
 	while (std::getline(mFs, buffer)) {
 //		std::cout << "buffer: " << buffer << std::endl;
-		if (buffer.size() < 1) {
+		if (buffer.compare(0, 1, "#", 1) == 0) {
+			// a comment
+		}
+		else if (buffer.size() < 1) {
 			if (body.size() > 0) {
 				message->setBody(body);
 				mClient->sendMessage(message);
