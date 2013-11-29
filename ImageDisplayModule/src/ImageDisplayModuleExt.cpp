@@ -14,7 +14,7 @@
  */
 
 #include <ImageDisplayModuleExt.h>
-
+#include <iostream>
 #include <unistd.h>
 
 using namespace cimg_library;
