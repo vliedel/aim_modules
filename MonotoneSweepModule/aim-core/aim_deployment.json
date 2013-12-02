@@ -2,7 +2,9 @@
 	"name":"MonotoneSweepModule",
 	"type":"background",
 	"description":"Performs amazing functions",
-	"enable":"true",
+	"supported_middleware":[ ],
+	"supported_devices":[ ],
+	"enable":"false",
 	"android": {
 		"package":"com.dobots.monotonesweepmodule",
 		"url":"https://play.google.com/store/apps/details?id=com.dobots.monotonesweepmodule"
