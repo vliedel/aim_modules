@@ -20,7 +20,6 @@ import org.dobots.bmptojpgmodule.aim.*;
 
 public class MainActivity extends Activity {
 private static final String TAG = "MainActivity";
-private static final String MODULE_NAME = "BmpToJpgModule";
 
 TextView mCallbackText;
 Button mButtonStartStop;

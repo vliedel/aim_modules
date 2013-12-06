@@ -63,6 +63,7 @@ public class PictureTransformModuleService extends Service {
       mToMsgService = new Messenger(service);
       Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
       Bundle bundle = new Bundle();
+      bundle.putString("package", getPackageName());
       bundle.putString("module", MODULE_NAME);
       bundle.putInt("id", mId);
       msg.setData(bundle);

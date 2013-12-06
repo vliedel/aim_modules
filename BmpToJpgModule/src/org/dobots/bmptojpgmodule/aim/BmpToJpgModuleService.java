@@ -21,7 +21,7 @@ import android.util.Log;
 
 public class BmpToJpgModuleService extends Service {
 	private static final String TAG = "BmpToJpgModuleService";
-	private static final String MODULE_NAME = "BmpToJpgModule";
+	public static final String MODULE_NAME = "BmpToJpgModule";
 	int mId = -1;
 	Messenger mToMsgService = null;
 	final Messenger mFromMsgService = new Messenger(new IncomingMsgHandler());
@@ -108,6 +108,7 @@ public class BmpToJpgModuleService extends Service {
 			mToMsgService = new Messenger(service);
 			Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
 			Bundle bundle = new Bundle();
+			bundle.putString("package", getPackageName());
 			bundle.putString("module", MODULE_NAME);
 			bundle.putInt("id", mId);
 			msg.setData(bundle);

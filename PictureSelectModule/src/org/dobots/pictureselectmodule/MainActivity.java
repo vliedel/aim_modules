@@ -37,7 +37,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
 	private static final String MODULE_NAME = "PictureSelectModule";
-	private int mId = 0;
+	private int mId = -1;
 	
 	TextView mCallbackText;
 	EditText mEditText;
@@ -68,7 +68,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		Intent intent = getIntent();
-		mId = intent.getIntExtra("id", 0);
+		mId = intent.getIntExtra("id", -1);
 		
 		mCallbackText = (TextView) findViewById(R.id.messageOutput);
 //		mEditText = (EditText) findViewById(R.id.messageInput);
@@ -148,6 +148,7 @@ public class MainActivity extends Activity {
 
 			Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
 			Bundle bundle = new Bundle();
+			bundle.putString("package", getPackageName());
 			bundle.putString("module", MODULE_NAME);
 			bundle.putInt("id", mId);
 			msg.setData(bundle);
