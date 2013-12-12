@@ -36,12 +36,14 @@ public class BmpToJpgModuleService extends Service {
 			switch (msg.what) {
 			case AimProtocol.MSG_PORT_DATA: {
 				int[] readVal = msg.getData().getIntArray("data");
-				int nDims = readVal[0];
+				int dataType = readVal[0];
+				int nArrays = readVal[1];
+				int nDims = readVal[2];
 				if (nDims != 3)
 					break;
-				int height = readVal[1];
-				int width = readVal[2];
-				int channels = readVal[3];
+				int height = readVal[3];
+				int width = readVal[4];
+				int channels = readVal[5];
 				
 				int[] pixels = new int[height*width];
 //				for (int x=0; x<width; x++) {
@@ -53,7 +55,7 @@ public class BmpToJpgModuleService extends Service {
 				
 				Log.d(TAG,  "height=" + height + " width=" + width + " channels=" + channels);
 				for (int i=0, j=0; i < height*width*channels; i+=3, j++) {
-					int r = readVal[4+i+0]; int g = readVal[4+i+1]; int b = readVal[4+i+2];
+					int r = readVal[6+i+0]; int g = readVal[6+i+1]; int b = readVal[6+i+2];
 //					Log.i(TAG, "i=" + i + " r=" + r + " g=" + g + " b=" + b);
 					pixels[j] = 0xFF000000 | (r & 0xFF) << 16 | (g & 0xFF) << 8 | (b & 0xFF);
 				}
@@ -117,6 +119,7 @@ public class BmpToJpgModuleService extends Service {
 				Message msgPort = Message.obtain(null, AimProtocol.MSG_SET_MESSENGER);
 				msgPort.replyTo = mPortBmpInMessenger;
 				Bundle bundlePort = new Bundle();
+				bundlePort.putString("package", getPackageName());
 				bundlePort.putString("module", MODULE_NAME);
 				bundlePort.putInt("id", mId);
 				bundlePort.putString("port", "bmp");

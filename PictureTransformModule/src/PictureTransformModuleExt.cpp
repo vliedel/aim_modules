@@ -40,6 +40,10 @@ void PictureTransformModuleExt::Tick() {
 	if (read != NULL && !read->empty()) {
 		// -- Read the image --
 		long_seq::const_iterator it = read->begin();
+		int dataType = *it++;
+		if (dataType != 0)
+			return;
+		int nArrays = *it++;
 		int nDims = *it++;
 		if (nDims != 3) {
 			std::cerr << "nDims=" << nDims << ", should be 3" << std::endl;
@@ -84,8 +88,10 @@ void PictureTransformModuleExt::Tick() {
 		img.index(img.default_LUT256()).map(img.HSV_LUT256());
 
 		// -- Write the result --
-		long_seq out(4 + img.size());
+		long_seq out(6 + img.size());
 		long_seq::iterator outIt = out.begin();
+		*outIt++ = 0; // data type
+		*outIt++ = 1; // num arrays
 		*outIt++ = 3;
 //		*outIt++ = img.height();
 //		*outIt++ = img.width();

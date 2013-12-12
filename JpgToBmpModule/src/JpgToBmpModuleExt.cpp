@@ -187,8 +187,10 @@ void JpgToBmpModuleExt::Tick() {
 //		int height = cinfo.output_height;
 //		int channels = cinfo.output_components;
 //		CImg<unsigned char> img(width, height, 1, channels);
-		long_seq writeVec(4+cinfo.output_height*cinfo.output_width*cinfo.output_components);
+		long_seq writeVec(6+cinfo.output_height*cinfo.output_width*cinfo.output_components);
 		long_seq::iterator itOut = writeVec.begin();
+		*itOut++ = 0; // datatype
+		*itOut++ = 1; // nArrays
 		*itOut++ = 3; // nDims
 		*itOut++ = cinfo.output_height;
 		*itOut++ = cinfo.output_width;

@@ -36,8 +36,12 @@ void ImageDisplayModuleExt::Tick() {
 	if (readVec != NULL && !readVec->empty()) {
 		std::cout << "Read something" << std::endl;
 		long_seq::const_iterator it = readVec->begin();
-		int dims = *it++;
-		if (dims != 3) {
+		int dataType = *it++;
+		if (dataType != 0)
+			return;
+		int nArrays = *it++;
+		int nDims = *it++;
+		if (nDims != 3) {
 			readVec->clear();
 			return;
 		}

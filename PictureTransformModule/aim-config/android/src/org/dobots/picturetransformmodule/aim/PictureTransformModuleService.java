@@ -72,6 +72,7 @@ public class PictureTransformModuleService extends Service {
         Message msgPort = Message.obtain(null, AimProtocol.MSG_SET_MESSENGER);
         msgPort.replyTo = mPortInImageInMessenger;
         Bundle bundlePort = new Bundle();
+        bundlePort.putString("package", getPackageName());
         bundlePort.putString("module", MODULE_NAME);
         bundlePort.putInt("id", mId);
         bundlePort.putString("port", "inimage");

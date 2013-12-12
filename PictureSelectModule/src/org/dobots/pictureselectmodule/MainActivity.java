@@ -295,11 +295,13 @@ public class MainActivity extends Activity {
 			width = scaledImage.getWidth();
 			height = scaledImage.getHeight();
 			
-			int[] msgData = new int[width * height * 3 + 4];
-			msgData[0] = 3; // Ndims
-			msgData[1] = height; // size dim 1
-			msgData[2] = width; // size dim 2
-			msgData[3] = 3; // size dim 3 (rgb)
+			int[] msgData = new int[width * height * 3 + 6];
+			msgData[0] = 0; // datatype
+			msgData[1] = 1; // Narrays
+			msgData[2] = 3; // Ndims
+			msgData[3] = height; // size dim 1
+			msgData[4] = width; // size dim 2
+			msgData[5] = 3; // size dim 3 (rgb)
 			
 			Log.d(TAG, "height=" + height + "width=" + width);
 //			if (scaledImage.getConfig().equals(Bitmap.Config.RGB_565)) {
@@ -313,7 +315,7 @@ public class MainActivity extends Activity {
 //			}	
 			
 			// GetPixels returns ARGB_8888
-			for (int i=0, j=4; i<pixels.length; ++i, j+=3) {
+			for (int i=0, j=6; i<pixels.length; ++i, j+=3) {
 				msgData[j] = (pixels[i] >> 16) & 0xFF;
 				msgData[j+1] = (pixels[i] >> 8) & 0xFF;
 				msgData[j+2] = pixels[i] & 0xFF;
