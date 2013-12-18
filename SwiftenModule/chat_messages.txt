@@ -1,0 +1,31 @@
+AIM deploy {
+        "name": "vliedel/aim_modules/ChatModule",
+        "type": "UI",
+        "git": "https://github.com/vliedel/ChatModule_Android.git",
+        "android": {
+                "package": "org.dobots.chatmodule",
+                "url": "ChatModule"
+        },
+        "ports": [
+                {
+                        "name": "textout",
+                        "dir": "out",
+                        "type": "string"
+                },
+                {
+                        "name": "textin",
+                        "dir": "in",
+                        "type": "string"
+                }
+        ]
+}
+
+sleep 5
+
+AIM start vliedel/aim_modules/ChatModule 0
+
+sleep 5
+
+AIM connect test10@dobots.customers.luna.net/android_GT-I9000_405 vliedel/aim_modules/ChatModule 0 textout test10@dobots.customers.luna.net/android_Nexus_4_569 vliedel/aim_modules/ChatModule 0 textin
+
+AIM connect test10@dobots.customers.luna.net/android_Nexus_4_569 vliedel/aim_modules/ChatModule 0 textout test10@dobots.customers.luna.net/android_GT-I9000_405 vliedel/aim_modules/ChatModule 0 textin

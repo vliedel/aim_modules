@@ -1,0 +1,132 @@
+AIM deploy {
+	"name":"vliedel/aim_modules/VideoToMorseModule",
+	"type":"background",
+	"description":"Performs amazing functions",
+	"supported_middleware":[ ],
+	"supported_devices":[ ],
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.videotomorsemodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.videotomorsemodule"
+	},
+	"ports": [
+		{
+			"name":"video",
+			"dir":"in",
+			"type":"intarray",
+			"middleware":"default"
+		},
+		{
+			"name":"brightness",
+			"dir":"in",
+			"type":"float",
+			"middleware":"default"
+		},
+		{
+			"name":"morse",
+			"dir":"out",
+			"type":"std::string",
+			"middleware":"default"
+		},
+		{
+			"name":"train",
+			"dir":"out",
+			"type":"floatarray",
+			"middleware":"default"
+		},
+		{
+			"name":"test",
+			"dir":"out",
+			"type":"floatarray",
+			"middleware":"default"
+		},
+		{
+			"name":"class",
+			"dir":"in",
+			"type":"intarray",
+			"middleware":"default"
+		},
+		{
+			"name":"clustercommand",
+			"dir":"out",
+			"type":"std::string",
+			"middleware":"default"
+		}
+	]
+}
+
+
+AIM deploy {
+	"name":"vliedel/aim_modules/JpgToBmpModule",
+	"type":"background",
+	"category":"Image processing",
+	"description":"Transforms a jpeg as base64 string to bitmap",
+	"supported_middleware":[ "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "raspberrypi", "ubuntu" ],
+	"enable":"true",
+	"android": {
+		"package":"com.dobots.jpgtobmpmodule",
+		"url":"https://play.google.com/store/apps/details?id=com.dobots.jpgtobmpmodule"
+	},
+	"ports": [
+		{
+			"name":"jpg",
+			"dir":"in",
+			"type":"std::string",
+			"middleware":"default"
+		},
+		{
+			"name":"bmp",
+			"dir":"out",
+			"type":"intarray",
+			"middleware":"default"
+		}
+	]
+}
+
+AIM deploy {
+	"name":"vliedel/aim_modules/ParseJsonModule",
+	"type":"background",
+	"description":"Performs amazing functions",
+	"supported_middleware":[ ],
+	"supported_devices":[ ],
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.parsejsonmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.parsejsonmodule"
+	},
+	"ports": [
+		{
+			"name":"json",
+			"dir":"in",
+			"type":"std::string",
+			"middleware":"default"
+		},
+		{
+			"name":"selection",
+			"dir":"out",
+			"type":"std::string",
+			"middleware":"default"
+		}
+	]
+}
+
+sleep 5
+
+#AIM start vliedel/aim_modules/ParseJsonModule 0
+
+#AIM start vliedel/aim_modules/JpgToBmpModule 0
+
+AIM start vliedel/aim_modules/VideoToMorseModule 0
+
+sleep 5
+
+#AIM connect test10@dobots.customers.luna.net/android_Nexus_4_625 eggerdo/aim_modules/CameraModule 0 video_base64 test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/ParseJsonModule 0 json
+
+#AIM connect test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/ParseJsonModule 0 selection test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/JpgToBmpModule 0 jpg
+
+#AIM connect test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/JpgToBmpModule 0 bmp test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/VideoToMorseModule 0 video
+
+AIM connect test10@dobots.customers.luna.net/android_Nexus_4_625 vliedel/aim_modules/AvgBrightnessModule 0 brightness test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/VideoToMorseModule 0 brightness
+
+

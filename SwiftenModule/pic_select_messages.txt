@@ -1,0 +1,87 @@
+AIM deploy {
+	"name":"vliedel/aim_modules/AvgBrightnessModule",
+	"type":"background",
+	"description":"Performs amazing functions",
+	"supported_middleware":[ ],
+	"supported_devices":[ ],
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.avgbrightnessmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.avgbrightnessmodule"
+	},
+	"ports": [
+		{
+			"name":"image",
+			"dir":"in",
+			"type":"string",
+			"middleware":"default"
+		},
+		{
+			"name":"brightness",
+			"dir":"out",
+			"type":"float",
+			"middleware":"default"
+		}
+	]
+}
+
+AIM deploy {
+        "name": "vliedel/aim_modules/PictureSelectModule",
+        "type": "UI",
+        "git": "https://github.com/vliedel/PictureSelectModule_Android.git",
+        "android": {
+                "package": "org.dobots.pictureselectmodule",
+                "url": "https://dl.dropboxusercontent.com/u/56370/PictureSelectModule.apk"
+        },
+        "ports": [
+                {
+                        "name": "position",
+                        "dir": "out",
+                        "type": "floatarray"
+                },
+                {
+                        "name": "image",
+                        "dir": "out",
+                        "type": "intarray"
+                }
+        ]
+}
+
+AIM deploy {
+	"name": "vliedel/aim_modules/BmpToJpgModule",
+	"type": "background",
+	"git": "https://github.com/vliedel/BmpToJpgModule_Android.git",
+	"android": {
+		"package": "org.dobots.bmptojpgmodule",
+		"url": "https://dl.dropboxusercontent.com/u/56370/BmpToJpgModule.apk"
+	},
+	"ports": [
+		{
+			"name": "bmp",
+			"dir": "in",
+			"type": "intarray"
+		},
+		{
+			"name": "jpg",
+			"dir": "out",
+			"type": "string"
+		}
+	]
+}
+
+sleep 5
+
+AIM start vliedel/aim_modules/PictureSelectModule 0
+
+AIM start vliedel/aim_modules/BmpToJpgModule 0
+
+#AIM start vliedel/aim_modules/AvgBrightnessModule 0
+
+sleep 5
+
+AIM connect local vliedel/aim_modules/PictureSelectModule 0 image local vliedel/aim_modules/BmpToJpgModule 0 bmp
+
+AIM connect test10@dobots.customers.luna.net/android_Nexus_4_625 vliedel/aim_modules/BmpToJpgModule 0 jpg test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/JpgToBmpModule 0 jpg
+
+#AIM connect local vliedel/aim_modules/BmpToJpgModule 0 jpg local vliedel/aim_modules/AvgBrightnessModule 0 image
+

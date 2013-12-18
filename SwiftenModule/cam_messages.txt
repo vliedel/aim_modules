@@ -1,0 +1,76 @@
+AIM deploy {
+        "name":"eggerdo/aim_modules/CameraModule",
+        "type":"background",
+        "category":"Image processing",
+        "description":"Provides Android Camera as video output",
+        "default_middleware":"android",
+        "supported_middleware": ["android"],
+        "supported_devices": ["android"],
+        "enable":"true",
+        "git":"https://github.com/eggerdo/aim_modules.git",
+        "android": {
+                "package":"org.dobots.cameramodule",
+                "url":"https://play.google.com/store/apps/details?id=org.dobots.cameramodule"
+        },
+        "ports": [
+                {
+                        "name":"cmd",
+                        "dir":"in",
+                        "type":"string",
+                        "middleware":"android"
+                },
+                {
+                        "name":"video_base64",
+                        "dir":"out",
+                        "type":"string",
+                        "middleware":"android"
+                }
+        ]
+}
+
+AIM deploy {
+	"name":"vliedel/aim_modules/AvgBrightnessModule",
+	"type":"background",
+	"description":"Performs amazing functions",
+	"supported_middleware":[ ],
+	"supported_devices":[ ],
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.avgbrightnessmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.avgbrightnessmodule"
+	},
+	"ports": [
+		{
+			"name":"image",
+			"dir":"in",
+			"type":"string",
+			"middleware":"default"
+		},
+		{
+			"name":"brightness",
+			"dir":"out",
+			"type":"float",
+			"middleware":"default"
+		}
+	]
+}
+
+sleep 5
+
+AIM start eggerdo/aim_modules/CameraModule 0
+
+AIM start vliedel/aim_modules/AvgBrightnessModule 0
+
+sleep 5
+
+#AIM connect test10@dobots.customers.luna.net/android_GT-I9000_405 eggerdo/aim_modules/CameraModule 0 video_base64 test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/JpgToBmpModule 0 jpg
+
+#AIM connect test10@dobots.customers.luna.net/android_Nexus_4_625 eggerdo/aim_modules/CameraModule 0 video_base64 test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/ParseJsonModule 0 json
+
+AIM connect local eggerdo/aim_modules/CameraModule 0 video_base64 local vliedel/aim_modules/AvgBrightnessModule 0 image
+
+AIM connect test10@dobots.customers.luna.net/android_Nexus_4_625 vliedel/aim_modules/AvgBrightnessModule 0 brightness test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/VideoToMorseModule 0 brightness
+
+sleep 90
+
+AIM stop all

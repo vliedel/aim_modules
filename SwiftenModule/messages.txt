@@ -74,15 +74,23 @@ AIM start vliedel/aim_modules/PictureTransformModule 0
 
 sleep 5
 
-#AIM connect local PictureSelectModule 0 image local PictureTransformModule 0 inimage
+AIM connect local vliedel/aim_modules/PictureSelectModule 0 image local vliedel/aim_modules/PictureTransformModule 0 inimage
 
-#AIM connect local PictureTransformModule 0 outimage local BmpToJpgModule 0 bmp
+AIM connect local vliedel/aim_modules/PictureTransformModule 0 outimage local vliedel/aim_modules/BmpToJpgModule 0 bmp
 
-#AIM connect local PictureSelectModule 0 image local BmpToJpgModule 0 bmp
+AIM connect local vliedel/aim_modules/BmpToJpgModule 0 jpg test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/JpgToBmpModule 0 jpg
 
-#AIM connect local BmpToJpgModule 0 jpg test10@dobots.customers.luna.net/raspberrypi_1 JpgToBmpModule 0 jpg
 
-#AIM connect local PictureSelectModule 0 position test10@dobots.customers.luna.net/raspberrypi_1 bla 0 bla
+#AIM connect local vliedel/aim_modules/PictureSelectModule 0 image local vliedel/aim_modules/BmpToJpgModule 0 bmp
 
-AIM connect local PictureSelectModule 0 position test10@dobots.customers.luna.net/android_HTC_One_X_377 bla 0 bla
+#AIM connect local vliedel/aim_modules/BmpToJpgModule 0 jpg test10@dobots.customers.luna.net/raspberrypi_1 vliedel/aim_modules/JpgToBmpModule 0 jpg
+
+
+AIM connect local vliedel/aim_modules/PictureSelectModule 0 position test10@dobots.customers.luna.net/raspberrypi_1 bla 0 bla
+
+#AIM connect local vliedel/aim_modules/PictureSelectModule 0 position test10@dobots.customers.luna.net/android_HTC_One_X_377 bla 0 bla
+
+sleep 10
+
+#AIM stop all
 
