@@ -1,0 +1,27 @@
+{
+	"name":"BrightnessToMorseModule",
+	"type":"background",
+	"category":"general",
+	"description":"Converts brightness over time to a morse code string",
+	"supported_middleware":[ "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "raspberrypi", "ubuntu" ],
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.brightnesstomorsemodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.brightnesstomorsemodule"
+	},
+	"ports": [
+		{
+			"name":"brightness",
+			"dir":"in",
+			"type":"float",
+			"middleware":"default"
+		},
+		{
+			"name":"morse",
+			"dir":"out",
+			"type":"string",
+			"middleware":"default"
+		}
+	]
+}

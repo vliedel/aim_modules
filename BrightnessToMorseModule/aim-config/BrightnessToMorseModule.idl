@@ -1,0 +1,54 @@
+/**
+ * IDL description of the BrightnessToMorseModule
+ *
+ * This file is automatically parsed by the rurbuilder backends for the omniidl compiler. The names of the functions
+ * will become port identifiers. The names of the function variables are not used. 
+ *
+ * The syntax of the IDL file also allows for "inout", but not all middlewares will accept this yet.
+ */
+
+#pragma author               Bart van Vliet
+#pragma copyright            DoBots
+#pragma date                 dec 19, 2013
+#pragma license              GNU General Lesser Public Licence
+
+// Recommended namespace "rur"
+module rur {
+
+// The command-line parameter (this struct is required)
+struct Param {
+  // multiple modules can be addressed in parallel, killed, etc. using "module_id"
+  string module_id;
+};
+
+// Typedef for array of integers
+typedef sequence<long> long_seq;
+typedef sequence<float> float_seq;
+
+// The public interface of BrightnessToMorseModule
+interface BrightnessToMorseModule {
+
+	// Input video, simply frame by frame
+//	void Video(in long_seq input);
+
+	// Input average brightness of the frame, saves bandwidth
+	void Brightness(in float input);
+
+	// Output string of 0s and 1s
+	void Morse(out string output);
+
+	// samples for cluster module, each row a sample
+//	void Train(out float_seq output);
+
+	// samples we want to test, each row a sample
+//	void Test(out float_seq output);
+
+	// classified samples, each row a class
+//	void Class(in long_seq input);
+
+	// This module will set the number of clusters
+//	void ClusterCommand(out string output);
+
+};
+
+};
