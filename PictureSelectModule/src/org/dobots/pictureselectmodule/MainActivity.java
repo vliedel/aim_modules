@@ -284,7 +284,7 @@ public class MainActivity extends Activity {
 			cursor.close();
 			
 			File file = new File(filePath);
-			Bitmap scaledImage = decodeFile(file, 100*100); //  150*200 is possible for the messenger, but xmpp can't handle it
+			Bitmap scaledImage = decodeFile(file, 100*1000);
 			
 			mImageView.setImageBitmap(scaledImage);
 

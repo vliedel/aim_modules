@@ -11,8 +11,8 @@ enable='true'
 application_type=background
 
 # For deployment as Android package
-android_package='com.dobots.jpgtobmpmodule'
-android_url='https://play.google.com/store/apps/details?id=com.dobots.jpgtobmpmodule'
+android_package='org.dobots.jpgtobmpmodule'
+android_url='https://play.google.com/store/apps/details?id=org.dobots.jpgtobmpmodule'
 
 # Supported middlewarez
 middleware_support_android='false'
