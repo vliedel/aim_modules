@@ -1,0 +1,27 @@
+{
+	"name":"AvgBrightnessModule",
+	"type":"background",
+	"category":"Image processing",
+	"description":"Calculates the average brightness of an image",
+	"supported_middleware":[ "android", "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "android", "raspberrypi", "ubuntu" ],
+	"enable":"true",
+	"android": {
+		"package":"org.dobots.avgbrightnessmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.avgbrightnessmodule"
+	},
+	"ports": [
+		{
+			"name":"image",
+			"dir":"in",
+			"type":"string",
+			"middleware":"default"
+		},
+		{
+			"name":"brightness",
+			"dir":"out",
+			"type":"float",
+			"middleware":"default"
+		}
+	]
+}
