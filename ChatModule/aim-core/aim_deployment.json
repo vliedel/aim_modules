@@ -1,0 +1,29 @@
+{
+	"name":"ChatModule",
+	"type":"UI",
+	"category":"Chat",
+	"description":"Shows incoming messages and allows you to send messages",
+	"default_middleware":"android",
+	"supported_middleware": ["android"],
+	"supported_devices": ["android"],
+	"enable":"true",
+	"git":"https://github.com/vliedel/aim_modules.git",
+	"android": {
+		"package":"org.dobots.chatmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.chatmodule"
+	},
+	"ports": [
+		{
+			"name":"textout",
+			"dir":"out",
+			"type":"string",
+			"middleware":"android"
+		},
+		{
+			"name":"textin",
+			"dir":"in",
+			"type":"string",
+			"middleware":"android"
+		}
+	]
+}
