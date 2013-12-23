@@ -1,0 +1,38 @@
+/**
+ * IDL description of the BmpToJpgModule
+ *
+ * This file is automatically parsed by the rurbuilder backends for the omniidl compiler. The names of the functions
+ * will become port identifiers. The names of the function variables are not used. 
+ *
+ * The syntax of the IDL file also allows for "inout", but not all middlewares will accept this yet.
+ */
+
+#pragma author               Bart van Vliet
+#pragma copyright            DoBots
+#pragma date                 dec 19, 2013
+#pragma license              GNU General Lesser Public Licence
+
+// Recommended namespace "rur"
+module rur {
+
+// The command-line parameter (this struct is required)
+struct Param {
+  // multiple modules can be addressed in parallel, killed, etc. using "module_id"
+  string module_id;
+};
+
+// Typedef for array of integers
+typedef sequence<long> long_seq;
+
+// The public interface of BmpToJpgModule
+interface BmpToJpgModule {
+
+	// Input is the image as bitmap
+	void Bmp(in long_seq input);
+
+	// Output is a binary Jpg file, encoded as base64 string
+	void Jpg(out string output);
+
+};
+
+};
