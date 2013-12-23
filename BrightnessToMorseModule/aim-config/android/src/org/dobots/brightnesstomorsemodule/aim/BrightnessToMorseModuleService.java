@@ -17,30 +17,105 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.util.Log;
 
-
 public class BrightnessToMorseModuleService extends Service {
-	private static final String TAG = "BrightnessToMorseModuleService";
-	private static final String MODULE_NAME = "BrightnessToMorseModule";
-	
-	Messenger mToMsgService = null;
-	final Messenger mFromMsgService = new Messenger(new IncomingMsgHandler());
-	boolean mMsgServiceIsBound;
+  private static final String TAG = "BrightnessToMorseModuleService";
+  private static final String MODULE_NAME = "BrightnessToMorseModule";
+  private int mId = -1;
+  Messenger mToMsgService = null;
+  final Messenger mFromMsgService = new Messenger(new IncomingMsgHandler());
+  boolean mMsgServiceIsBound;
+  
+  Messenger mPortBrightnessInMessenger = new Messenger(new PortBrightnessMessengerHandler());
+  private List<Float> mPortBrightnessInBuffer = new ArrayList<Float>(0);
+  Messenger mPortMorseOutMessenger = null;
+  
+  class PortBrightnessMessengerHandler extends Handler {
+    @Override
+    public void handleMessage(Message msg) {
+      switch (msg.what) {
+      case AimProtocol.MSG_PORT_DATA:
+        Float readVal = msg.getData().getFloat("data");
+        // Debug
+        Log.d(TAG, "Read msg: " + readVal);
+        synchronized(mPortBrightnessInBuffer) {
+          mPortBrightnessInBuffer.add(readVal);
+        }
+      default:
+        super.handleMessage(msg);
+      }
+    }
+  }
+  
+  private ServiceConnection mMsgServiceConnection = new ServiceConnection() {
+    public void onServiceConnected(ComponentName className, IBinder service) {
+      // This is called when the connection with the service has been established, giving us the service object
+      // we can use to interact with the service.  We are communicating with our service through an IDL
+      // interface, so get a client-side representation of that from the raw service object.
+      mToMsgService = new Messenger(service);
+      Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
+      Bundle bundle = new Bundle();
+      bundle.putString("package", getPackageName());
+      bundle.putString("module", MODULE_NAME);
+      bundle.putInt("id", mId);
+      msg.setData(bundle);
+      msgSend(msg);
+      {
+        Message msgPort = Message.obtain(null, AimProtocol.MSG_SET_MESSENGER);
+        msgPort.replyTo = mPortBrightnessInMessenger;
+        Bundle bundlePort = new Bundle();
+        bundlePort.putString("package", getPackageName());
+        bundlePort.putString("module", MODULE_NAME);
+        bundlePort.putInt("id", mId);
+        bundlePort.putString("port", "brightness");
+        msgPort.setData(bundlePort);
+        msgSend(mToMsgService, msgPort);
+      }
+      
+      
+      Log.i(TAG, "Connected to MsgService: " + mToMsgService.toString());
+    }
+    public void onServiceDisconnected(ComponentName className) {
+      // This is called when the connection with the service has been unexpectedly disconnected: its process crashed.
+      mToMsgService = null;
+      Log.i(TAG, "Disconnected from MsgService");
+    }
+  };
+  
+  // Handle messages from MsgService
+  class IncomingMsgHandler extends Handler {
+    @Override
+    public void handleMessage(Message msg) {
+      switch (msg.what) {
+      case AimProtocol.MSG_SET_MESSENGER:
+        if (msg.getData().getString("port").equals("morse"))
+          mPortMorseOutMessenger = msg.replyTo;
+        break;
+      case AimProtocol.MSG_STOP:
+        Log.i(TAG, "stopping");
+        stopSelf();
+        break;
+      default:
+        super.handleMessage(msg);
+      }
+    }
+  }
+  
 
-
-	// TODO: Has to be generated!
-//	Messenger mPortOutMessenger = null;
-//	private List<Float> mPortOutBuffer = new ArrayList<Float>(0);
+	AIMRun mAIMRun = null;
 	
-//	Messenger mPortInMessgener = new Messenger(new PortInMsgHandler());
+	public void start() {
+		if (mId < 0)
+			return;
+		if (!mMsgServiceIsBound)
+			bindToMsgService();
+		if (mAIMRun == null) {
+			mAIMRun = new AIMRun();
+			mAIMRun.execute(mId);
+		}
+	}
 	
-	AIMRun mAIMRun;
-
 	public void onCreate() {
-		bindToMsgService();
-		
-		Integer id = 0; // TODO: adjustable id, multiple modules
-		mAIMRun = new AIMRun();
-		mAIMRun.execute(id);
+		// On create mId is unknown!
 	}
 	
 	public void onDestroy() {
@@ -67,116 +142,20 @@ public class BrightnessToMorseModuleService extends Service {
 	@Override
 	public void onStart(Intent intent, int startId) {
 //		handleStartCommand(intent);
+		mId = intent.getIntExtra("id", 0);
+		Log.d(TAG, "onStart " + mId);
+		start();
 	}
 	
 	// Called each time a client uses startService()
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-//	    handleStartCommand(intent);
-	    // We want this service to continue running until it is explicitly stopped, so return sticky.
-	    return START_STICKY;
-	}
-	
-	
-	
-	// Copied from MsgService, should be an include?
-	public static final int MSG_REGISTER = 1;
-	public static final int MSG_UNREGISTER = 2;
-	public static final int MSG_SET_MESSENGER = 3;
-	public static final int MSG_START = 4;
-	public static final int MSG_STOP = 5;
-	public static final int MSG_SEND = 6;
-	public static final int MSG_XMPP_LOGIN = 7;
-	public static final int MSG_ADD_PORT = 8;
-	public static final int MSG_REM_PORT = 9;
-	public static final int MSG_XMPP_LOGGED_IN = 10;
-	public static final int MSG_XMPP_DISCONNECTED = 11;
-	public static final int MSG_PORT_DATA = 12;
-	public static final int MSG_USER_LOGIN = 13;
-	public static final int MSG_GET_MESSENGER = 14;
-		
-	public static final int DATATYPE_FLOAT = 1;
-	public static final int DATATYPE_FLOAT_ARRAY = 2;
-	public static final int DATATYPE_STRING = 3;
-	public static final int DATATYPE_IMAGE = 4;
-	public static final int DATATYPE_BINARY = 5;
-	
-	
-
-	
-	
-	private ServiceConnection mMsgServiceConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// This is called when the connection with the service has been established, giving us the service object
-			// we can use to interact with the service.  We are communicating with our service through an IDL 
-			// interface, so get a client-side representation of that from the raw service object.
-			mToMsgService = new Messenger(service);
-			//Log.i(TAG, "Connected to Dodedodo.");
-
-			Message msg = Message.obtain(null, MSG_REGISTER);
-			Bundle bundle = new Bundle();
-			bundle.putString("module", MODULE_NAME);
-			bundle.putInt("id", 0); // TODO: adjustable id, multiple modules
-			msg.setData(bundle);
-			msgSend(msg);
-
-			// TODO: Has to be generated!!
-//			Message msg2 = Message.obtain(null, MSG_SET_MESSENGER);
-//			msg2.replyTo = mPortInMessgener;
-//			Bundle bundle2 = new Bundle();
-//			bundle2.putString("module", MODULE_NAME);
-//			bundle2.putInt("id", 0);
-//			bundle2.putString("port", "in");
-//			msg2.setData(bundle2);
-//			msgSend(mToMsgService, msg2);
-			
-			Log.i(TAG, "Connected to MsgService: " + mToMsgService.toString());
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			// This is called when the connection with the service has been unexpectedly disconnected: its process crashed.
-			mToMsgService = null;
-			Log.i(TAG, "Disconnected from MsgService");
-		}
-	};
-
-	// Handle messages from MsgService
-	class IncomingMsgHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MSG_SET_MESSENGER:
-				// TODO: Has to be generated!
-//				Log.i(TAG, "set port: " + msg.getData().getString("port") + " to: " + msg.replyTo.toString());
-//				if (msg.getData().getString("port").equals("out"))
-//					mPortOutMessenger = msg.replyTo;
-				break;
-			case MSG_STOP:
-				Log.i(TAG, "stopping");
-				stopSelf();
-				break;
-			default:
-				super.handleMessage(msg);
-			}
-		}
-	}
-	
-	class PortInMsgHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case MSG_PORT_DATA:
-				
-				// TODO: Has to be generated!
-//				float readVal = msg.getData().getFloat("data");
-//				Log.i(TAG, "msg: " + readVal);
-//				synchronized(mPortOutBuffer) {
-//					mPortOutBuffer.add(readVal);
-//				}
-			default:
-				super.handleMessage(msg);
-			}
-		}
+//		handleStartCommand(intent);
+		// We want this service to continue running until it is explicitly stopped, so return sticky.
+		mId = intent.getIntExtra("id", 0);
+		Log.d(TAG, "onStartCommand " + mId);
+		start();
+		return START_STICKY;
 	}
 	
 	void bindToMsgService() {
@@ -188,15 +167,15 @@ public class BrightnessToMorseModuleService extends Service {
 		mMsgServiceIsBound = true;
 		Log.i(TAG, "Binding to msgService");
 	}
-
+	
 	void unbindFromMsgService() {
 		if (mMsgServiceIsBound) {
 			// If we have received the service, and registered with it, then now is the time to unregister.
 			if (mToMsgService != null) {
-				Message msg = Message.obtain(null, MSG_UNREGISTER);
+				Message msg = Message.obtain(null, AimProtocol.MSG_UNREGISTER);
 				Bundle bundle = new Bundle();
 				bundle.putString("module", MODULE_NAME);
-				bundle.putInt("id", 0); // TODO: adjustable id, multiple modules
+				bundle.putInt("id", mId);
 				msg.setData(bundle);
 				msgSend(msg);
 			}
@@ -206,7 +185,7 @@ public class BrightnessToMorseModuleService extends Service {
 			Log.i(TAG, "Unbinding from msgService");
 		}
 	}
-
+	
 	// Send a msg to the msgService
 	protected void msgSend(Message msg) {
 		if (!mMsgServiceIsBound) {
@@ -230,85 +209,53 @@ public class BrightnessToMorseModuleService extends Service {
 			//msg.replyTo = mFromMsgService;
 			messenger.send(msg);
 		} catch (RemoteException e) {
-			Log.i(TAG, "failed to send msg to service. " + e);
+			Log.i(TAG, "failed to send msg. " + e);
 			// There is nothing special we need to do if the service has crashed.
 		}
 	}
+	
 
-//	class LogStreamer extends Streamer {
-//		public void display(String text) {
-//			Log.i(TAG, "C++ " + text);
-//		}
-//	}
-	
-	// AsyncTask<Params, Progress, Result>
-	private class AIMRun extends AsyncTask<Integer, Void, Boolean> {
-		protected Boolean doInBackground(Integer... id) {
-			Log.i(TAG, "Starting AIMRun");
-			int input = 3;
-			BrightnessToMorseModule aim = new BrightnessToMorseModule();
-
-//			LogStreamer logStreamer = new LogStreamer();
-//			AIM.setStreamer(logStreamer);
-			
-			// TODO: has to be generated!
-			AIMandroidReadPort_t output;
-			AIMandroidReadSeqPort_t seqOutput;
-			
-			vector_float seqInput = new vector_float();
-			
-			while (true) {
-				Log.d(TAG, "mPortOutBuffer=" + mPortOutBuffer);
-				synchronized(mPortOutBuffer) {
-					if (!mPortOutBuffer.isEmpty()) {
-						input = Math.round(mPortOutBuffer.get(0));
-						mPortOutBuffer.remove(0);
-						aim.androidWritePort(input);
-					}
-				}
-				aim.androidWriteSeqPort(seqInput); // TODO: generated mSeqPortOutBuffer
-				
-				aim.Tick();
-				
-				output = aim.androidReadPort();
-				if (output.getSuccess()) {
-					Log.d(TAG, "Output=" + output.getVal());
-					Message msg = Message.obtain(null, MSG_PORT_DATA);
-					Bundle bundle = new Bundle();
-					bundle.putInt("datatype", DATATYPE_FLOAT);
-					bundle.putFloat("data", output.getVal());
-					msg.setData(bundle);
-					msgSend(mPortOutMessenger, msg);
-				}
-				
-				seqOutput = aim.androidReadSeqPort();
-				if (seqOutput.getSuccess()) {
-					Log.d(TAG, "seqOutput=" + seqOutput.getVal().toString() + " ");
-					for (int i=0; i<seqOutput.getVal().size(); i++) {
-						Log.d(TAG, seqOutput.getVal().get(i) + " ");
-					}
-					// TODO: generated msgSend
-				}
-				
-				if (isCancelled()) break;
-			}
-			return true;
-		}
-		
-//		protected void onPostExecute() {
-//			Log.i(TAG, "Stopped AIMRun");
-//		}
-		
-		protected void onCancelled() {
-			Log.i(TAG, "Stopped AIMRun");
-		}
-	
-	}
-	
-	// static constructor
-	static {
-		System.loadLibrary("BrightnessToMorseModule");
-	}
-	
+  // AsyncTask<Params, Progress, Result>
+  private class AIMRun extends AsyncTask<Integer, Void, Boolean> {
+    protected Boolean doInBackground(Integer... id) {
+      Log.i(TAG, "Starting AIMRun " + id);
+      BrightnessToMorseModuleExt aim = new BrightnessToMorseModuleExt();
+      //aim.Init("0"); // TODO: pass on the id
+      AndroidMorseRead_t outputMorse;
+      
+      while (true) {
+        synchronized(mPortBrightnessInBuffer) {
+          if (!mPortBrightnessInBuffer.isEmpty()) {
+            aim.androidWriteBrightness(mPortBrightnessInBuffer.get(0));
+            mPortBrightnessInBuffer.remove(0);
+          }
+        }
+        
+        aim.Tick();
+        outputMorse = aim.androidReadMorse();
+        if (outputMorse.getSuccess()) {
+          // Debug
+          Log.d(TAG, "outputMorse=" + outputMorse.getVal());
+          Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
+          Bundle bundle = new Bundle();
+          bundle.putInt("datatype", AimProtocol.DATATYPE_STRING);
+          bundle.putString("data", outputMorse.getVal());
+          msg.setData(bundle);
+          msgSend(mPortMorseOutMessenger, msg);
+        }
+        
+        if (isCancelled()) break;
+      }
+      return true;
+    }
+    
+    protected void onCancelled() {
+      Log.i(TAG, "Stopped AIMRun");
+    }
+  }
+  
+  // static constructor
+  static {
+    System.loadLibrary("BrightnessToMorseModule");
+  }
 }
-

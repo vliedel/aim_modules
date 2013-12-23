@@ -1,6 +1,7 @@
 {
 	"name":"PictureTransformModule",
 	"type":"background",
+	"version":"1",
 	"category":"Image processing",
 	"description":"Makes a picture look funny",
 	"supported_middleware":[ "android", "yarp", "zeromq", "ros" ],

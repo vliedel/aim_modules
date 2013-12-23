@@ -22,7 +22,7 @@ namespace rur {
 AvgBrightnessModule::AvgBrightnessModule():
   cliParam(0)
 {
-  const char* const channel[2] = {"readImage", "writeBrightness"};
+  const char* const channel[3] = {"readImage", "writeBrightness", "writeCommandOut"};
   cliParam = new Param();
 }
 
@@ -60,6 +60,22 @@ AndroidBrightnessRead_t AvgBrightnessModule::androidReadBrightness() {
   ret.val = mPortBrightnessWriteBuf.front();
   ret.success = true;
   mPortBrightnessWriteBuf.pop_front();
+  return ret;
+}
+
+bool AvgBrightnessModule::writeCommandOut(const std::string output) {
+  mPortCommandOutWriteBuf.push_back(output);
+}
+
+AndroidCommandOutRead_t AvgBrightnessModule::androidReadCommandOut() {
+  AndroidCommandOutRead_t ret;
+  if (mPortCommandOutWriteBuf.empty()) {
+    ret.success = false;
+    return ret;
+  }
+  ret.val = mPortCommandOutWriteBuf.front();
+  ret.success = true;
+  mPortCommandOutWriteBuf.pop_front();
   return ret;
 }
 

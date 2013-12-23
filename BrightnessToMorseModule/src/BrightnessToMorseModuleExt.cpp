@@ -90,6 +90,7 @@ void BrightnessToMorseModuleExt::Tick() {
 //	}
 
 	float* brightness = readBrightness(false);
+	usleep(20*1000);
 	if (brightness != NULL) {
 
 		// Use a moving average of 5 samples
@@ -120,118 +121,153 @@ void BrightnessToMorseModuleExt::Tick() {
 		for (int i=0; i<1; ++i) {
 			mKMeans->tick();
 		}
+
+//		writeMorse("hui");
+
+		// After at least 30 seconds, try calculating the morse code
+//		if (mSums.size() > 30*20) {
+		if (mSums.size() > 1*20) {
+			calcMorse();
+		}
 	}
 
-	// If the module doesn't get data for some time, start analyzing the data
-	if (!mTimes.empty() && get_duration(mTimes.back(), get_cur_1ms()) > 3*1000) {
-
-		// Train a bit more
-		for (int i=0; i<10; ++i) {
-			mKMeans->tick();
-		}
-
-		// Print samples and kMeans
-		std::vector<float>::const_iterator itSum = mSums.begin();
-		std::vector<long>::const_iterator itTime = mTimes.begin();
-		for (; itSum!=mSums.end(); ++itSum, ++itTime) {
-			std::cout << *itTime << " " << *itSum << std::endl;
-		}
-		std::cout << "Means:" << std::endl;
-		mKMeans->print();
-		std::cout << std::endl;
+//	// Test
+//	if (mSums.size() > 5*20) {
+//		writeMorse("hi");
+//		reset();
+//	}
 
 
-		// Label data
-		std::vector<float> sample(1);
-		std::vector<int> labels(mSums.size());
-		std::vector<int>::iterator itLabel = labels.begin();
-		for (itSum=mSums.begin(); itSum!=mSums.end(); ++itSum, ++itLabel) {
-			sample[0] = *itSum;
-			*itLabel = mKMeans->test(sample, 1);
-//			std::cout << "label " << *itSum << " as " << *itLabel << std::endl;
-		}
 
-
-		// Search for a switch in label: from 1 to 0 or 0 to 1
-		// store the time at which this happens
-		std::cout << "Search for a switches in label" << std::endl;
-		itTime = mTimes.begin();
-		itLabel = labels.begin();
-		int lastSwitchLabel = *itLabel;
-		std::vector<long> switchTimeStamps;
-		switchTimeStamps.push_back(*itTime);
-		++itSum; ++itTime; ++itLabel;
-
-		for (; itLabel!=labels.end(); ++itTime, ++itLabel) {
-			if (*itLabel != lastSwitchLabel) {
-				switchTimeStamps.push_back(*itTime);
-				lastSwitchLabel = *itLabel;
-			}
-		}
-
-		// Calculate time between switches
-		std::cout << "Switch times:" << std::endl;
-		std::vector<int> switchTimeDurations;
-		std::vector<long>::const_iterator itSwitchTime = switchTimeStamps.begin();
-		long lastSwitchTime = *itSwitchTime++;
-		for (; itSwitchTime != switchTimeStamps.end(); ++itSwitchTime) {
-			switchTimeDurations.push_back(get_duration(lastSwitchTime, *itSwitchTime)/1000);
-//			std::cout << switchTimeDurations.back() << std::endl;
-			lastSwitchTime = *itSwitchTime;
-		}
-
-		bool start = false;
-		bool up = false;
-		std::string output; output.clear();
-		std::vector<int>::iterator itDuration = switchTimeDurations.begin();
-		for (; itDuration != switchTimeDurations.end(); ++itDuration) {
-			std::cout << "duration=" << *itDuration << " start=" << start << " up=" << up << " output=" << output << std::endl;
-			if (start) {
-				if (up) {
-					if (*itDuration < 2)
-						output += "1";
-					else
-						output += "111";
-					up = false;
-				}
-				else {
-					if (*itDuration < 2)
-						output += "0";
-					else if (*itDuration < 5)
-						output += "000";
-					else if (*itDuration < 11) {
-						output += "0000000";
-					}
-					else {
-						std::cout << "morse output: " << output << std::endl;
-						writeMorse(output);
-						break;
-					}
-					up = true;
-				}
-			}
-			if (!start && *itDuration > 10) {
-				start = true;
-				up = true;
-			}
-		}
-
-		// Clear data
-		mBrightnessHistory.clear();
-		mSums.clear();
-		mTimes.clear();
-
-		delete mKMeans;
-		mKMeans = new KMeans(2,1);
-	}
+//	// If the module doesn't get data for some time, start analyzing the data
+//	if (!mTimes.empty() && get_duration(mTimes.back(), get_cur_1ms()) > 3*1000) {
+//		calcMorse();
+//		reset();
+//	}
 
 	// lag=5; for i=[1:length(b)-lag]; c(i)=mean(b(i:i+lag)); end; d=find(c>m); e=find(b>m); figure(1); plot(b); hold on; plot(c, 'r'); plot(d,c(d),'x'); plot([0 length(b)], [m m]); hold off; figure(2); plot(diff(d),'x'); figure(3); plot(diff(e),'x');
 	// t=A(:,1); b=A(:,2); e=find(b>m); figure(1); plot(b); hold on; plot(e,b(e),'x'); plot([0 length(b)], [m m]); hold off; figure(2); figure(2); plot(diff(e),'x');
 
-	usleep(5*1000);
+	usleep(20*1000);
 }
 
 bool BrightnessToMorseModuleExt::Stop() {
 	return false;
+}
+
+void BrightnessToMorseModuleExt::calcMorse() {
+	// Train a bit more
+	for (int i=0; i<10; ++i) {
+		mKMeans->tick();
+	}
+
+	std::vector<float>::const_iterator itSum;
+	std::vector<long>::const_iterator itTime;
+
+	// Print samples and kMeans
+	itSum = mSums.begin();
+	itTime = mTimes.begin();
+	for (; itSum!=mSums.end(); ++itSum, ++itTime) {
+//		std::cout << *itTime << " " << *itSum << std::endl;
+	}
+//	std::cout << "Means:" << std::endl;
+//	mKMeans->print();
+//	std::cout << std::endl;
+
+
+	// Label data
+	std::vector<float> sample(1);
+	std::vector<int> labels(mSums.size());
+	std::vector<int>::iterator itLabel = labels.begin();
+	for (itSum=mSums.begin(); itSum!=mSums.end(); ++itSum, ++itLabel) {
+		sample[0] = *itSum;
+		*itLabel = mKMeans->test(sample, 1);
+//			std::cout << "label " << *itSum << " as " << *itLabel << std::endl;
+	}
+
+
+	// Search for a switch in label: from 1 to 0 or 0 to 1
+	// store the time at which this happens
+//	std::cout << "Search for a switches in label" << std::endl;
+	itTime = mTimes.begin();
+	itLabel = labels.begin();
+	int lastSwitchLabel = *itLabel;
+	std::vector<long> switchTimeStamps;
+	switchTimeStamps.push_back(*itTime);
+	++itSum; ++itTime; ++itLabel;
+
+	for (; itLabel!=labels.end(); ++itTime, ++itLabel) {
+		if (*itLabel != lastSwitchLabel) {
+			switchTimeStamps.push_back(*itTime);
+			lastSwitchLabel = *itLabel;
+		}
+	}
+
+	// Calculate time between switches
+//	std::cout << "Switch times:" << std::endl;
+	std::vector<int> switchTimeDurations;
+	std::vector<long>::const_iterator itSwitchTime = switchTimeStamps.begin();
+	long lastSwitchTime = *itSwitchTime++;
+	for (; itSwitchTime != switchTimeStamps.end(); ++itSwitchTime) {
+		switchTimeDurations.push_back(get_duration(lastSwitchTime, *itSwitchTime)/1000);
+//			std::cout << switchTimeDurations.back() << std::endl;
+		lastSwitchTime = *itSwitchTime;
+	}
+
+	bool start = false;
+	bool up = false;
+	std::string output; output.clear();
+	std::vector<int>::iterator itDuration = switchTimeDurations.begin();
+	for (; itDuration != switchTimeDurations.end(); ++itDuration) {
+//		std::cout << "duration=" << *itDuration << " start=" << start << " up=" << up << " output=" << output << std::endl;
+		if (start) {
+			if (up) {
+				if (*itDuration < 2)
+					output += "1";
+				else
+					output += "111";
+				up = false;
+			}
+			else {
+				if (*itDuration < 2)
+					output += "0";
+				else if (*itDuration < 5)
+					output += "000";
+				else if (*itDuration < 11) {
+					output += "0000000";
+				}
+				else {
+					std::cout << "morse output: " << output << std::endl;
+					writeMorse(output);
+					std::cout << "still working!" << std::endl;
+					// Clear data
+					reset();
+//					break;
+					return;
+				}
+				up = true;
+			}
+		}
+		if (!start && *itDuration > 10) {
+			start = true;
+			up = true;
+		}
+	}
+
+//	// Test
+//	std::cout << "mSums.size()=" << mSums.size() << std::endl;
+//	if (!output.empty() && !mSums.size() % 20) {
+//		std::cout << "test output: " << output << std::endl;
+//		writeMorse(output);
+//		std::cout << "still working!" << std::endl;
+//	}
+}
+
+void BrightnessToMorseModuleExt::reset() {
+	mBrightnessHistory.clear();
+	mSums.clear();
+	mTimes.clear();
+	delete mKMeans;
+	mKMeans = new KMeans(2,1);
 }
 

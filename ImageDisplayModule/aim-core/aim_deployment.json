@@ -1,6 +1,7 @@
 {
 	"name":"ImageDisplayModule",
 	"type":"background",
+	"version":"1",
 	"category":"Image processing",
 	"description":"Displays an image",
 	"supported_middleware":[ "yarp", "zeromq", "ros" ],

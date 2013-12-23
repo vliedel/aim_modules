@@ -38,6 +38,11 @@ struct AndroidBrightnessRead_t {
   float val;
 };
 
+struct AndroidCommandOutRead_t {
+  bool success;
+  std::string val;
+};
+
 class AvgBrightnessModule {
 private:
   Param *cliParam;
@@ -47,9 +52,11 @@ private:
   
   std::deque<float> mPortBrightnessWriteBuf;
   
+  std::deque<std::string> mPortCommandOutWriteBuf;
+  
 protected:
-  static const int channel_count = 2;
-  const char* channel[2];
+  static const int channel_count = 3;
+  const char* channel[3];
 public:
   // Default constructor
   AvgBrightnessModule();
@@ -79,6 +86,11 @@ public:
   bool writeBrightness(const float output);
   
   AndroidBrightnessRead_t androidReadBrightness();
+  
+  // Write to this function and assume it ends up at some receiving module
+  bool writeCommandOut(const std::string output);
+  
+  AndroidCommandOutRead_t androidReadCommandOut();
   
 };
 } // End of namespace

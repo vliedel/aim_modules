@@ -70,7 +70,7 @@ void ImageDisplayModule::Init(std::string & name) {
   
   {
     // incoming port, function as client
-    zmqPortName = "/imagedisplaymodule" + cliParam->module_id + "/portimage";
+    zmqPortName = "/imagedisplaymodule" + cliParam->module_id + "/image";
     portImageIn.name = zmqPortName;
     zmqPortName = "/resolve" + portImageIn.name;
     pns_record record;

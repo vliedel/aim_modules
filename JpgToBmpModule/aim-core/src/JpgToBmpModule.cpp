@@ -74,7 +74,7 @@ void JpgToBmpModule::Init(std::string & name) {
   
   {
     // incoming port, function as client
-    zmqPortName = "/jpgtobmpmodule" + cliParam->module_id + "/portjpg";
+    zmqPortName = "/jpgtobmpmodule" + cliParam->module_id + "/jpg";
     portJpgIn.name = zmqPortName;
     zmqPortName = "/resolve" + portJpgIn.name;
     pns_record record;
@@ -91,7 +91,7 @@ void JpgToBmpModule::Init(std::string & name) {
   }
   {
     // outgoing port, function as server
-    zmqPortName = "/jpgtobmpmodule" + cliParam->module_id + "/portbmp";
+    zmqPortName = "/jpgtobmpmodule" + cliParam->module_id + "/bmp";
     portBmpOut.name = zmqPortName;
     zmqPortName = "/resolve" + portBmpOut.name;
     pns_record record;

@@ -1,10 +1,12 @@
 # Use format xxx=xxx for configuration options
-version=0.2
+version=1
 build_folder=builds
 
 # Brief description for e.g. on the website
 description='Transforms a jpeg as base64 string to bitmap'
 category='Image processing'
+
+# Whether the website should add this module
 enable='true'
 
 # The application types that are possible: UI, background

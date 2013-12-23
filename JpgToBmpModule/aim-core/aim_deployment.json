@@ -1,6 +1,7 @@
 {
 	"name":"JpgToBmpModule",
 	"type":"background",
+	"version":"1",
 	"category":"Image processing",
 	"description":"Transforms a jpeg as base64 string to bitmap",
 	"supported_middleware":[ "yarp", "zeromq", "ros" ],

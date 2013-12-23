@@ -1,5 +1,6 @@
 {
 	"name":"ChatModule",
+	"version":"1",
 	"type":"UI",
 	"category":"Chat",
 	"description":"Shows incoming messages and allows you to send messages",

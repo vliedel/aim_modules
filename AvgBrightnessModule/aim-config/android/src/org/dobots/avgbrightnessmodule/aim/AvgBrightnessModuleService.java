@@ -28,6 +28,7 @@ public class AvgBrightnessModuleService extends Service {
   Messenger mPortImageInMessenger = new Messenger(new PortImageMessengerHandler());
   private List<String> mPortImageInBuffer = new ArrayList<String>(0);
   Messenger mPortBrightnessOutMessenger = null;
+  Messenger mPortCommandOutOutMessenger = null;
   
   class PortImageMessengerHandler extends Handler {
     @Override
@@ -89,6 +90,8 @@ public class AvgBrightnessModuleService extends Service {
       case AimProtocol.MSG_SET_MESSENGER:
         if (msg.getData().getString("port").equals("brightness"))
           mPortBrightnessOutMessenger = msg.replyTo;
+        if (msg.getData().getString("port").equals("commandout"))
+          mPortCommandOutOutMessenger = msg.replyTo;
         break;
       case AimProtocol.MSG_STOP:
         Log.i(TAG, "stopping");
@@ -222,6 +225,7 @@ public class AvgBrightnessModuleService extends Service {
       AvgBrightnessModuleExt aim = new AvgBrightnessModuleExt();
       //aim.Init("0"); // TODO: pass on the id
       AndroidBrightnessRead_t outputBrightness;
+      AndroidCommandOutRead_t outputCommandOut;
       
       while (true) {
         synchronized(mPortImageInBuffer) {
@@ -242,6 +246,18 @@ public class AvgBrightnessModuleService extends Service {
           bundle.putFloat("data", outputBrightness.getVal());
           msg.setData(bundle);
           msgSend(mPortBrightnessOutMessenger, msg);
+        }
+        
+        outputCommandOut = aim.androidReadCommandOut();
+        if (outputCommandOut.getSuccess()) {
+          // Debug
+          Log.d(TAG, "outputCommandOut=" + outputCommandOut.getVal());
+          Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
+          Bundle bundle = new Bundle();
+          bundle.putInt("datatype", AimProtocol.DATATYPE_STRING);
+          bundle.putString("data", outputCommandOut.getVal());
+          msg.setData(bundle);
+          msgSend(mPortCommandOutOutMessenger, msg);
         }
         
         if (isCancelled()) break;

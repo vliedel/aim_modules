@@ -44,6 +44,9 @@ private:
 	std::vector<float> mSums;
 	std::vector<long> mTimes;
 	KMeans* mKMeans;
+
+	void calcMorse();
+	void reset();
 };
 
 }

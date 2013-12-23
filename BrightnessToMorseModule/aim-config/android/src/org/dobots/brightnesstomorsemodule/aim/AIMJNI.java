@@ -6,7 +6,7 @@
  * the SWIG interface file instead.
  * ----------------------------------------------------------------------------- */
 
-package org.dobots.avgbrightnessmodule.aim;
+package org.dobots.brightnesstomorsemodule.aim;
 
 public class AIMJNI {
   public final static native long new_vector_int__SWIG_0();
@@ -57,33 +57,25 @@ public class AIMJNI {
   public final static native String Param_module_id_get(long jarg1, Param jarg1_);
   public final static native long new_Param();
   public final static native void delete_Param(long jarg1);
-  public final static native void AndroidBrightnessRead_t_success_set(long jarg1, AndroidBrightnessRead_t jarg1_, boolean jarg2);
-  public final static native boolean AndroidBrightnessRead_t_success_get(long jarg1, AndroidBrightnessRead_t jarg1_);
-  public final static native void AndroidBrightnessRead_t_val_set(long jarg1, AndroidBrightnessRead_t jarg1_, float jarg2);
-  public final static native float AndroidBrightnessRead_t_val_get(long jarg1, AndroidBrightnessRead_t jarg1_);
-  public final static native long new_AndroidBrightnessRead_t();
-  public final static native void delete_AndroidBrightnessRead_t(long jarg1);
-  public final static native void AndroidCommandOutRead_t_success_set(long jarg1, AndroidCommandOutRead_t jarg1_, boolean jarg2);
-  public final static native boolean AndroidCommandOutRead_t_success_get(long jarg1, AndroidCommandOutRead_t jarg1_);
-  public final static native void AndroidCommandOutRead_t_val_set(long jarg1, AndroidCommandOutRead_t jarg1_, String jarg2);
-  public final static native String AndroidCommandOutRead_t_val_get(long jarg1, AndroidCommandOutRead_t jarg1_);
-  public final static native long new_AndroidCommandOutRead_t();
-  public final static native void delete_AndroidCommandOutRead_t(long jarg1);
-  public final static native void delete_AvgBrightnessModule(long jarg1);
-  public final static native void AvgBrightnessModule_Init(long jarg1, AvgBrightnessModule jarg1_, long jarg2);
-  public final static native long AvgBrightnessModule_GetParam(long jarg1, AvgBrightnessModule jarg1_);
-  public final static native void AvgBrightnessModule_Tick(long jarg1, AvgBrightnessModule jarg1_);
-  public final static native boolean AvgBrightnessModule_Stop(long jarg1, AvgBrightnessModule jarg1_);
-  public final static native long AvgBrightnessModule_readImage__SWIG_0(long jarg1, AvgBrightnessModule jarg1_, boolean jarg2);
-  public final static native long AvgBrightnessModule_readImage__SWIG_1(long jarg1, AvgBrightnessModule jarg1_);
-  public final static native void AvgBrightnessModule_androidWriteImage(long jarg1, AvgBrightnessModule jarg1_, String jarg2);
-  public final static native boolean AvgBrightnessModule_writeBrightness(long jarg1, AvgBrightnessModule jarg1_, float jarg2);
-  public final static native long AvgBrightnessModule_androidReadBrightness(long jarg1, AvgBrightnessModule jarg1_);
-  public final static native boolean AvgBrightnessModule_writeCommandOut(long jarg1, AvgBrightnessModule jarg1_, String jarg2);
-  public final static native long AvgBrightnessModule_androidReadCommandOut(long jarg1, AvgBrightnessModule jarg1_);
-  public final static native long new_AvgBrightnessModuleExt();
-  public final static native void delete_AvgBrightnessModuleExt(long jarg1);
-  public final static native void AvgBrightnessModuleExt_Tick(long jarg1, AvgBrightnessModuleExt jarg1_);
-  public final static native boolean AvgBrightnessModuleExt_Stop(long jarg1, AvgBrightnessModuleExt jarg1_);
-  public final static native long AvgBrightnessModuleExt_SWIGUpcast(long jarg1);
+  public final static native void AndroidMorseRead_t_success_set(long jarg1, AndroidMorseRead_t jarg1_, boolean jarg2);
+  public final static native boolean AndroidMorseRead_t_success_get(long jarg1, AndroidMorseRead_t jarg1_);
+  public final static native void AndroidMorseRead_t_val_set(long jarg1, AndroidMorseRead_t jarg1_, String jarg2);
+  public final static native String AndroidMorseRead_t_val_get(long jarg1, AndroidMorseRead_t jarg1_);
+  public final static native long new_AndroidMorseRead_t();
+  public final static native void delete_AndroidMorseRead_t(long jarg1);
+  public final static native void delete_BrightnessToMorseModule(long jarg1);
+  public final static native void BrightnessToMorseModule_Init(long jarg1, BrightnessToMorseModule jarg1_, long jarg2);
+  public final static native long BrightnessToMorseModule_GetParam(long jarg1, BrightnessToMorseModule jarg1_);
+  public final static native void BrightnessToMorseModule_Tick(long jarg1, BrightnessToMorseModule jarg1_);
+  public final static native boolean BrightnessToMorseModule_Stop(long jarg1, BrightnessToMorseModule jarg1_);
+  public final static native long BrightnessToMorseModule_readBrightness__SWIG_0(long jarg1, BrightnessToMorseModule jarg1_, boolean jarg2);
+  public final static native long BrightnessToMorseModule_readBrightness__SWIG_1(long jarg1, BrightnessToMorseModule jarg1_);
+  public final static native void BrightnessToMorseModule_androidWriteBrightness(long jarg1, BrightnessToMorseModule jarg1_, float jarg2);
+  public final static native boolean BrightnessToMorseModule_writeMorse(long jarg1, BrightnessToMorseModule jarg1_, String jarg2);
+  public final static native long BrightnessToMorseModule_androidReadMorse(long jarg1, BrightnessToMorseModule jarg1_);
+  public final static native long new_BrightnessToMorseModuleExt();
+  public final static native void delete_BrightnessToMorseModuleExt(long jarg1);
+  public final static native void BrightnessToMorseModuleExt_Tick(long jarg1, BrightnessToMorseModuleExt jarg1_);
+  public final static native boolean BrightnessToMorseModuleExt_Stop(long jarg1, BrightnessToMorseModuleExt jarg1_);
+  public final static native long BrightnessToMorseModuleExt_SWIGUpcast(long jarg1);
 }

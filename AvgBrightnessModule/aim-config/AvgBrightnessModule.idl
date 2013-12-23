@@ -32,6 +32,9 @@ interface AvgBrightnessModule {
 
 	// Output the average brightness of the image
 	void Brightness(out float output);
+
+	// Change settings of the camera module
+	void CommandOut(out string output);
 };
 
 };

@@ -1,5 +1,6 @@
 {
 	"name":"PictureSelectModule",
+	"version":"1",
 	"type":"UI",
 	"category":"Image processing",
 	"description":"Select a picture on your phone",

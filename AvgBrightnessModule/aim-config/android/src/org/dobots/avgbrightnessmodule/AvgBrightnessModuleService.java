@@ -1,6 +1,8 @@
 package org.dobots.avgbrightnessmodule;
 
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.dobots.aim.AimProtocol;
 import org.dobots.aim.AimService;
@@ -20,6 +22,7 @@ import android.util.Log;
 public class AvgBrightnessModuleService extends AimService {
 	
 	private static final String TAG = "AvgBrightnessService";
+	Timer mSetCameraTimer = new Timer();
 
 	private Messenger mMessengerImage = new Messenger(new Handler() {
 
@@ -40,6 +43,11 @@ public class AvgBrightnessModuleService extends AimService {
 		}
 	});
 	
+	public void start() {
+		super.start();
+		mSetCameraTimer.schedule(setCamParameters, 0, 20);
+	};
+	
 	@Override
 	public String getModuleName() {
 		return "AvgBrightnessModule";
@@ -53,6 +61,7 @@ public class AvgBrightnessModuleService extends AimService {
 	@Override
 	public void defineOutMessenger(HashMap<String, Messenger> list) {
 		list.put("brightness", null);
+		list.put("commandout", null);
 	}
 
 	@Override
@@ -60,6 +69,19 @@ public class AvgBrightnessModuleService extends AimService {
 		return null;
 	}
 	
+	// TODO: this only works 1 time
+	TimerTask setCamParameters = new TimerTask() {
+		@Override
+		public void run() {
+			Messenger camMessenger = getOutMessenger("commandout");
+			if (camMessenger != null) {
+				sendData(camMessenger, "{\"data\":{\"command\":\"setAutoExposure\",\"parameter\":[false]},\"id\":2}");
+				sendData(camMessenger, "{\"data\":{\"command\":\"setFrameRate\",\"parameter\":[20.0]},\"id\":2}");
+				sendData(camMessenger, "{\"data\":{\"command\":\"setSize\",\"parameter\":[320, 240]},\"id\":2}");
+				mSetCameraTimer.cancel();
+			}
+		}
+	};
 	
 	void handleImage(String base64) {
 		byte[] jpg = Base64.decode(base64, Base64.NO_WRAP);
@@ -84,7 +106,7 @@ public class AvgBrightnessModuleService extends AimService {
 		
 		float avg = sum / pixels.length / 3;
 		
-		sendData(getOutMessenger("brightness"), avg);	
+		sendData(getOutMessenger("brightness"), avg);
 	}
 
 }

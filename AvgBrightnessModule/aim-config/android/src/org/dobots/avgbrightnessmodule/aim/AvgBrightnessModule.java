@@ -74,4 +74,12 @@ public class AvgBrightnessModule {
     return new AndroidBrightnessRead_t(AIMJNI.AvgBrightnessModule_androidReadBrightness(swigCPtr, this), true);
   }
 
+  public boolean writeCommandOut(String output) {
+    return AIMJNI.AvgBrightnessModule_writeCommandOut(swigCPtr, this, output);
+  }
+
+  public AndroidCommandOutRead_t androidReadCommandOut() {
+    return new AndroidCommandOutRead_t(AIMJNI.AvgBrightnessModule_androidReadCommandOut(swigCPtr, this), true);
+  }
+
 }

@@ -284,8 +284,11 @@ public class MainActivity extends Activity {
 			cursor.close();
 			
 			File file = new File(filePath);
-			Bitmap scaledImage = decodeFile(file, 100*1000);
-			
+			Bitmap scaledImage = decodeFile(file, 50*1000);
+			if (scaledImage == null) {
+				Log.e(TAG, "error: could not open image: " + file);
+				return;
+			}
 			mImageView.setImageBitmap(scaledImage);
 
 			int[] pixels = new int[scaledImage.getWidth() * scaledImage.getHeight()];

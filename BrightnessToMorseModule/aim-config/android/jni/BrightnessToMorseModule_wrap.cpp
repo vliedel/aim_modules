@@ -277,15 +277,15 @@ SWIGINTERN void std_vector_Sl_double_Sg__set(std::vector< double > *self,int i,s
                     throw std::out_of_range("vector index out of range");
             }
 
-#include "../../../aim-core/inc/AvgBrightnessModule.h"
-#include "../../../inc/AvgBrightnessModuleExt.h"
+#include "../../../aim-core/inc/BrightnessToMorseModule.h"
+#include "../../../inc/BrightnessToMorseModuleExt.h"
 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1int_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1int_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   std::vector< int > *result = 0 ;
   
@@ -297,7 +297,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1int_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1int_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jlong jresult = 0 ;
   std::vector< int >::size_type arg1 ;
   std::vector< int > *result = 0 ;
@@ -311,7 +311,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   std::vector< int >::size_type result;
@@ -326,7 +326,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   std::vector< int >::size_type result;
@@ -341,7 +341,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   std::vector< int >::size_type arg2 ;
   
@@ -354,7 +354,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1i
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   bool result;
@@ -369,7 +369,7 @@ SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vecto
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   
   (void)jenv;
@@ -380,7 +380,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1i
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   std::vector< int >::value_type *arg2 = 0 ;
   std::vector< int >::value_type temp2 ;
@@ -395,7 +395,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1i
 }
 
 
-SWIGEXPORT jint JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT jint JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jint jresult = 0 ;
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   int arg2 ;
@@ -419,7 +419,7 @@ SWIGEXPORT jint JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1i
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1int_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1int_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   int arg2 ;
   std::vector< int >::value_type *arg3 = 0 ;
@@ -443,7 +443,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1i
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1vector_1int(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1vector_1int(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   std::vector< int > *arg1 = (std::vector< int > *) 0 ;
   
   (void)jenv;
@@ -453,7 +453,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1v
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1long_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1long_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   std::vector< long > *result = 0 ;
   
@@ -465,7 +465,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1long_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1long_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jlong jresult = 0 ;
   std::vector< long >::size_type arg1 ;
   std::vector< long > *result = 0 ;
@@ -479,7 +479,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   std::vector< long >::size_type result;
@@ -494,7 +494,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   std::vector< long >::size_type result;
@@ -509,7 +509,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   std::vector< long >::size_type arg2 ;
   
@@ -522,7 +522,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1l
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   bool result;
@@ -537,7 +537,7 @@ SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vecto
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   
   (void)jenv;
@@ -548,7 +548,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1l
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   std::vector< long >::value_type *arg2 = 0 ;
   std::vector< long >::value_type temp2 ;
@@ -563,7 +563,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1l
 }
 
 
-SWIGEXPORT jint JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT jint JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jint jresult = 0 ;
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   int arg2 ;
@@ -587,7 +587,7 @@ SWIGEXPORT jint JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1l
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1long_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1long_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jint jarg3) {
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   int arg2 ;
   std::vector< long >::value_type *arg3 = 0 ;
@@ -611,7 +611,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1l
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1vector_1long(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1vector_1long(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   std::vector< long > *arg1 = (std::vector< long > *) 0 ;
   
   (void)jenv;
@@ -621,7 +621,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1v
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1float_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1float_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   std::vector< float > *result = 0 ;
   
@@ -633,7 +633,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1float_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1float_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jlong jresult = 0 ;
   std::vector< float >::size_type arg1 ;
   std::vector< float > *result = 0 ;
@@ -647,7 +647,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   std::vector< float >::size_type result;
@@ -662,7 +662,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   std::vector< float >::size_type result;
@@ -677,7 +677,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   std::vector< float >::size_type arg2 ;
   
@@ -690,7 +690,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1f
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   bool result;
@@ -705,7 +705,7 @@ SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vecto
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   
   (void)jenv;
@@ -716,7 +716,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1f
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   std::vector< float >::value_type *arg2 = 0 ;
   std::vector< float >::value_type temp2 ;
@@ -731,7 +731,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1f
 }
 
 
-SWIGEXPORT jfloat JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT jfloat JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jfloat jresult = 0 ;
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   int arg2 ;
@@ -755,7 +755,7 @@ SWIGEXPORT jfloat JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1float_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jfloat jarg3) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1float_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jfloat jarg3) {
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   int arg2 ;
   std::vector< float >::value_type *arg3 = 0 ;
@@ -779,7 +779,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1f
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1vector_1float(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1vector_1float(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   std::vector< float > *arg1 = (std::vector< float > *) 0 ;
   
   (void)jenv;
@@ -789,7 +789,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1v
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1double_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1double_1_1SWIG_10(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   std::vector< double > *result = 0 ;
   
@@ -801,7 +801,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vector_1double_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1vector_1double_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   jlong jresult = 0 ;
   std::vector< double >::size_type arg1 ;
   std::vector< double > *result = 0 ;
@@ -815,7 +815,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1vec
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1size(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   std::vector< double >::size_type result;
@@ -830,7 +830,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1capacity(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   std::vector< double >::size_type result;
@@ -845,7 +845,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1reserve(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   std::vector< double >::size_type arg2 ;
   
@@ -858,7 +858,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1d
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1isEmpty(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   bool result;
@@ -873,7 +873,7 @@ SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vecto
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1clear(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   
   (void)jenv;
@@ -884,7 +884,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1d
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1add(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jdouble jarg2) {
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   std::vector< double >::value_type *arg2 = 0 ;
   std::vector< double >::value_type temp2 ;
@@ -899,7 +899,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1d
 }
 
 
-SWIGEXPORT jdouble JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
+SWIGEXPORT jdouble JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2) {
   jdouble jresult = 0 ;
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   int arg2 ;
@@ -923,7 +923,7 @@ SWIGEXPORT jdouble JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1double_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jdouble jarg3) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_vector_1double_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jint jarg2, jdouble jarg3) {
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   int arg2 ;
   std::vector< double >::value_type *arg3 = 0 ;
@@ -947,7 +947,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_vector_1d
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1vector_1double(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1vector_1double(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   std::vector< double > *arg1 = (std::vector< double > *) 0 ;
   
   (void)jenv;
@@ -957,7 +957,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1v
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_Param_1module_1id_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_Param_1module_1id_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   rur::Param *arg1 = (rur::Param *) 0 ;
   std::string *arg2 = 0 ;
   
@@ -978,7 +978,7 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_Param_1mo
 }
 
 
-SWIGEXPORT jstring JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_Param_1module_1id_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jstring JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_Param_1module_1id_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
   rur::Param *arg1 = (rur::Param *) 0 ;
   std::string *result = 0 ;
@@ -993,7 +993,7 @@ SWIGEXPORT jstring JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_Param_
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1Param(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1Param(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
   rur::Param *result = 0 ;
   
@@ -1005,7 +1005,7 @@ SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1Par
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1Param(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1Param(JNIEnv *jenv, jclass jcls, jlong jarg1) {
   rur::Param *arg1 = (rur::Param *) 0 ;
   
   (void)jenv;
@@ -1015,120 +1015,42 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1P
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidBrightnessRead_1t_1success_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
-  rur::AndroidBrightnessRead_t *arg1 = (rur::AndroidBrightnessRead_t *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_AndroidMorseRead_1t_1success_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
+  rur::AndroidMorseRead_t *arg1 = (rur::AndroidMorseRead_t *) 0 ;
   bool arg2 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AndroidBrightnessRead_t **)&jarg1; 
+  arg1 = *(rur::AndroidMorseRead_t **)&jarg1; 
   arg2 = jarg2 ? true : false; 
   if (arg1) (arg1)->success = arg2;
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidBrightnessRead_1t_1success_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_AndroidMorseRead_1t_1success_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
-  rur::AndroidBrightnessRead_t *arg1 = (rur::AndroidBrightnessRead_t *) 0 ;
+  rur::AndroidMorseRead_t *arg1 = (rur::AndroidMorseRead_t *) 0 ;
   bool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AndroidBrightnessRead_t **)&jarg1; 
+  arg1 = *(rur::AndroidMorseRead_t **)&jarg1; 
   result = (bool) ((arg1)->success);
   jresult = (jboolean)result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidBrightnessRead_1t_1val_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
-  rur::AndroidBrightnessRead_t *arg1 = (rur::AndroidBrightnessRead_t *) 0 ;
-  float arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(rur::AndroidBrightnessRead_t **)&jarg1; 
-  arg2 = (float)jarg2; 
-  if (arg1) (arg1)->val = arg2;
-}
-
-
-SWIGEXPORT jfloat JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidBrightnessRead_1t_1val_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jfloat jresult = 0 ;
-  rur::AndroidBrightnessRead_t *arg1 = (rur::AndroidBrightnessRead_t *) 0 ;
-  float result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(rur::AndroidBrightnessRead_t **)&jarg1; 
-  result = (float) ((arg1)->val);
-  jresult = (jfloat)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1AndroidBrightnessRead_1t(JNIEnv *jenv, jclass jcls) {
-  jlong jresult = 0 ;
-  rur::AndroidBrightnessRead_t *result = 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  result = (rur::AndroidBrightnessRead_t *)new rur::AndroidBrightnessRead_t();
-  *(rur::AndroidBrightnessRead_t **)&jresult = result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1AndroidBrightnessRead_1t(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  rur::AndroidBrightnessRead_t *arg1 = (rur::AndroidBrightnessRead_t *) 0 ;
-  
-  (void)jenv;
-  (void)jcls;
-  arg1 = *(rur::AndroidBrightnessRead_t **)&jarg1; 
-  delete arg1;
-}
-
-
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidCommandOutRead_1t_1success_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
-  rur::AndroidCommandOutRead_t *arg1 = (rur::AndroidCommandOutRead_t *) 0 ;
-  bool arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(rur::AndroidCommandOutRead_t **)&jarg1; 
-  arg2 = jarg2 ? true : false; 
-  if (arg1) (arg1)->success = arg2;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidCommandOutRead_1t_1success_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jboolean jresult = 0 ;
-  rur::AndroidCommandOutRead_t *arg1 = (rur::AndroidCommandOutRead_t *) 0 ;
-  bool result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(rur::AndroidCommandOutRead_t **)&jarg1; 
-  result = (bool) ((arg1)->success);
-  jresult = (jboolean)result; 
-  return jresult;
-}
-
-
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidCommandOutRead_1t_1val_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
-  rur::AndroidCommandOutRead_t *arg1 = (rur::AndroidCommandOutRead_t *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_AndroidMorseRead_1t_1val_1set(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+  rur::AndroidMorseRead_t *arg1 = (rur::AndroidMorseRead_t *) 0 ;
   std::string *arg2 = 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AndroidCommandOutRead_t **)&jarg1; 
+  arg1 = *(rur::AndroidMorseRead_t **)&jarg1; 
   if(!jarg2) {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
     return ;
@@ -1142,61 +1064,61 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidCo
 }
 
 
-SWIGEXPORT jstring JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AndroidCommandOutRead_1t_1val_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jstring JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_AndroidMorseRead_1t_1val_1get(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jstring jresult = 0 ;
-  rur::AndroidCommandOutRead_t *arg1 = (rur::AndroidCommandOutRead_t *) 0 ;
+  rur::AndroidMorseRead_t *arg1 = (rur::AndroidMorseRead_t *) 0 ;
   std::string *result = 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AndroidCommandOutRead_t **)&jarg1; 
+  arg1 = *(rur::AndroidMorseRead_t **)&jarg1; 
   result = (std::string *) & ((arg1)->val);
   jresult = jenv->NewStringUTF(result->c_str()); 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1AndroidCommandOutRead_1t(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1AndroidMorseRead_1t(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
-  rur::AndroidCommandOutRead_t *result = 0 ;
+  rur::AndroidMorseRead_t *result = 0 ;
   
   (void)jenv;
   (void)jcls;
-  result = (rur::AndroidCommandOutRead_t *)new rur::AndroidCommandOutRead_t();
-  *(rur::AndroidCommandOutRead_t **)&jresult = result; 
+  result = (rur::AndroidMorseRead_t *)new rur::AndroidMorseRead_t();
+  *(rur::AndroidMorseRead_t **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1AndroidCommandOutRead_1t(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  rur::AndroidCommandOutRead_t *arg1 = (rur::AndroidCommandOutRead_t *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1AndroidMorseRead_1t(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  rur::AndroidMorseRead_t *arg1 = (rur::AndroidMorseRead_t *) 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(rur::AndroidCommandOutRead_t **)&jarg1; 
+  arg1 = *(rur::AndroidMorseRead_t **)&jarg1; 
   delete arg1;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1AvgBrightnessModule(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1BrightnessToMorseModule(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   delete arg1;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1Init(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1Init(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jlong jarg2) {
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   std::string *arg2 = 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   arg2 = *(std::string **)&jarg2;
   if (!arg2) {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "std::string & reference is null");
@@ -1206,141 +1128,102 @@ SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBright
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1GetParam(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1GetParam(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   rur::Param *result = 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   result = (rur::Param *)(arg1)->GetParam();
   *(rur::Param **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1Tick(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1Tick(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   (arg1)->Tick();
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1Stop(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1Stop(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   bool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   result = (bool)(arg1)->Stop();
   jresult = (jboolean)result; 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1readImage_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1readBrightness_1_1SWIG_10(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jboolean jarg2) {
   jlong jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   bool arg2 ;
-  std::string *result = 0 ;
+  float *result = 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   arg2 = jarg2 ? true : false; 
-  result = (std::string *)(arg1)->readImage(arg2);
-  *(std::string **)&jresult = result; 
+  result = (float *)(arg1)->readBrightness(arg2);
+  *(float **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1readImage_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1readBrightness_1_1SWIG_11(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
-  std::string *result = 0 ;
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
+  float *result = 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
-  result = (std::string *)(arg1)->readImage();
-  *(std::string **)&jresult = result; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
+  result = (float *)(arg1)->readBrightness();
+  *(float **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1androidWriteImage(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
-  std::string arg2 ;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
-  if(!jarg2) {
-    SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
-    return ;
-  } 
-  const char *arg2_pstr = (const char *)jenv->GetStringUTFChars(jarg2, 0); 
-  if (!arg2_pstr) return ;
-  (&arg2)->assign(arg2_pstr);
-  jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  (arg1)->androidWriteImage(arg2);
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1writeBrightness(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
-  jboolean jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1androidWriteBrightness(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jfloat jarg2) {
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   float arg2 ;
-  bool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   arg2 = (float)jarg2; 
-  result = (bool)(arg1)->writeBrightness(arg2);
-  jresult = (jboolean)result; 
-  return jresult;
+  (arg1)->androidWriteBrightness(arg2);
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1androidReadBrightness(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  jlong jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
-  rur::AndroidBrightnessRead_t result;
-  
-  (void)jenv;
-  (void)jcls;
-  (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
-  result = (arg1)->androidReadBrightness();
-  *(rur::AndroidBrightnessRead_t **)&jresult = new rur::AndroidBrightnessRead_t((const rur::AndroidBrightnessRead_t &)result); 
-  return jresult;
-}
-
-
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1writeCommandOut(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1writeMorse(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_, jstring jarg2) {
   jboolean jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
   std::string arg2 ;
   bool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
   if(!jarg2) {
     SWIG_JavaThrowException(jenv, SWIG_JavaNullPointerException, "null string");
     return 0;
@@ -1349,80 +1232,80 @@ SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBr
   if (!arg2_pstr) return 0;
   (&arg2)->assign(arg2_pstr);
   jenv->ReleaseStringUTFChars(jarg2, arg2_pstr); 
-  result = (bool)(arg1)->writeCommandOut(arg2);
+  result = (bool)(arg1)->writeMorse(arg2);
   jresult = (jboolean)result; 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModule_1androidReadCommandOut(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModule_1androidReadMorse(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jlong jresult = 0 ;
-  rur::AvgBrightnessModule *arg1 = (rur::AvgBrightnessModule *) 0 ;
-  rur::AndroidCommandOutRead_t result;
+  rur::BrightnessToMorseModule *arg1 = (rur::BrightnessToMorseModule *) 0 ;
+  rur::AndroidMorseRead_t result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModule **)&jarg1; 
-  result = (arg1)->androidReadCommandOut();
-  *(rur::AndroidCommandOutRead_t **)&jresult = new rur::AndroidCommandOutRead_t((const rur::AndroidCommandOutRead_t &)result); 
+  arg1 = *(rur::BrightnessToMorseModule **)&jarg1; 
+  result = (arg1)->androidReadMorse();
+  *(rur::AndroidMorseRead_t **)&jresult = new rur::AndroidMorseRead_t((const rur::AndroidMorseRead_t &)result); 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_new_1AvgBrightnessModuleExt(JNIEnv *jenv, jclass jcls) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_new_1BrightnessToMorseModuleExt(JNIEnv *jenv, jclass jcls) {
   jlong jresult = 0 ;
-  rur::AvgBrightnessModuleExt *result = 0 ;
+  rur::BrightnessToMorseModuleExt *result = 0 ;
   
   (void)jenv;
   (void)jcls;
-  result = (rur::AvgBrightnessModuleExt *)new rur::AvgBrightnessModuleExt();
-  *(rur::AvgBrightnessModuleExt **)&jresult = result; 
+  result = (rur::BrightnessToMorseModuleExt *)new rur::BrightnessToMorseModuleExt();
+  *(rur::BrightnessToMorseModuleExt **)&jresult = result; 
   return jresult;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_delete_1AvgBrightnessModuleExt(JNIEnv *jenv, jclass jcls, jlong jarg1) {
-  rur::AvgBrightnessModuleExt *arg1 = (rur::AvgBrightnessModuleExt *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_delete_1BrightnessToMorseModuleExt(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+  rur::BrightnessToMorseModuleExt *arg1 = (rur::BrightnessToMorseModuleExt *) 0 ;
   
   (void)jenv;
   (void)jcls;
-  arg1 = *(rur::AvgBrightnessModuleExt **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModuleExt **)&jarg1; 
   delete arg1;
 }
 
 
-SWIGEXPORT void JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModuleExt_1Tick(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
-  rur::AvgBrightnessModuleExt *arg1 = (rur::AvgBrightnessModuleExt *) 0 ;
+SWIGEXPORT void JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModuleExt_1Tick(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+  rur::BrightnessToMorseModuleExt *arg1 = (rur::BrightnessToMorseModuleExt *) 0 ;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModuleExt **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModuleExt **)&jarg1; 
   (arg1)->Tick();
 }
 
 
-SWIGEXPORT jboolean JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModuleExt_1Stop(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
+SWIGEXPORT jboolean JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModuleExt_1Stop(JNIEnv *jenv, jclass jcls, jlong jarg1, jobject jarg1_) {
   jboolean jresult = 0 ;
-  rur::AvgBrightnessModuleExt *arg1 = (rur::AvgBrightnessModuleExt *) 0 ;
+  rur::BrightnessToMorseModuleExt *arg1 = (rur::BrightnessToMorseModuleExt *) 0 ;
   bool result;
   
   (void)jenv;
   (void)jcls;
   (void)jarg1_;
-  arg1 = *(rur::AvgBrightnessModuleExt **)&jarg1; 
+  arg1 = *(rur::BrightnessToMorseModuleExt **)&jarg1; 
   result = (bool)(arg1)->Stop();
   jresult = (jboolean)result; 
   return jresult;
 }
 
 
-SWIGEXPORT jlong JNICALL Java_org_dobots_avgbrightnessmodule_aim_AIMJNI_AvgBrightnessModuleExt_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
+SWIGEXPORT jlong JNICALL Java_org_dobots_brightnesstomorsemodule_aim_AIMJNI_BrightnessToMorseModuleExt_1SWIGUpcast(JNIEnv *jenv, jclass jcls, jlong jarg1) {
     jlong baseptr = 0;
     (void)jenv;
     (void)jcls;
-    *(rur::AvgBrightnessModule **)&baseptr = *(rur::AvgBrightnessModuleExt **)&jarg1;
+    *(rur::BrightnessToMorseModule **)&baseptr = *(rur::BrightnessToMorseModuleExt **)&jarg1;
     return baseptr;
 }
 
