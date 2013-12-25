@@ -20,7 +20,8 @@
 using namespace rur;
 
 BrightnessToMorseModuleExt::BrightnessToMorseModuleExt() :
-		mBrightnessAvg(0)
+		mBrightnessAvg(0),
+		mTimeUnit(500)
 {
 	// 2 clusters, 1 dimension
 	mKMeans = new KMeans(2,1);
@@ -90,7 +91,7 @@ void BrightnessToMorseModuleExt::Tick() {
 //	}
 
 	float* brightness = readBrightness(false);
-	usleep(20*1000);
+//	usleep(10*1000);
 	if (brightness != NULL) {
 
 		// Use a moving average of 5 samples
@@ -125,8 +126,7 @@ void BrightnessToMorseModuleExt::Tick() {
 //		writeMorse("hui");
 
 		// After at least 30 seconds, try calculating the morse code
-//		if (mSums.size() > 30*20) {
-		if (mSums.size() > 1*20) {
+		if (mTimes.size() > 2 && get_duration(mTimes.front(), mTimes.back()) > 30*mTimeUnit) {
 			calcMorse();
 		}
 	}
@@ -156,8 +156,8 @@ bool BrightnessToMorseModuleExt::Stop() {
 }
 
 void BrightnessToMorseModuleExt::calcMorse() {
-	// Train a bit more
-	for (int i=0; i<10; ++i) {
+	// Train a bit more?
+	for (int i=0; i<1; ++i) {
 		mKMeans->tick();
 	}
 
@@ -205,11 +205,11 @@ void BrightnessToMorseModuleExt::calcMorse() {
 
 	// Calculate time between switches
 //	std::cout << "Switch times:" << std::endl;
-	std::vector<int> switchTimeDurations;
+	std::vector<long> switchTimeDurations;
 	std::vector<long>::const_iterator itSwitchTime = switchTimeStamps.begin();
 	long lastSwitchTime = *itSwitchTime++;
 	for (; itSwitchTime != switchTimeStamps.end(); ++itSwitchTime) {
-		switchTimeDurations.push_back(get_duration(lastSwitchTime, *itSwitchTime)/1000);
+		switchTimeDurations.push_back(get_duration(lastSwitchTime, *itSwitchTime));
 //			std::cout << switchTimeDurations.back() << std::endl;
 		lastSwitchTime = *itSwitchTime;
 	}
@@ -217,23 +217,23 @@ void BrightnessToMorseModuleExt::calcMorse() {
 	bool start = false;
 	bool up = false;
 	std::string output; output.clear();
-	std::vector<int>::iterator itDuration = switchTimeDurations.begin();
+	std::vector<long>::const_iterator itDuration = switchTimeDurations.begin();
 	for (; itDuration != switchTimeDurations.end(); ++itDuration) {
 //		std::cout << "duration=" << *itDuration << " start=" << start << " up=" << up << " output=" << output << std::endl;
 		if (start) {
 			if (up) {
-				if (*itDuration < 2)
+				if (*itDuration < 2*mTimeUnit)
 					output += "1";
 				else
 					output += "111";
 				up = false;
 			}
 			else {
-				if (*itDuration < 2)
+				if (*itDuration < 2*mTimeUnit)
 					output += "0";
-				else if (*itDuration < 5)
+				else if (*itDuration < 5*mTimeUnit)
 					output += "000";
-				else if (*itDuration < 11) {
+				else if (*itDuration < 11*mTimeUnit) {
 					output += "0000000";
 				}
 				else {
@@ -248,19 +248,19 @@ void BrightnessToMorseModuleExt::calcMorse() {
 				up = true;
 			}
 		}
-		if (!start && *itDuration > 10) {
+		if (!start && *itDuration >= 11*mTimeUnit) {
 			start = true;
 			up = true;
 		}
 	}
 
 //	// Test
-//	std::cout << "mSums.size()=" << mSums.size() << std::endl;
-//	if (!output.empty() && !mSums.size() % 20) {
-//		std::cout << "test output: " << output << std::endl;
-//		writeMorse(output);
+	std::cout << "mSums.size()=" << mSums.size() << std::endl;
+	if (!output.empty() && !mSums.size() % 20) {
+		std::cout << "test output: " << output << std::endl;
+		writeMorse(output);
 //		std::cout << "still working!" << std::endl;
-//	}
+	}
 }
 
 void BrightnessToMorseModuleExt::reset() {

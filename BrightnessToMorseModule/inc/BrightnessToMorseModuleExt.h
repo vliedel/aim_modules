@@ -44,6 +44,7 @@ private:
 	std::vector<float> mSums;
 	std::vector<long> mTimes;
 	KMeans* mKMeans;
+	long mTimeUnit; // Number of milliseconds that a morse code time unit is.
 
 	void calcMorse();
 	void reset();
