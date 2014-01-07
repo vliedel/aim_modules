@@ -26,7 +26,8 @@
         android:layout_above="@+id/editChat"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="16dp"
-        android:text="outgoing message goes here" />
+        android:text="outgoing message goes here"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/textChatIn"
@@ -35,6 +36,7 @@
         android:layout_above="@+id/textChatOut"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="16dp"
-        android:text="incoming message goes here" />
+        android:text="incoming message goes here"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>

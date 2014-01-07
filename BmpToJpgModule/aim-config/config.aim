@@ -18,11 +18,11 @@ android_url='https://play.google.com/store/apps/details?id=org.dobots.bmptojpgmo
 
 # Supported middlewarez
 middleware_support_android='true'
-middleware_support_yarp='false'
-middleware_support_zeromq='false'
-middleware_support_ros='false'
+middleware_support_yarp='true'
+middleware_support_zeromq='true'
+middleware_support_ros='true'
 
 # Supported devices
 device_support_android='true'
-device_support_raspberrypi='false'
-device_support_ubuntu='false'
+device_support_raspberrypi='true'
+device_support_ubuntu='true'

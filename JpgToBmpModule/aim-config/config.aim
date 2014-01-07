@@ -17,12 +17,12 @@ android_package='org.dobots.jpgtobmpmodule'
 android_url='https://play.google.com/store/apps/details?id=org.dobots.jpgtobmpmodule'
 
 # Supported middlewarez
-middleware_support_android='false'
+middleware_support_android='true'
 middleware_support_yarp='true'
 middleware_support_zeromq='true'
 middleware_support_ros='true'
 
 # Supported devices
-device_support_android='false'
+device_support_android='true'
 device_support_raspberrypi='true'
 device_support_ubuntu='true'

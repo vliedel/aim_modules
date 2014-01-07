@@ -97,14 +97,14 @@ protected void onCreate(Bundle savedInstanceState) {
 
 	private void startService() {
 		Intent intent = new Intent();
-		intent.setClassName("org.dobots.jpgtobmpmodule", "org.dobots.jpgtobmpmodule.aim.JpgToBmpModuleService");
+		intent.setClassName("org.dobots.jpgtobmpmodule", "org.dobots.jpgtobmpmodule.JpgToBmpModuleService");
 		ComponentName name = startService(intent);
 		Log.i(TAG, "Starting: " + intent.toString());
 	}
 
     private void stopService() {
 		Intent intent = new Intent();
-		intent.setClassName("org.dobots.jpgtobmpmodule", "org.dobots.jpgtobmpmodule.aim.JpgToBmpModuleService");
+		intent.setClassName("org.dobots.jpgtobmpmodule", "org.dobots.jpgtobmpmodule.JpgToBmpModuleService");
 		stopService(intent);
 		Log.i(TAG, "Stopping service: " + intent.toString());
 //		finish();

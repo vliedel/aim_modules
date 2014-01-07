@@ -21,6 +21,37 @@
 
 using namespace rur;
 
+//class JpgDataDest {
+//public:
+//	unsigned char* mBuf;
+//	unsigned char* mNextOutputByte;
+//	size_t mBytesLeft;
+//
+//	void init_destination(j_compress_ptr cinfo) {
+//
+//	}
+//
+//	// This is called whenever the buffer has filled (mBytesLeft reaches zero).
+//	bool empty_output_buffer (j_compress_ptr cinfo) {
+//		// In typical applications, it should write out the *entire* buffer
+//		// (use the saved start address and buffer length; ignore the current state of mNextOutputByte and mBytesLeft).
+//		// Then reset the pointer & count to the start of the buffer, and return TRUE indicating that the buffer has been dumped.
+//		// mBytesLeft must be set to a positive value when TRUE is returned.
+//		// A FALSE return should only be used when I/O suspension is desired.
+//
+//		return true;
+//	}
+//
+//	// Terminate destination --- called by jpeg_finish_compress() after all data has been written.
+//	void term_destination (j_compress_ptr cinfo) {
+//		// In most applications, this must flush any data remaining in the buffer.
+//		// Use either mNextOutputByte or mBytesLeft to determine how much data is in the buffer.
+//	}
+//
+//
+//
+//};
+
 //! Replace with your own code
 BmpToJpgModuleExt::BmpToJpgModuleExt() {
 
@@ -59,14 +90,13 @@ void BmpToJpgModuleExt::Tick() {
 			read->clear();
 			return;
 		}
-		if (read->size() < 4+height*width*channels) {
-			std::cerr << "read.size=" << read->size() << ", should be " << 4+height*width*channels << std::endl;
+		if (read->size() < 6+height*width*channels) {
+			std::cerr << "read.size=" << read->size() << ", should be " << 6+height*width*channels << std::endl;
 			read->clear();
 			return;
 		}
 
-		char* buffer = new char[height*width*channels];
-		size_t bufSize = height*width*channels;
+		unsigned char* bufIn = new unsigned char[width*channels];
 
 
 		struct jpeg_compress_struct cinfo;
@@ -74,13 +104,65 @@ void BmpToJpgModuleExt::Tick() {
 		cinfo.err = jpeg_std_error(&jerr);
 		jpeg_create_compress(&cinfo);
 
+//		FILE * outfile;
+//		if ((outfile = fopen(filename, "wb")) == NULL) {
+//			fprintf(stderr, "can't open %s\n", filename);
+//			exit(1);
+//		}
 
+//		jpeg_stdio_dest(&cinfo, );
 
+//		unsigned long bufOutSize = read->size();
+//		unsigned char* bufOut = new unsigned char[bufOutSize];
+		unsigned long bufOutSize = 0;
+		unsigned char* bufOut = NULL;
+
+		jpeg_mem_dest(&cinfo, &bufOut, &bufOutSize);
+
+		cinfo.image_height = height;
+		cinfo.image_width = width;
+		cinfo.input_components = channels;
+		cinfo.in_color_space = JCS_RGB;
+		jpeg_set_defaults(&cinfo);
+		// Make optional parameter settings here
+
+		jpeg_start_compress(&cinfo, TRUE);
+
+		unsigned char* pRow[1];        /* pointer to a single row */
+		int row_stride;                 /* physical row width in buffer */
+		row_stride = cinfo.image_width * cinfo.input_components;   /* JSAMPLEs per row in image_buffer */
+		while (cinfo.next_scanline < cinfo.image_height) {
+			for (int i=0; i<row_stride; ++i) {
+				bufIn[i] = *it++;
+			}
+
+			//row_pointer[0] = &buffer[cinfo.next_scanline * row_stride];
+			pRow[0] = bufIn;
+			jpeg_write_scanlines(&cinfo, pRow, 1);
+		}
+		jpeg_finish_compress(&cinfo);
+
+		// Write the result
+		//..
+		//..
+		// Converts binary data of length=len to base64 characters.
+		// Length of the resultant string is stored in flen
+		// (you must pass pointer flen).
+		int base64Len;
+		char* base64String = base64(bufOut, bufOutSize, &base64Len);
+
+		writeJpg(std::string(base64String));
+		//std::cout << std::string(base64String) << std::endl;
+
+		jpeg_destroy_compress(&cinfo);
 
 
 		// http://apodeline.free.fr/DOC/libjpeg/libjpeg-3.html
-		delete buffer;
+		delete [] bufIn;
+//		delete [] bufOut;
 		read->clear();
+
+
 	}
 }
 

@@ -4,8 +4,8 @@
 	"version":"1",
 	"category":"Image processing",
 	"description":"Transforms a jpeg as base64 string to bitmap",
-	"supported_middleware":[ "yarp", "zeromq", "ros" ],
-	"supported_devices":[ "raspberrypi", "ubuntu" ],
+	"supported_middleware":[ "android", "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "android", "raspberrypi", "ubuntu" ],
 	"enable":"true",
 	"android": {
 		"package":"org.dobots.jpgtobmpmodule",
