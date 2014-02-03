@@ -1,0 +1,29 @@
+{
+	"name":"FaceDetectModule",
+	"type":"background",
+	"version":"1",
+	"category":"Image processing",
+	"description":"Detects faces in an image",
+	"long_description":"Detects faces in an input image and output many images of faces",
+	"supported_middleware":[ "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "raspberrypi", "ubuntu" ],
+	"enable":"false",
+	"android": {
+		"package":"org.dobots.facedetectmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.facedetectmodule"
+	},
+	"ports": [
+		{
+			"name":"image",
+			"dir":"in",
+			"type":"intarray",
+			"middleware":"default"
+		},
+		{
+			"name":"faceimage",
+			"dir":"out",
+			"type":"intarray",
+			"middleware":"default"
+		}
+	]
+}
