@@ -1,0 +1,29 @@
+{
+	"name":"MotionDetectionModule",
+	"type":"background",
+	"version":"1",
+	"category":"Image processing",
+	"description":"Calculates the probability of motion in an image stream",
+	"long_description":"Calculates the probability of motion in an image stream",
+	"supported_middleware":[ "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "raspberrypi", "ubuntu" ],
+	"enable":"false",
+	"android": {
+		"package":"org.dobots.motiondetectionmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.motiondetectionmodule"
+	},
+	"ports": [
+		{
+			"name":"image",
+			"dir":"in",
+			"type":"intarray",
+			"middleware":"default"
+		},
+		{
+			"name":"motion",
+			"dir":"out",
+			"type":"float",
+			"middleware":"default"
+		}
+	]
+}
