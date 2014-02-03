@@ -136,7 +136,7 @@ public:
    * that).
    */
   // Write to this function and assume it ends up at some receiving module
-  bool writeMotion(const float probability);
+  bool writeMotion(const int probability);
   
 };
 } // End of namespace

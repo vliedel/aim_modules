@@ -88,21 +88,19 @@ void MotionDetectionModuleExt::Tick() {
 			(*itFrame)[0] = *it++;
 		}
 
-//		cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
-//		cv::imshow("test", mFrame);
-//		cv::waitKey(0);
-
 		mBackGroundSubtractor(mFrame, mForeground);
 		cv::erode(mForeground,mForeground,cv::Mat()); //if element=Mat() , a 3 x 3 rectangular structuring element is used.
 
-		std::vector<std::vector<cv::Point> > contours;
+		//std::vector<std::vector<cv::Point> > contours;
 		//cv::findContours(mForeground,contours, CV_RETR_EXTERNAL, CV_CHAIN_APPROX_NONE);
 
 		mBackGroundSubtractor.getBackgroundImage(mBackground);
 
-		cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
+//		cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
 		//cv::drawContours(mFrame,contours,-1,cv::Scalar(0,0,255),2);
-		cv::imshow("test", mForeground);
+//		cv::imshow("test", mForeground);
+//		cv::waitKey(10);
+		//cv::updateWindow("test"); // requires openGL support
 
 		long sum=0;
 		cv::Mat_<unsigned char>::iterator itFore = mForeground.begin<unsigned char>(), itForeEnd = mForeground.end<unsigned char>();
@@ -110,17 +108,12 @@ void MotionDetectionModuleExt::Tick() {
 			if (*itFore>128) // 0 for background, 127 for shadow, 255 for foreground
 				sum+=*itFore;
 		}
-//		std::cout << mForeground << std::endl;
-		std::cout << "sum=" << sum << " probability=" << (float)sum/width/height/255 << std::endl;
-//		std::cout << mForeground.rows << " " << mForeground.cols <<
 
-		cv::waitKey(10);
-		//cv::updateWindow("test"); // requires openGL support
+//		std::cout << "sum=" << sum << " probability=" << (float)sum/width/height/255 << std::endl;
+		std::cout << "sum=" << sum << " probability=" << sum/width/height << std::endl;
 
-//		std::cout << "writing result..." << std::endl;
-//		writeMotion((float)sum/width/height/255);
+		writeMotion(sum/width/height);
 
-		std::cout << "Done processing image" << std::endl;
 		readVec->clear();
 	}
 	usleep(10*1000);

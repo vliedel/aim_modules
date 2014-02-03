@@ -324,7 +324,7 @@ long_seq* MotionDetectionModule::readImage(bool blocking) {
   return &portImageValue;
 }
 
-bool MotionDetectionModule::writeMotion(const float probability) {
+bool MotionDetectionModule::writeMotion(const int probability) {
   std::stringstream ss; ss.clear(); ss.str("");
   ss << probability; // very dirty, no endianness, etc, just use the stream operator itself
   pthread_mutex_lock(&cmdMutex);

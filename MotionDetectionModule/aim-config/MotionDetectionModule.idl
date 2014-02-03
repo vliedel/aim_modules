@@ -30,7 +30,7 @@ interface MotionDetectionModule {
   // Input image from a camera
   void Image(in long_seq bmp);
 
-  void Motion(out float probability);
+  void Motion(out long probability);
 };
 
 };
