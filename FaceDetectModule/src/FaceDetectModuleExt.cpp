@@ -135,7 +135,8 @@ void FaceDetectModuleExt::detectAndDraw(cv::Mat& img, cv::CascadeClassifier& cas
 			,
 			cv::Size(30, 30) );
 	t = (double)cvGetTickCount() - t;
-	printf( "detection time = %g ms\n", t/((double)cvGetTickFrequency()*1000.) );
+	//printf( "detection time = %g ms\n", t/((double)cvGetTickFrequency()*1000.) );
+	std::cout << "detection time = " << t/((double)cvGetTickFrequency()*1000.) << " ms" << std::endl;
 	for(std::vector<cv::Rect>::const_iterator r = faces.begin(); r != faces.end(); r++, i++ )
 	{
 		cv::Mat smallImgROI;
