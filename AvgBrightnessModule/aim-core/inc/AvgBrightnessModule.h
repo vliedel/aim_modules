@@ -20,10 +20,8 @@
 
 #include <string>
 #include <vector>
-#include <vector>
-#include <deque>
 #include <string>
-
+#include <vector>
 
 namespace rur {
 
@@ -33,27 +31,11 @@ struct Param {
 
 typedef std::vector<int> long_seq;
 
-struct AndroidBrightnessRead_t {
-  bool success;
-  float val;
-};
-
-struct AndroidCommandOutRead_t {
-  bool success;
-  std::string val;
-};
-
 class AvgBrightnessModule {
 private:
   Param *cliParam;
   
-  std::string mPortImageValue;
-  std::deque<std::string> mPortImageReadBuf;
-  
-  std::deque<float> mPortBrightnessWriteBuf;
-  
-  std::deque<std::string> mPortCommandOutWriteBuf;
-  
+  std::string dummyImage;
 protected:
   static const int channel_count = 3;
   const char* channel[3];
@@ -80,17 +62,11 @@ public:
   // Remark: check if result is not NULL
   std::string *readImage(bool blocking=false);
   
-  void androidWriteImage(std::string base_64);
-  
   // Write to this function and assume it ends up at some receiving module
   bool writeBrightness(const float output);
   
-  AndroidBrightnessRead_t androidReadBrightness();
-  
   // Write to this function and assume it ends up at some receiving module
   bool writeCommandOut(const std::string output);
-  
-  AndroidCommandOutRead_t androidReadCommandOut();
   
 };
 } // End of namespace

@@ -36,47 +36,15 @@ void AvgBrightnessModule::Init(std::string & name) {
 }
 
 std::string* AvgBrightnessModule::readImage(bool blocking) {
-  if (mPortImageReadBuf.empty())
-    return NULL;
-  mPortImageValue = mPortImageReadBuf.front();
-  mPortImageReadBuf.pop_front();
-  return &mPortImageValue;
-}
-
-void AvgBrightnessModule::androidWriteImage(std::string in) {
-  mPortImageReadBuf.push_back(in);
+  return &dummyImage;
 }
 
 bool AvgBrightnessModule::writeBrightness(const float output) {
-  mPortBrightnessWriteBuf.push_back(output);
-}
-
-AndroidBrightnessRead_t AvgBrightnessModule::androidReadBrightness() {
-  AndroidBrightnessRead_t ret;
-  if (mPortBrightnessWriteBuf.empty()) {
-    ret.success = false;
-    return ret;
-  }
-  ret.val = mPortBrightnessWriteBuf.front();
-  ret.success = true;
-  mPortBrightnessWriteBuf.pop_front();
-  return ret;
+  return true;
 }
 
 bool AvgBrightnessModule::writeCommandOut(const std::string output) {
-  mPortCommandOutWriteBuf.push_back(output);
-}
-
-AndroidCommandOutRead_t AvgBrightnessModule::androidReadCommandOut() {
-  AndroidCommandOutRead_t ret;
-  if (mPortCommandOutWriteBuf.empty()) {
-    ret.success = false;
-    return ret;
-  }
-  ret.val = mPortCommandOutWriteBuf.front();
-  ret.success = true;
-  mPortCommandOutWriteBuf.pop_front();
-  return ret;
+  return true;
 }
 
 } // namespace

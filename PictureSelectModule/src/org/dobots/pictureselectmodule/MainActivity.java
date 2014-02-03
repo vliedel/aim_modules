@@ -3,22 +3,15 @@ package org.dobots.pictureselectmodule;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 
 import org.dobots.pictureselectmodule.R;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
 import android.os.Messenger;
-import android.os.RemoteException;
 import android.provider.MediaStore;
-import android.app.Activity;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,11 +26,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.dobots.aim.AimActivity;
+import org.dobots.aim.AimProtocol;
 
-public class MainActivity extends Activity {
+
+public class MainActivity extends AimActivity {
 	private static final String TAG = "MainActivity";
-	private static final String MODULE_NAME = "PictureSelectModule";
-	private int mId = -1;
 	
 	TextView mCallbackText;
 	EditText mEditText;
@@ -46,13 +40,20 @@ public class MainActivity extends Activity {
 	Button mButtonLogin;
 	ImageView mImageView;
 	
-	
-	Messenger mToMsgService = null;
-	final Messenger mFromMsgService = new Messenger(new IncomingMsgHandler());
-	boolean mMsgServiceIsBound;
-	
-	Messenger mPortPositionMessenger = null;
-	Messenger mPortImageMessenger = null;
+	@Override
+	public String getModuleName() {
+		return "PictureSelectModule";
+	}
+
+	@Override
+	public void defineInMessenger(HashMap<String, Messenger> list) {
+	}
+
+	@Override
+	public void defineOutMessenger(HashMap<String, Messenger> list) {
+		list.put("image", null);
+		list.put("position", null);
+	}
 	
 	private GestureDetectorCompat mGestureDetector;
 
@@ -66,9 +67,6 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		Log.d(TAG,"onCreate");
 		setContentView(R.layout.activity_main);
-		
-		Intent intent = getIntent();
-		mId = intent.getIntExtra("id", -1);
 		
 		mCallbackText = (TextView) findViewById(R.id.messageOutput);
 //		mEditText = (EditText) findViewById(R.id.messageInput);
@@ -96,39 +94,32 @@ public class MainActivity extends Activity {
 		});
 		
 		mGestureDetector = new GestureDetectorCompat(this, new MyGestureListener());
-		
-		doBindService();
 	}
 	
 	@Override
 	public void onStart() {
 		super.onStart();
-		Log.d(TAG,"onStart");
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.d(TAG,"onResume");
+		mCallbackText.setText("");
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		Log.d(TAG,"onPause");
 	}
 
 	@Override
 	public void onStop() {
 		super.onStop();
-		Log.d(TAG,"onStop");
 	}
 
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
-		Log.d(TAG, "onDestroy " + mMsgServiceIsBound);
-		doUnbindService();
 	}
 	
 	@Override
@@ -136,114 +127,6 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
-	}
-
-	private ServiceConnection mMsgServiceConnection = new ServiceConnection() {
-		public void onServiceConnected(ComponentName className, IBinder service) {
-			// This is called when the connection with the service has been established, giving us the service object
-			// we can use to interact with the service.  We are communicating with our service through an IDL 
-			// interface, so get a client-side representation of that from the raw service object.
-			mToMsgService = new Messenger(service);
-			mCallbackText.setText("Connected to Dodedodo.");
-
-			Message msg = Message.obtain(null, AimProtocol.MSG_REGISTER);
-			Bundle bundle = new Bundle();
-			bundle.putString("package", getPackageName());
-			bundle.putString("module", MODULE_NAME);
-			bundle.putInt("id", mId);
-			msg.setData(bundle);
-			msgSend(msg);
-			
-//	        Toast.makeText(Binding.this, R.string.remote_service_connected, Toast.LENGTH_SHORT).show();
-			Log.i(TAG, "Connected to MsgService: " + mToMsgService.toString());
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			// This is called when the connection with the service has been unexpectedly disconnected: its process crashed.
-			mToMsgService = null;
-			mCallbackText.setText("Disconnected from Dodedodo.");
-
-//	        Toast.makeText(Binding.this, R.string.remote_service_disconnected, Toast.LENGTH_SHORT).show();
-			Log.i(TAG, "Disconnected from MsgService");
-		}
-	};
-
-	// Handle messages from MsgService
-	class IncomingMsgHandler extends Handler {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case AimProtocol.MSG_SET_MESSENGER:
-				Log.i(TAG, "set port: " + msg.getData().getString("port") + " to: " + msg.replyTo.toString());
-				if (msg.getData().getString("port").equals("position"))
-					mPortPositionMessenger = msg.replyTo;
-				if (msg.getData().getString("port").equals("image"))
-					mPortImageMessenger = msg.replyTo;
-				break;
-			case AimProtocol.MSG_STOP:
-				Log.i(TAG, "stopping");
-				finish();
-				break;
-			default:
-				super.handleMessage(msg);
-			}
-		}
-	}
-	
-	void doBindService() {
-		// Establish a connection with the service.  We use an explicit class name because there is no reason to be 
-		// able to let other applications replace our component.
-		//bindService(new Intent(this, XMPPService.class), mConnection, Context.BIND_AUTO_CREATE);
-		
-		Intent intent = new Intent();
-		intent.setClassName("org.dobots.dodedodo", "org.dobots.dodedodo.MsgService");
-		bindService(intent, mMsgServiceConnection, Context.BIND_AUTO_CREATE);
-		mMsgServiceIsBound = true;
-		mCallbackText.setText("Binding to service.");
-	}
-
-	void doUnbindService() {
-		if (mMsgServiceIsBound) {
-			// If we have received the service, and registered with it, then now is the time to unregister.
-			if (mToMsgService != null) {
-				Message msg = Message.obtain(null, AimProtocol.MSG_UNREGISTER);
-				Bundle bundle = new Bundle();
-				bundle.putString("module", MODULE_NAME);
-				bundle.putInt("id", mId);
-				msg.setData(bundle);
-				msgSend(msg);
-			}
-			// Detach our existing connection.
-			unbindService(mMsgServiceConnection);
-			mMsgServiceIsBound = false;
-			mCallbackText.setText("Unbinding from service.");
-		}
-	}
-
-	protected void msgSend(Message msg) {
-		if (!mMsgServiceIsBound) {
-			Log.i(TAG, "Can't send message to service: not bound");
-			return;
-		}
-		try {
-			msg.replyTo = mFromMsgService;
-			mToMsgService.send(msg);
-		} catch (RemoteException e) {
-			Log.i(TAG, "Failed to send msg to service. " + e);
-			// There is nothing special we need to do if the service has crashed.
-		}
-	}
-	
-	protected void msgSend(Messenger messenger, Message msg) {
-		if (messenger == null)
-			return;
-		try {
-//			msg.replyTo = mFromMsgService;
-			messenger.send(msg);
-		} catch (RemoteException e) {
-			Log.i(TAG, "failed to send msg. " + e);
-			// There is nothing special we need to do if the service has crashed.
-		}
 	}
 
 	
@@ -324,14 +207,11 @@ public class MainActivity extends Activity {
 				msgData[j+2] = pixels[i] & 0xFF;
 			}
 			
-			Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
 			Bundle bundle = new Bundle();
-			bundle.putIntArray("data", msgData);
 			bundle.putInt("datatype", AimProtocol.DATATYPE_INT_ARRAY);
-			msg.setData(bundle);
-			msgSend(mPortImageMessenger, msg);
-
-			Log.d(TAG, "image: " + filePath + " rotation:" + rotation + " to port: " + mPortImageMessenger);
+			bundle.putIntArray("data", msgData);
+			sendData(getOutMessenger("image"), bundle);
+			Log.d(TAG, "image: " + filePath + " rotation:" + rotation + " to port: " + getOutMessenger("image"));
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -382,18 +262,16 @@ public class MainActivity extends Activity {
 			Log.d(TAG, event.getX() + " " + event.getY());
 //			Log.i(TAG, event.toString());
 			
-			Message msg = Message.obtain(null, AimProtocol.MSG_PORT_DATA);
-			Bundle bundle = new Bundle();
-			float[] data = new float[4];
-			data[0] = 1;
-			data[1] = 2;
-			data[2] = event.getX();
-			data[3] = event.getY();
-			bundle.putFloatArray("data", data);
-			bundle.putInt("datatype", AimProtocol.DATATYPE_FLOAT_ARRAY);
-			msg.setData(bundle);
-			msgSend(mPortPositionMessenger, msg);
-			
+//			float[] data = new float[4];
+//			data[0] = 1;
+//			data[1] = 2;
+//			data[2] = event.getX();
+//			data[3] = event.getY();
+			float[] data = new float[2];
+			data[0] = event.getX();
+			data[1] = event.getY();
+
+			sendData(getOutMessenger("position"), data);
 			return true;
 		}
 	}

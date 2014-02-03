@@ -17,40 +17,40 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-private static final String TAG = "MainActivity";
-private static final String MODULE_NAME = "BmpToJpgModule";
+	private static final String TAG = "MainActivity";
+	private static final String MODULE_NAME = "BmpToJpgModule";
 
-TextView mCallbackText;
-Button mButtonStartStop;
+	TextView mCallbackText;
+	Button mButtonStartStop;
 
-boolean mServiceIsRunning;
-Timer mCheckServiceTimer;
-CheckServiceTimerTask mCheckServiceTimerTask;
+	boolean mServiceIsRunning;
+	Timer mCheckServiceTimer;
+	CheckServiceTimerTask mCheckServiceTimerTask;
 
-@Override
-protected void onCreate(Bundle savedInstanceState) {
-	super.onCreate(savedInstanceState);
-	setContentView(R.layout.activity_main);
-	
-	mCallbackText = (TextView) findViewById(R.id.messageOutput);
-	mButtonStartStop = (Button) findViewById(R.id.buttonStartStop);
-	
-	mButtonStartStop.setOnClickListener(new View.OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			if (mServiceIsRunning) {
-				stopService();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		mCallbackText = (TextView) findViewById(R.id.messageOutput);
+		mButtonStartStop = (Button) findViewById(R.id.buttonStartStop);
+
+		mButtonStartStop.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (mServiceIsRunning) {
+					stopService();
+				}
+				else {
+					startService();
+				}
+				checkServiceRunning();
 			}
-			else {
-				startService();
-			}
-			checkServiceRunning();
-		}
-	});
-	
-	checkServiceRunning();
-	mCheckServiceTimer = new Timer();
-}
+		});
+
+		checkServiceRunning();
+		mCheckServiceTimer = new Timer();
+	}
 
 	@Override
 	public void onStart() {
@@ -101,14 +101,14 @@ protected void onCreate(Bundle savedInstanceState) {
 		Log.i(TAG, "Starting: " + intent.toString());
 	}
 
-    private void stopService() {
+	private void stopService() {
 		Intent intent = new Intent();
 		intent.setClassName("org.dobots.bmptojpgmodule", "org.dobots.bmptojpgmodule.BmpToJpgModuleService");
 		stopService(intent);
 		Log.i(TAG, "Stopping service: " + intent.toString());
-//		finish();
+		//		finish();
 	}
-    
+
 	private void timedCheck() {
 		this.runOnUiThread(new Runnable() {
 			@Override
@@ -124,8 +124,8 @@ protected void onCreate(Bundle savedInstanceState) {
 			//checkServiceRunning(); // Can't do this, it has to run on the UI thread
 		}
 	}
-    
-    private boolean checkServiceRunning() {
+
+	private boolean checkServiceRunning() {
 		Log.d(TAG, "Checking if service is running");
 		ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
