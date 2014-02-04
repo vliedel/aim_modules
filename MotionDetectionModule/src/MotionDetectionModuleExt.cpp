@@ -25,23 +25,13 @@ using namespace rur;
 
 //! Replace with your own code
 MotionDetectionModuleExt::MotionDetectionModuleExt() {
-	mBackGroundSubtractor.set("nmixtures", 3);
-
-//	int height = 10;
-//	int width = 20;
-//	cv::Mat frame(height, width, CV_8UC3);
-//	cv::Mat_<cv::Vec3b>::iterator it = frame.begin<cv::Vec3b>(), itEnd = frame.end<cv::Vec3b>();
-//	for (; it != itEnd; ++it) {
-//		(*it)[0] = 255; // b
-//		(*it)[1] = 0; // g
-//		(*it)[2] = 0; // r
-//	}
-//
-//	std::cout << frame << std::endl;
-//	cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
-//	cv::imshow("test", frame);
-//	cv::waitKey(0);
-
+	// Assume opencv 2
+	// version 2.4 has a different way to set nmixtures
+#if CV_VERSION_MAJOR > 3
+		mBackGroundSubtractor.set("nmixtures", 3);
+#else
+		mBackGroundSubtractor.nmixtures = 3;
+#endif
 }
 
 //! Replace with your own code
