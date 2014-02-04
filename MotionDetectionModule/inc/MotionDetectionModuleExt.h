@@ -37,6 +37,7 @@ public:
 
 private:
 	cv::Mat mFrame;
+	cv::Mat mFrameScaled;
 	cv::Mat mBackground;
 	cv::Mat mForeground;
 	cv::BackgroundSubtractorMOG2 mBackGroundSubtractor;
