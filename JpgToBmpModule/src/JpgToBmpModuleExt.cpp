@@ -18,6 +18,7 @@
 #include <jpeglib.h>
 #include <iostream>
 #include <base64.h>
+#include <CTime.h>
 
 // For test only
 //#include <fstream>
@@ -158,9 +159,16 @@ void JpgToBmpModuleExt::Tick() {
 	if (read != NULL && !read->empty()) {
 		std::cout << "read something" << std::endl;
 
+		long startTime = get_cur_1ms();
+		long endTime;
+
 		unsigned char* bufIn;
 		int bufInSize;
 		bufIn = unbase64(read->c_str(), read->size(), &bufInSize);
+
+		endTime = get_cur_1ms();
+		std::cout << "Converted base64 string to binary in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
 
 		jpeg_decompress_struct cinfo;
 		jpeg_error_mgr jerr;
@@ -171,17 +179,12 @@ void JpgToBmpModuleExt::Tick() {
 		// Set parameters here (scale, quality, colormap)
 
 		jpeg_calc_output_dimensions(&cinfo);
-		// You will need output_width * output_components JSAMPLEs per scanline in your output buffer, and a total of output_height scanlines will be returned
-	//	unsigned char** bufOut = new unsigned char*[cinfo.output_height];
-	//	for (int i=0; i<cinfo.output_height; ++i) {
-	//		bufOut[i] = new unsigned char[cinfo.output_width*cinfo.output_components];
-	//	}
-		unsigned char* bufOut[2];
-		for (int i=0; i<2; ++i) {
-			bufOut[i] = new unsigned char[cinfo.output_width*cinfo.output_components];
-		}
 
 		jpeg_start_decompress(&cinfo);
+
+		endTime = get_cur_1ms();
+		std::cout << "Decompressed jpg in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
 
 //		int width = cinfo.output_width;
 //		int height = cinfo.output_height;
@@ -196,6 +199,16 @@ void JpgToBmpModuleExt::Tick() {
 		*itOut++ = cinfo.output_width;
 		*itOut++ = cinfo.output_components;
 //		int lineStart=0;
+
+		// You will need output_width * output_components JSAMPLEs per scanline in your output buffer, and a total of output_height scanlines will be returned
+		//	unsigned char** bufOut = new unsigned char*[cinfo.output_height];
+		//	for (int i=0; i<cinfo.output_height; ++i) {
+		//		bufOut[i] = new unsigned char[cinfo.output_width*cinfo.output_components];
+		//	}
+		unsigned char* bufOut[2];
+		for (int i=0; i<2; ++i) {
+			bufOut[i] = new unsigned char[cinfo.output_width*cinfo.output_components];
+		}
 
 		// Use bitmap data here
 		std::cout << "cinfo.output_height=" << cinfo.output_height << " cinfo.output_width=" << cinfo.output_width << " cinfo.output_components=" << cinfo.output_components << std::endl;
@@ -217,13 +230,16 @@ void JpgToBmpModuleExt::Tick() {
 //			lineStart = cinfo.output_scanline;
 		}
 
+		endTime = get_cur_1ms();
+		std::cout << "Wrote result to int array in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
+
 		jpeg_finish_decompress(&cinfo);
 		jpeg_destroy_decompress(&cinfo);
 
 		delete [] bufIn;
 
 		// Write output
-		std::cout << "Decompressed jpeg" << std::endl;
 		writeBmp(writeVec);
 
 //		CImgDisplay disp(img);
