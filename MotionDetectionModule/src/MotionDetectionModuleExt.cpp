@@ -35,48 +35,46 @@ MotionDetectionModuleExt::MotionDetectionModuleExt() {
 #endif
 
 
-	int height = 4;
-	int width = 8;
-	cv::Mat frame(height/2, width/2, CV_8UC3);
-
-	std::vector<int> pic;
-	int c=0;
-	for (int h=0; h<height; ++h) {
-//		if (h >= height/2)
-//			c=255;
-		for (int w=0; w<width; ++w) {
-			pic.push_back(c++);
-			pic.push_back(c++);
-			pic.push_back(c++);
-		}
-	}
-	for (std::vector<int>::iterator itt=pic.begin(); itt != pic.end(); ++itt)
-		std::cout << *itt << " " << std::endl;
-	std::vector<int>::iterator it = pic.begin();
-
-	int rows=frame.rows, cols=frame.cols;
-	for (int i=0; i<rows; ++i, it+=3*width) { // skip 1 row of source = 3 subpixels * width
-		std::cout << "i=" << i << std::endl;
-		unsigned char* row = frame.ptr<unsigned char>(i);
-		for (int j=0; j<cols*3; j+=3, it+=3) { // skip 1 rgb pixel of source
-			std::cout << "j=" << j << " r=" << *it << std::endl;
-			row[j+2] = *it++;
-			row[j+1] = *it++;
-			row[j] = *it++;
-		}
-	}
-
-//	cv::Mat_<cv::Vec3b>::iterator it = frame.begin<cv::Vec3b>(), itEnd = frame.end<cv::Vec3b>();
-//	for (; it != itEnd; ++it) {
-//		(*it)[0] = 255; // b
-//		(*it)[1] = 0; // g
-//		(*it)[2] = 0; // r
+//	int height = 4;
+//	int width = 8;
+//	cv::Mat frame(height/2, width/2, CV_8UC3);
+//
+//	std::vector<int> pic;
+//	int c=0;
+//	for (int h=0; h<height; ++h) {
+//		for (int w=0; w<width; ++w) {
+//			pic.push_back(c++);
+//			pic.push_back(c++);
+//			pic.push_back(c++);
+//		}
 //	}
-
-	std::cout << frame << std::endl;
-	cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
-	cv::imshow("test", frame);
-	cv::waitKey(10);
+//	for (std::vector<int>::iterator itt=pic.begin(); itt != pic.end(); ++itt)
+//		std::cout << *itt << " " << std::endl;
+//	std::vector<int>::iterator it = pic.begin();
+//
+//	int rows=frame.rows, cols=frame.cols;
+//	for (int i=0; i<rows; ++i, it+=3*width) { // skip 1 row of source = 3 subpixels * width
+//		std::cout << "i=" << i << std::endl;
+//		unsigned char* row = frame.ptr<unsigned char>(i);
+//		for (int j=0; j<cols*3; j+=3, it+=3) { // skip 1 rgb pixel of source
+//			std::cout << "j=" << j << " r=" << *it << std::endl;
+//			row[j+2] = *it++;
+//			row[j+1] = *it++;
+//			row[j] = *it++;
+//		}
+//	}
+//
+//	std::cout << frame << std::endl;
+//	cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
+//	cv::imshow("test", frame);
+//	cv::waitKey(10);
+//
+//	//	cv::Mat_<cv::Vec3b>::iterator it = frame.begin<cv::Vec3b>(), itEnd = frame.end<cv::Vec3b>();
+//	//	for (; it != itEnd; ++it) {
+//	//		(*it)[0] = 255; // b
+//	//		(*it)[1] = 0; // g
+//	//		(*it)[2] = 0; // r
+//	//	}
 }
 
 //! Replace with your own code
