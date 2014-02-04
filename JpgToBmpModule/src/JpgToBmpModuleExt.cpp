@@ -176,7 +176,12 @@ void JpgToBmpModuleExt::Tick() {
 		jpeg_create_decompress(&cinfo);
 		jpeg_mem_src(&cinfo, bufIn, bufInSize); // buf = unsigned char* , size = unsigned long
 		jpeg_read_header(&cinfo, true);
+
 		// Set parameters here (scale, quality, colormap)
+
+		// scale by num/denom, 1/2, 1/4, 1/8 are supported
+		cinfo.scale_num = 1;
+		cinfo.scale_denom = 2;
 
 		jpeg_calc_output_dimensions(&cinfo);
 
@@ -210,6 +215,10 @@ void JpgToBmpModuleExt::Tick() {
 			bufOut[i] = new unsigned char[cinfo.output_width*cinfo.output_components];
 		}
 
+		endTime = get_cur_1ms();
+		std::cout << "Allocated bufOut in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
+
 		// Use bitmap data here
 		std::cout << "cinfo.output_height=" << cinfo.output_height << " cinfo.output_width=" << cinfo.output_width << " cinfo.output_components=" << cinfo.output_components << std::endl;
 		while (cinfo.output_scanline < cinfo.output_height) {
@@ -242,6 +251,10 @@ void JpgToBmpModuleExt::Tick() {
 		// Write output
 		writeBmp(writeVec);
 
+		endTime = get_cur_1ms();
+		std::cout << "Wrote result to port in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
+
 //		CImgDisplay disp(img);
 //		while (!disp.is_closed())
 //			disp.wait();
@@ -250,6 +263,10 @@ void JpgToBmpModuleExt::Tick() {
 			delete [] bufOut[i];
 		}
 		//delete [] bufOut;
+
+		endTime = get_cur_1ms();
+		std::cout << "Deallocated bufOut in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
 
 		read->clear();
 	}

@@ -118,15 +118,15 @@ void MotionDetectionModuleExt::Tick() {
 
 //#define scaleread
 #ifdef scaleread
-		mFrameScaled.create(height/2, width/2, CV_8UC3);
-		int cols = mFrameScaled.cols, rows = mFrameScaled.rows;
+		mFrame.create(height/2, width/2, CV_8UC3);
+		int cols = mFrame.cols, rows = mFrame.rows;
 //		if (mFrame.isContinuous()) {
 //			cols *= rows;
 //			rows = 1;
 //		}
 		for (int i=0; i<rows; ++i, it+=3*width) {
 //			std::cout << "i=" << i << std::endl;
-			unsigned char* row = mFrameScaled.ptr<unsigned char>(i);
+			unsigned char* row = mFrame.ptr<unsigned char>(i);
 			for (int j=0; j<cols*3; j+=3, it+=3) {
 //				std::cout << "j=" << j << std::endl;
 				row[j+2] = *it++;
@@ -154,13 +154,13 @@ void MotionDetectionModuleExt::Tick() {
 		std::cout << "Read image in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
-		cv::resize(mFrame, mFrameScaled, cv::Size(), 0.5, 0.5, cv::INTER_NEAREST);
+//		cv::resize(mFrame, mFrameScaled, cv::Size(), 0.5, 0.5, cv::INTER_NEAREST);
 #endif
 		endTime = get_cur_1ms();
 		std::cout << "Resized image in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
-		mBackGroundSubtractor(mFrameScaled, mForeground);
+		mBackGroundSubtractor(mFrame, mForeground);
 
 		endTime = get_cur_1ms();
 		std::cout << "Got foreground image in " << get_duration(startTime, endTime) << "ms" << std::endl;
