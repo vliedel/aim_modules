@@ -75,6 +75,9 @@ private:
   
   zmq_socket_ext portBmpOut;
   
+  std::string portCommandValue;
+  zmq_socket_ext portCommandIn;
+  
   static void* readCommandsHelper(void* object) {
     ((JpgToBmpModule*)object)->readCommands();
     return NULL;
@@ -82,8 +85,8 @@ private:
   
   void readCommands();
 protected:
-  static const int channel_count = 2;
-  const char* channel[2];
+  static const int channel_count = 3;
+  const char* channel[3];
   // the standard zeromq context object
   zmq::context_t *context;
   // some default debug parameter
@@ -137,6 +140,15 @@ public:
    */
   // Write to this function and assume it ends up at some receiving module
   bool writeBmp(const long_seq &output);
+  
+  /**
+   * The "readCommand" function receives stuff over a zeromq REP socket. It works as a client. It is better not
+   * to run it in blocking mode, because this would make it impossible to receive message on other ports (under which 
+   * the /pid/control port). The function returns NULL if there is no new item available.
+   */
+  // Read from this function and assume it means something
+  // Remark: check if result is not NULL
+  std::string *readCommand(bool blocking=false);
   
 };
 } // End of namespace

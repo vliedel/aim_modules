@@ -25,7 +25,7 @@ JpgToBmpModule::JpgToBmpModule():
   debug(0),
   cliParam(0)
 {
-  const char* const channel[2] = {"readJpg", "writeBmp"};
+  const char* const channel[3] = {"readJpg", "writeBmp", "readCommand"};
   cliParam = new Param();
   context = new zmq::context_t(1);
   pthread_mutex_init(&cmdMutex, NULL);
@@ -36,12 +36,16 @@ JpgToBmpModule::JpgToBmpModule():
   portBmpOut.sock = new zmq::socket_t(*context, ZMQ_REQ);
   portBmpOut.ready = true;
   zmq_sockets.push_back(&portBmpOut);
+  portCommandIn.sock = new zmq::socket_t(*context, ZMQ_REP);
+  portCommandIn.ready = true;
+  zmq_sockets.push_back(&portCommandIn);
 }
 
 JpgToBmpModule::~JpgToBmpModule() {
   delete cliParam;
   delete portJpgIn.sock;
   delete portBmpOut.sock;
+  delete portCommandIn.sock;
 }
 
 void JpgToBmpModule::Init(std::string & name) {
@@ -100,6 +104,23 @@ void JpgToBmpModule::Init(std::string & name) {
     zmqSs << getpid();
     record.pid = zmqSs.str();
     Resolve(record);
+  }
+  {
+    // incoming port, function as client
+    zmqPortName = "/jpgtobmpmodule" + cliParam->module_id + "/command";
+    portCommandIn.name = zmqPortName;
+    zmqPortName = "/resolve" + portCommandIn.name;
+    pns_record record;
+    record.name = zmqPortName;
+    zmqSs.clear(); zmqSs.str("");
+    zmqSs << getpid();
+    record.pid = zmqSs.str();
+    Resolve(record);
+    zmqSs.str("");
+    zmqSs << "tcp://" << record.host << ":" << record.port;
+    zmqPortName = zmqSs.str();
+    std::cout << "Bind to socket " << zmqPortName << std::endl;
+    portCommandIn.sock->bind(zmqPortName.c_str());
   }
 }
 
@@ -335,6 +356,31 @@ bool JpgToBmpModule::writeBmp(const long_seq &output) {
   }
   pthread_mutex_unlock(&cmdMutex);
   return false;
+}
+
+std::string* JpgToBmpModule::readCommand(bool blocking) {
+  pthread_mutex_lock(&cmdMutex);
+  int reply_size = -1;
+  char *reply = GetReply(portCommandIn.sock, portCommandIn.ready, blocking, reply_size);
+  if (!portCommandIn.ready) {
+    delete [] reply;
+    pthread_mutex_unlock(&cmdMutex);
+    return NULL;
+  }
+  if (reply == NULL) {
+    pthread_mutex_unlock(&cmdMutex);
+    return NULL;
+  }
+  SendAck(portCommandIn.sock, portCommandIn.ready);
+  pthread_mutex_unlock(&cmdMutex);
+  if (reply_size < 1) {
+    std::cerr << "Error: Reply is not large enough to store a value!" << std::endl;
+    delete [] reply;
+    return NULL;
+  }
+  portCommandValue = std::string(reply, reply_size-1);
+  delete [] reply;
+  return &portCommandValue;
 }
 
 } // namespace

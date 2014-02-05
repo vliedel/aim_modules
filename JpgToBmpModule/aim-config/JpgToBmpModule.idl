@@ -27,11 +27,15 @@ typedef sequence<long> long_seq;
 // The public interface of JpgToBmpModule
 interface JpgToBmpModule {
 
-  // Input is a binary Jpg file, encoded as base64 string
-  void Jpg(in string input);
+	// Input is a binary Jpg file, encoded as base64 string
+	void Jpg(in string input);
 
-  // Output is the image as bitmap
-  void Bmp(out long_seq output);
+	// Output is the image as bitmap
+	void Bmp(out long_seq output);
+
+	// Command port 
+	void Command(in string cmd);
+
 };
 
 };

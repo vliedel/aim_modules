@@ -18,7 +18,11 @@
 #include <jpeglib.h>
 #include <iostream>
 #include <base64.h>
-#include <CTime.h>
+
+#include <boost/property_tree/ptree.hpp>		// For command port
+#include <boost/property_tree/json_parser.hpp>	// For command port
+
+#include <CTime.h> // For profiling
 
 // For test only
 //#include <fstream>
@@ -28,8 +32,9 @@
 
 using namespace rur;
 
-//! Replace with your own code
-JpgToBmpModuleExt::JpgToBmpModuleExt() {
+JpgToBmpModuleExt::JpgToBmpModuleExt():
+				mScaleNum(1),
+				mScaleDenom(1) {
 
 //#define TEST_JPG
 #ifdef TEST_JPG
@@ -121,43 +126,15 @@ JpgToBmpModuleExt::JpgToBmpModuleExt() {
 #endif
 }
 
-//! Replace with your own code
 JpgToBmpModuleExt::~JpgToBmpModuleExt() {
 
 }
 
-//! Replace with your own code
 void JpgToBmpModuleExt::Tick() {
-//	long_seq* read = readJpg(false);
-//	if (read != NULL && !read->empty()) {
-//		std::cout << "Read: dims=" << read->at(0) << " ";
-//		for (int i=0; i<read->at(0); ++i)
-//			std::cout << "size" << i << "=" << read->at(i+1);
-//		std::cout << std::endl;
-//
-//
-//		long_seq::const_iterator itRead = read->begin();
-//		int dims = *itRead++;
-//		if (dims != 1) {
-//			read->clear();
-//			return;
-//		}
-//
-//		int size = *itRead++;
-//		if (size != read->size()-2) {
-//			read->clear();
-//			return;
-//		}
-//
-//		unsigned char* bufIn = new unsigned char[size];
-//		for (int i=0; i<size; ++i)
-//			bufIn[i] = *itRead++;
 
-	// Only one input port, so we can block.
-	// To be sure, we assume it's non-blocking in case the middleware did not implement blocking reads.
 	std::string* read = readJpg(false);
 	if (read != NULL && !read->empty()) {
-		std::cout << "read something" << std::endl;
+		std::cout << "[JpgToBmp] " << "read something" << std::endl;
 
 		long startTime = get_cur_1ms();
 		long endTime;
@@ -167,7 +144,7 @@ void JpgToBmpModuleExt::Tick() {
 		bufIn = unbase64(read->c_str(), read->size(), &bufInSize);
 
 		endTime = get_cur_1ms();
-		std::cout << "Converted base64 string to binary in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] " << "Converted base64 string to binary in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		jpeg_decompress_struct cinfo;
@@ -179,16 +156,16 @@ void JpgToBmpModuleExt::Tick() {
 
 		// Set parameters here (scale, quality, colormap)
 
-		// scale by num/denom, 1/2, 1/4, 1/8 are supported
-		cinfo.scale_num = 1;
-		cinfo.scale_denom = 2;
+		// scale by num/denom, 1/1, 1/2, 1/4, 1/8 are supported
+		cinfo.scale_num = mScaleNum;
+		cinfo.scale_denom = mScaleDenom;
 
 		jpeg_calc_output_dimensions(&cinfo);
 
 		jpeg_start_decompress(&cinfo);
 
 		endTime = get_cur_1ms();
-		std::cout << "Decompressed jpg in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] " << "Read jpg header in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 //		int width = cinfo.output_width;
@@ -216,11 +193,11 @@ void JpgToBmpModuleExt::Tick() {
 		}
 
 		endTime = get_cur_1ms();
-		std::cout << "Allocated bufOut in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] " << "Allocated bufOut in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		// Use bitmap data here
-		std::cout << "cinfo.output_height=" << cinfo.output_height << " cinfo.output_width=" << cinfo.output_width << " cinfo.output_components=" << cinfo.output_components << std::endl;
+		std::cout << "[JpgToBmp] " << "cinfo.output_height=" << cinfo.output_height << " cinfo.output_width=" << cinfo.output_width << " cinfo.output_components=" << cinfo.output_components << std::endl;
 		while (cinfo.output_scanline < cinfo.output_height) {
 			// Try to read line per 2 lines (return value is number of lines actually read)
 			int linesRead = jpeg_read_scanlines(&cinfo, bufOut, 2);
@@ -240,7 +217,7 @@ void JpgToBmpModuleExt::Tick() {
 		}
 
 		endTime = get_cur_1ms();
-		std::cout << "Wrote result to int array in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] " << "Decompressed jpg and wrote result to int array in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		jpeg_finish_decompress(&cinfo);
@@ -252,7 +229,7 @@ void JpgToBmpModuleExt::Tick() {
 		writeBmp(writeVec);
 
 		endTime = get_cur_1ms();
-		std::cout << "Wrote result to port in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] " << "Wrote result to port in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 //		CImgDisplay disp(img);
@@ -265,16 +242,54 @@ void JpgToBmpModuleExt::Tick() {
 		//delete [] bufOut;
 
 		endTime = get_cur_1ms();
-		std::cout << "Deallocated bufOut in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] " << "Deallocated bufOut in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		read->clear();
 	}
+
+	read = readCommand(false);
+	if (read != NULL && !read->empty()) {
+
+		int nom, denom;
+		boost::property_tree::ptree pt;
+		std::stringstream ss;
+		ss << *read;
+		try {
+			boost::property_tree::read_json(ss,pt);
+//			boost::property_tree::basic_ptree<std::string,std::string>::const_iterator iter = pt.begin(),iterEnd = pt.end();
+//			for(;iter != iterEnd;++iter){
+//				if (iter->first == "identifier") {
+//					//	       same thing
+//				} else if (iter->first == "server") {
+//					record.host = pt.get<std::string>(iter->first);
+//				} else if (iter->first == "port") {
+//					record.port = pt.get<std::string>(iter->first);
+//				} else if (iter->first == "pid") {
+//					record.pid =pt.get<std::string>(iter->first);
+//				}
+//			}
+			nom = pt.get("scale_numerator",1);
+			denom = pt.get("scale_denominator",1);
+		}
+		catch (std::exception &e) {
+			std::cerr << "[JpgToBmp] " << "Error: Unable to parse json command: " << e.what() << std::endl;
+		}
+
+		// Numerator must be 1, so ignore it
+		// Denominator can be 1, 2, 4 or 8
+		if (denom == 1 || denom == 2 || denom == 4 || denom == 8) {
+			mScaleDenom = denom;
+			std::cout << "[JpgToBmp] " << "Changed scale denominator to " << denom << std::endl;
+		}
+
+		read->clear();
+	}
+
 	usleep(10*1000);
 
 }
 
-//! Replace with your own code
 bool JpgToBmpModuleExt::Stop() {
 	return false;
 }

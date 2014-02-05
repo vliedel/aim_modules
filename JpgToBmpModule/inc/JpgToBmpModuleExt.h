@@ -33,6 +33,10 @@ public:
 
 	//! As soon as Stop() returns "true", the JpgToBmpModuleMain will stop the module
 	bool Stop();
+
+private:
+	int mScaleNum;
+	int mScaleDenom;
 };
 
 }

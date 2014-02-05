@@ -23,6 +23,12 @@
 			"dir":"out",
 			"type":"intarray",
 			"middleware":"default"
+		},
+		{
+			"name":"command",
+			"dir":"in",
+			"type":"string",
+			"middleware":"default"
 		}
 	]
 }
