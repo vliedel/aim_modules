@@ -152,7 +152,7 @@ void JpgToBmpModuleExt::Tick() {
 		cinfo.err = jpeg_std_error(&jerr);
 		jpeg_create_decompress(&cinfo);
 		jpeg_mem_src(&cinfo, bufIn, bufInSize); // buf = unsigned char* , size = unsigned long
-		jpeg_read_header(&cinfo, true);
+		jpeg_read_header(&cinfo, TRUE);
 
 		// Set parameters here (scale, quality, colormap)
 
