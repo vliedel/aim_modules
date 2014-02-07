@@ -19,6 +19,9 @@
 #include <iostream>
 #include <base64.h>
 
+#include <boost/property_tree/ptree.hpp>		// For command port
+#include <boost/property_tree/json_parser.hpp>	// For command port
+
 using namespace rur;
 
 //class JpgDataDest {
@@ -53,7 +56,7 @@ using namespace rur;
 //};
 
 //! Replace with your own code
-BmpToJpgModuleExt::BmpToJpgModuleExt() {
+BmpToJpgModuleExt::BmpToJpgModuleExt(): mQuality(75) {
 
 }
 
@@ -78,7 +81,7 @@ void BmpToJpgModuleExt::Tick() {
 		int nArrays = *it++;
 		int nDims = *it++;
 		if (nDims != 3) {
-			std::cerr << "nDims=" << nDims << ", should be 3" << std::endl;
+			std::cerr << "[BmpToJpg] nDims=" << nDims << ", should be 3" << std::endl;
 			read->clear();
 			return;
 		}
@@ -86,12 +89,12 @@ void BmpToJpgModuleExt::Tick() {
 		int width = *it++;
 		int channels = *it++;
 		if (channels != 3) {
-			std::cerr << "channels=" << channels << ", should be 3" << std::endl;
+			std::cerr << "[BmpToJpg] channels=" << channels << ", should be 3" << std::endl;
 			read->clear();
 			return;
 		}
 		if (read->size() < 6+height*width*channels) {
-			std::cerr << "read.size=" << read->size() << ", should be " << 6+height*width*channels << std::endl;
+			std::cerr << "[BmpToJpg] read.size=" << read->size() << ", should be " << 6+height*width*channels << std::endl;
 			read->clear();
 			return;
 		}
@@ -125,6 +128,7 @@ void BmpToJpgModuleExt::Tick() {
 		cinfo.in_color_space = JCS_RGB;
 		jpeg_set_defaults(&cinfo);
 		// Make optional parameter settings here
+		jpeg_set_quality(&cinfo, mQuality, TRUE);
 
 		jpeg_start_compress(&cinfo, TRUE);
 
@@ -163,6 +167,43 @@ void BmpToJpgModuleExt::Tick() {
 		read->clear();
 
 
+	}
+
+	std::string* readStr = readCommand(false);
+	if (readStr != NULL && !readStr->empty()) {
+
+		int quality;
+		boost::property_tree::ptree pt;
+		std::stringstream ss;
+		ss << *readStr;
+		try {
+			boost::property_tree::read_json(ss,pt);
+//			boost::property_tree::basic_ptree<std::string,std::string>::const_iterator iter = pt.begin(),iterEnd = pt.end();
+//			for(;iter != iterEnd;++iter){
+//				if (iter->first == "identifier") {
+//					//	       same thing
+//				} else if (iter->first == "server") {
+//					record.host = pt.get<std::string>(iter->first);
+//				} else if (iter->first == "port") {
+//					record.port = pt.get<std::string>(iter->first);
+//				} else if (iter->first == "pid") {
+//					record.pid =pt.get<std::string>(iter->first);
+//				}
+//			}
+			quality = pt.get("quality", 75);
+		}
+		catch (std::exception &e) {
+			std::cerr << "[BmpToJpg] Error: Unable to parse json command: " << e.what() << std::endl;
+		}
+
+		// Numerator must be 1, so ignore it
+		// Denominator can be 1, 2, 4 or 8
+		if (0 <= quality && quality <= 100) {
+			mQuality = quality;
+			std::cout << "[BmpToJpg] Changed quality to " << quality << std::endl;
+		}
+
+		readStr->clear();
 	}
 }
 

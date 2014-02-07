@@ -35,8 +35,8 @@ public:
 	bool Stop();
 
 private:
-	int mScaleNum;
-	int mScaleDenom;
+	unsigned int mScaleNum;
+	unsigned int mScaleDenom;
 };
 
 }

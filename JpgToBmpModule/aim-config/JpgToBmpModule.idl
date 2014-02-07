@@ -34,7 +34,7 @@ interface JpgToBmpModule {
 	void Bmp(out long_seq output);
 
 	// Command port 
-	void Command(in string cmd);
+	void Command(in string json);
 
 };
 

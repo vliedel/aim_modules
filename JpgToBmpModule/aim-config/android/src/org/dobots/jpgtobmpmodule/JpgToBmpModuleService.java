@@ -16,8 +16,13 @@ import android.os.Message;
 import android.os.Messenger;
 import android.util.Log;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class JpgToBmpModuleService extends AimService {
 	private static final String TAG = "JpgToBmpModuleService";
+	private int mScaleNum;
+	private int mScaleDenom;
 
 	Messenger mPortJpgInMessenger = new Messenger(new Handler() {
 		@Override
@@ -26,7 +31,10 @@ public class JpgToBmpModuleService extends AimService {
 			case AimProtocol.MSG_PORT_DATA: {
 				
 				byte[] bytes = android.util.Base64.decode(msg.getData().getString("data"), android.util.Base64.NO_WRAP);
-				Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+				
+				BitmapFactory.Options opts = new BitmapFactory.Options();
+				opts.inSampleSize = mScaleDenom;
+				Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, opts);
 				
 				int height = bmp.getHeight();
 				int width = bmp.getWidth();
@@ -80,6 +88,32 @@ public class JpgToBmpModuleService extends AimService {
 		}
 	});
 	
+	Messenger mPortCommandInMessenger = new Messenger(new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case AimProtocol.MSG_PORT_DATA: {
+				JSONObject json;
+				try {
+					json = new JSONObject(msg.getData().getString("data"));
+					int denom = json.getInt("scale_denominator");
+					if (denom==1 || denom==2 || denom==4 || denom==8) {
+						mScaleDenom = denom;
+						Log.i(TAG, "Set scale denominator to " + denom);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				break;
+			}
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	});
+	
 	@Override
 	public String getModuleName() {
 		return "JpgToBmpModule";
@@ -88,6 +122,7 @@ public class JpgToBmpModuleService extends AimService {
 	@Override
 	public void defineInMessenger(HashMap<String, Messenger> list) {
 		list.put("jpg", mPortJpgInMessenger);
+		list.put("command", mPortCommandInMessenger);
 	}
 
 	@Override
@@ -102,6 +137,8 @@ public class JpgToBmpModuleService extends AimService {
 
 	public void onCreate() {
 		super.onCreate();
+		mScaleNum = 1;
+		mScaleDenom = 1;
 	}
 
 	public void onDestroy() {

@@ -2,6 +2,8 @@ package org.dobots.bmptojpgmodule;
 
 import org.dobots.aim.AimProtocol;
 import org.dobots.aim.AimService;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import android.util.Log;
 
 public class BmpToJpgModuleService extends AimService {
 	private static final String TAG = "BmpToJpgModuleService";
+	private int mQuality = 75;
 
 	Messenger mPortBmpInMessenger = new Messenger(new Handler() {
 		@Override
@@ -59,12 +62,38 @@ public class BmpToJpgModuleService extends AimService {
 				
 				// Convert to jpeg
 				ByteArrayOutputStream os = new ByteArrayOutputStream();
-				bmp.compress(CompressFormat.JPEG, 100, os);
+				bmp.compress(CompressFormat.JPEG, mQuality, os);
 				byte[] bytes = os.toByteArray();
 				
 				// Send message
 				String msgData = android.util.Base64.encodeToString(bytes, android.util.Base64.NO_WRAP);
 				sendData(getOutMessenger("jpg"), msgData);
+
+				break;
+			}
+			default:
+				super.handleMessage(msg);
+			}
+		}
+	});
+	
+	Messenger mPortCommandInMessenger = new Messenger(new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case AimProtocol.MSG_PORT_DATA: {
+				JSONObject json;
+				try {
+					json = new JSONObject(msg.getData().getString("data"));
+					int quality = json.getInt("quality");
+					if (0 <= mQuality && mQuality <= 100) {
+						mQuality = quality;
+						Log.i(TAG, "Set quality to " + quality);
+					}
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 
 				break;
 			}
@@ -82,6 +111,7 @@ public class BmpToJpgModuleService extends AimService {
 	@Override
 	public void defineInMessenger(HashMap<String, Messenger> list) {
 		list.put("bmp", mPortBmpInMessenger);
+		list.put("command", mPortCommandInMessenger);
 	}
 
 	@Override

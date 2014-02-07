@@ -33,6 +33,10 @@ public:
 
 	//! As soon as Stop() returns "true", the BmpToJpgModuleMain will stop the module
 	bool Stop();
+
+private:
+	// Compression quality, ranging from 0 to 100
+	int mQuality;
 };
 
 }

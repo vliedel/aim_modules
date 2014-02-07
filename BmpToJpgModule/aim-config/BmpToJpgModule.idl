@@ -33,6 +33,9 @@ interface BmpToJpgModule {
 	// Output is a binary Jpg file, encoded as base64 string
 	void Jpg(out string output);
 
+	// Command port 
+	void Command(in string json);
+
 };
 
 };

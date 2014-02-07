@@ -20,8 +20,15 @@
 
 #include <string>
 #include <vector>
-#include <string>
 #include <vector>
+#include <string>
+#include <sstream>
+#include <unistd.h>
+// zeromq specific headers
+#include <zmq.hpp>
+#include <json_spirit_reader.h>
+#include <pthread.h>
+
 
 namespace rur {
 
@@ -31,14 +38,72 @@ struct Param {
 
 typedef std::vector<int> long_seq;
 
+/**
+ * Port name service record. This is like a domain name service record, but instead of containing an IP address and an
+ * URI, it comes with a "name" that can be resolved as a "host", "port", and "pid". The name is something like "/write",
+ * the host something like "127.0.0.1" or "dev.almende.com" (that is resolvable by dns), "port" is a TCP/UDP port, and
+ * "pid" is the process identifier.
+ */
+typedef struct pns_record_t {
+  std::string name;
+  std::string host;
+  std::string port;
+  std::string pid;
+} pns_record;
+
+// Following structure makes it easier to store state information per socket
+typedef struct zmq_socket_ext_t {
+  zmq::socket_t *sock;
+  std::string name;
+  bool ready;
+} zmq_socket_ext;
+
 class BmpToJpgModule {
 private:
   Param *cliParam;
   
-  long_seq dummyBmp;
+  // the socket over which is communicated with the name server
+  zmq::socket_t *ns_socket;
+  // standard control socket over which commands arrive to connect to some port for example
+  zmq::socket_t *cmd_socket;
+  pthread_t cmdThread;
+  pthread_mutex_t cmdMutex;
+  // standard control socket over which commands arrive to connect to some port for example
+  std::vector<zmq_socket_ext*> zmq_sockets;
+  long_seq portBmpValue;
+  zmq_socket_ext portBmpIn;
+  
+  zmq_socket_ext portJpgOut;
+  
+  std::string portCommandValue;
+  zmq_socket_ext portCommandIn;
+  
+  static void* readCommandsHelper(void* object) {
+    ((BmpToJpgModule*)object)->readCommands();
+    return NULL;
+  }
+  
+  void readCommands();
 protected:
-  static const int channel_count = 2;
-  const char* channel[2];
+  static const int channel_count = 3;
+  const char* channel[3];
+  // the standard zeromq context object
+  zmq::context_t *context;
+  // some default debug parameter
+  char debug;
+  /**
+   * The resolve function can be called by modules to get a new socket (and if you want host name and port). It can also
+   * be used by the connector, to bind to these previously set up sockets.
+   */
+  void Resolve(pns_record & record);
+  void SendAck(zmq::socket_t *s, bool state);
+  bool ReceiveAck(zmq::socket_t *s, bool & state, bool blocking);
+  char* GetReply(zmq::socket_t *s, bool & state, bool blocking, int & reply_size);
+  void SendRequest(zmq::socket_t *s, bool & state, bool blocking, std::string str);
+  void HandleCommand();
+  void Connect(std::string source, std::string target);
+  zmq::socket_t* GetSocket(std::string name);
+
 public:
   // Default constructor
   BmpToJpgModule();
@@ -58,12 +123,32 @@ public:
   // Overwrite this function with your own code
   bool Stop() { return false; }
   
+  /**
+   * The "readBmp" function receives stuff over a zeromq REP socket. It works as a client. It is better not
+   * to run it in blocking mode, because this would make it impossible to receive message on other ports (under which 
+   * the /pid/control port). The function returns NULL if there is no new item available.
+   */
   // Read from this function and assume it means something
   // Remark: caller is responsible for evoking vector->clear()
   long_seq *readBmp(bool blocking=false);
   
+  /**
+   * The "writeJpg" function sends stuff over a zeromq REQ socket. It works as a server. It cannot be blocking because this
+   * would make it impossible to receive message on other ports (under which the /pid/control port). It could have been
+   * blocking if it is known if it is connected to a REP port (but the connected() function is apparently not meant for
+   * that).
+   */
   // Write to this function and assume it ends up at some receiving module
   bool writeJpg(const std::string output);
+  
+  /**
+   * The "readCommand" function receives stuff over a zeromq REP socket. It works as a client. It is better not
+   * to run it in blocking mode, because this would make it impossible to receive message on other ports (under which 
+   * the /pid/control port). The function returns NULL if there is no new item available.
+   */
+  // Read from this function and assume it means something
+  // Remark: check if result is not NULL
+  std::string *readCommand(bool blocking=false);
   
 };
 } // End of namespace
