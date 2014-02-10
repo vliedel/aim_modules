@@ -69,7 +69,7 @@ JpgToBmpModuleExt::JpgToBmpModuleExt():
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_decompress(&cinfo);
 	jpeg_mem_src(&cinfo, bufIn, bufInSize); // buf = unsigned char* , size = unsigned long
-	jpeg_read_header(&cinfo, true);
+	jpeg_read_header(&cinfo, TRUE);
 	// Set parameters here (scale, quality, colormap)
 
 	jpeg_calc_output_dimensions(&cinfo);
@@ -147,6 +147,12 @@ void JpgToBmpModuleExt::Tick() {
 		std::cout << "[JpgToBmp] " << "Converted base64 string to binary in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
+		EXIFInfo exif;
+		int code = exif.parseFrom(bufIn, bufInSize);
+		if (code) {
+			printf("[JpgToBmp] Error parsing EXIF: code %d\n", code);
+		}
+
 		jpeg_decompress_struct cinfo;
 		jpeg_error_mgr jerr;
 		cinfo.err = jpeg_std_error(&jerr);
@@ -217,7 +223,13 @@ void JpgToBmpModuleExt::Tick() {
 		}
 
 		endTime = get_cur_1ms();
-		std::cout << "[JpgToBmp] " << "Decompressed jpg and wrote result to int array in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[JpgToBmp] Wrote result to int array in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		startTime = endTime;
+
+		rotate(writeVec, cinfo.output_width, cinfo.output_height, exif, &writeVec);
+
+		endTime = get_cur_1ms();
+		std::cout << "[JpgToBmp] image rotated in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		jpeg_finish_decompress(&cinfo);
@@ -288,6 +300,101 @@ void JpgToBmpModuleExt::Tick() {
 
 	usleep(10*1000);
 
+}
+
+int JpgToBmpModuleExt::getRotatedIdx(int rotation, int row, int col, int width, int height) {
+	rotation %= 360;
+
+	switch(rotation) {
+	case 90:
+	case -270:
+		return ((width - col - 1) * height + row) * 3;
+	case 180:
+	case -180:
+		return ((height - row - 1) * height + (height - col - 1)) * 3;
+	case 270:
+	case -90:
+		return (col * height + height - row - 1) * 3;
+	}
+}
+
+void JpgToBmpModuleExt::adjustRotatedSize(int rotation, int width, int height, int* newWidth, int* newHeight) {
+	rotation %= 360;
+
+	switch(rotation) {
+	case 90:
+	case -270:
+	case 270:
+	case -90:
+		*newWidth = height;
+		*newHeight = width;
+		break;
+	case 180:
+	case -180:
+		*newWidth = width;
+		*newHeight = height;
+	}
+
+	printf("new size: w=%d, h=%d\n", *newWidth, *newHeight);
+}
+
+void JpgToBmpModuleExt::rotate(long_seq img, int width, int height, EXIFInfo exif, long_seq* newImg) {
+
+	int rotation;
+	switch(exif.Orientation) {
+	case 6:
+		rotation = -90;
+		break;
+	case 3:
+		rotation = -180;
+		break;
+	case 8:
+		rotation = -270;
+		break;
+	default:
+		rotation = 0;
+		break;
+	}
+
+
+	if (rotation != 0) {
+		printf("rotating image by %d °\n", rotation);
+
+		int size = width * height * 3;
+//		long_seq* newImg = new long_seq(size);
+//		newImg->reserve(size);
+
+		long_seq::iterator itOut = newImg->begin();
+
+		int newWidth, newHeight;
+		int oldIndex = 0;
+
+		adjustRotatedSize(rotation, width, height, &newWidth, &newHeight);
+
+		*itOut++ = (img)[oldIndex++];
+		*itOut++ = (img)[oldIndex++];
+		*itOut++ = (img)[oldIndex++];
+		*itOut++ = newHeight; oldIndex++;
+		*itOut++ = newWidth; oldIndex++;
+		*itOut++ = (img)[oldIndex++];
+
+		int offset = oldIndex;
+
+		int row, col;
+		for (row = 0; row < newHeight; row++) {
+			for (col = 0; col < newWidth; col++) {
+				oldIndex = getRotatedIdx(-rotation, row, col, newWidth, newHeight);
+				*itOut++ = (img)[offset + oldIndex];
+				*itOut++ = (img)[offset + oldIndex+1];
+				*itOut++ = (img)[offset + oldIndex+2];
+			}
+		}
+		return;
+	} else {
+		printf("no rotation needed\n");
+		*newImg = img;
+		return;
+	}
 }
 
 bool JpgToBmpModuleExt::Stop() {

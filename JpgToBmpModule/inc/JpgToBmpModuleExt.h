@@ -14,6 +14,7 @@
  */
 
 #include <JpgToBmpModule.h>
+#include <exif.h>
 
 namespace rur {
 
@@ -37,6 +38,13 @@ public:
 private:
 	unsigned int mScaleNum;
 	unsigned int mScaleDenom;
+
+	int getRotatedIdx(int rotation, int row, int col, int width, int height);
+
+	void adjustRotatedSize(int rotation, int width, int height, int* newWidth, int* newHeight);
+
+	void rotate(long_seq img, int width, int height, EXIFInfo exif, long_seq* newImg);
+
 };
 
 }
