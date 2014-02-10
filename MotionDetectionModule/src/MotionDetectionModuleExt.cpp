@@ -88,7 +88,7 @@ void MotionDetectionModuleExt::Tick() {
 	readVec = readImage(false);
 	if (readVec != NULL && !readVec->empty()) {
 		// -- Read the image --
-		std::cout << "Received new image..." << std::endl;
+		std::cout << "[MotionDetection] " << "Received new image..." << std::endl;
 		long_seq::const_iterator it = readVec->begin();
 		int dataType = *it++;
 		if (dataType != 0)
@@ -125,17 +125,15 @@ void MotionDetectionModuleExt::Tick() {
 //			rows = 1;
 //		}
 		for (int i=0; i<rows; ++i, it+=3*width) {
-//			std::cout << "i=" << i << std::endl;
 			unsigned char* row = mFrame.ptr<unsigned char>(i);
 			for (int j=0; j<cols*3; j+=3, it+=3) {
-//				std::cout << "j=" << j << std::endl;
 				row[j+2] = *it++;
 				row[j+1] = *it++;
 				row[j] = *it++;
 			}
 		}
 		long endTime = get_cur_1ms();
-		std::cout << "Read image in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[MotionDetection] " << "Read image in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 //		cv::namedWindow("test", cv::WINDOW_AUTOSIZE);
 //		cv::imshow("test", mFrame);
@@ -151,25 +149,20 @@ void MotionDetectionModuleExt::Tick() {
 			(*itFrame)[0] = *it++;
 		}
 		long endTime = get_cur_1ms();
-		std::cout << "Read image in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[MotionDetection] " << "Read image in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
-
-//		cv::resize(mFrame, mFrameScaled, cv::Size(), 0.5, 0.5, cv::INTER_NEAREST);
 #endif
-		endTime = get_cur_1ms();
-		std::cout << "Resized image in " << get_duration(startTime, endTime) << "ms" << std::endl;
-		startTime = endTime;
 
 		mBackGroundSubtractor(mFrame, mForeground);
 
 		endTime = get_cur_1ms();
-		std::cout << "Got foreground image in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[MotionDetection] " << "Got foreground image in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		cv::erode(mForeground,mForeground,cv::Mat()); //if element=Mat() , a 3 x 3 rectangular structuring element is used.
 
 		endTime = get_cur_1ms();
-		std::cout << "Erode foreground image in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[MotionDetection] " << "Erode foreground image in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
 		//std::vector<std::vector<cv::Point> > contours;
@@ -188,15 +181,15 @@ void MotionDetectionModuleExt::Tick() {
 			if (*itFore>128) // 0 for background, 127 for shadow, 255 for foreground
 				sum+=*itFore;
 		}
+//		float probability = (float)sum/width/height/255;
+		int probability = sum/mForeground.rows/mForeground.cols;
 
 		endTime = get_cur_1ms();
-		std::cout << "Calculated probability in " << get_duration(startTime, endTime) << "ms" << std::endl;
+		std::cout << "[MotionDetection] " << "Calculated probability in " << get_duration(startTime, endTime) << "ms" << std::endl;
 		startTime = endTime;
 
-//		std::cout << "sum=" << sum << " probability=" << (float)sum/width/height/255 << std::endl;
-		std::cout << "sum=" << sum << " probability=" << sum/mForeground.rows/mForeground.cols << std::endl;
-
-		writeMotion(sum/mForeground.rows/mForeground.cols);
+		std::cout << "[MotionDetection] " << "sum=" << sum << " probability=" << probability << std::endl;
+		writeMotion(probability);
 
 		readVec->clear();
 	}
