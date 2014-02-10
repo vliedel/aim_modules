@@ -34,20 +34,32 @@ ImageDisplayModuleExt::~ImageDisplayModuleExt() {
 void ImageDisplayModuleExt::Tick() {
 	long_seq* readVec = readImage(false);
 	if (readVec != NULL && !readVec->empty()) {
-		std::cout << "Read something" << std::endl;
+		std::cout << "[ImageDisplay] Read something" << std::endl;
 		long_seq::const_iterator it = readVec->begin();
 		int dataType = *it++;
-		if (dataType != 0)
+		if (dataType != 0) {
+			std::cerr << "[ImageDisplay] WARNING: type is not 0" << std::endl;
 			return;
-		int nArrays = *it++;
+		}
+		int nTensors = *it++;
+		if (nTensors != 1) {
+			std::cerr << "[ImageDisplay] WARNING: nTensors is not 1" << std::endl;
+			return;
+		}
 		int nDims = *it++;
 		if (nDims != 3) {
 			readVec->clear();
+			std::cerr << "[ImageDisplay] WARNING: number of dimensions should be 3" << std::endl;
 			return;
 		}
 		int height = *it++;
 		int width = *it++;
 		int channels = *it++;
+		if (channels != 3) {
+			std::cerr << "[ImageDisplay] WARNING: channels should be 3" << std::endl;
+			readVec->clear();
+			return;
+		}
 		CImg<unsigned char> img(width, height, 1, channels);
 		for (int y=0; y<height; ++y) {
 			for (int x=0; x<width; ++x) {
@@ -56,6 +68,9 @@ void ImageDisplayModuleExt::Tick() {
 				}
 			}
 		}
+		std::cout << "[ImageDisplay] height=" << height << " width=" << width << std::endl;
+
+
 //		CImg<unsigned char> img(height, width, 1, channels);
 //		for (int y=0; y<height; ++y) {
 //			for (int x=0; x<width; ++x) {

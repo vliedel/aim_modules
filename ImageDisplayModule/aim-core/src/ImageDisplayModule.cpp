@@ -97,19 +97,21 @@ void ImageDisplayModule::readCommands() {
 void ImageDisplayModule::Resolve(pns_record & record) {
   std::cout << "Acquire TCP/IP port for " << record.name << std::endl;
   std::string reqname = record.name + ':' + record.pid;
-  zmq::message_t request (reqname.size() + 1);
-  memcpy ((void *) request.data (), reqname.c_str(), reqname.size());
+  zmq::message_t request (reqname.size());
+  memcpy((void *) request.data(), reqname.c_str(), reqname.size());
   ns_socket->send(request);
   
   zmq::message_t reply;
   if (!ns_socket->recv (&reply)) return;
   size_t msg_size = reply.size();
-  char* address = new char[msg_size+1];
-  memcpy (address, (void *) reply.data(), msg_size);
-  address[msg_size] = '\0';
-  std::string json = std::string(address);
-  std::cout << "Received " << json << std::endl;
-  delete [] address;
+  std::string json = std::string((char*)reply.data(), msg_size);
+  if (debug)
+    std::cout << "Received " << json << std::endl;
+//  char* address = new char[msg_size+1];
+//  memcpy (address, (void *) reply.data(), msg_size);
+//  address[msg_size] = '\0';
+//  std::string json = std::string(address);
+//  delete [] address;
   
   // get json object
   bool valid;
@@ -153,7 +155,12 @@ bool ImageDisplayModule::ReceiveAck(zmq::socket_t *s, bool & state, bool blockin
   int reply_size = 0;
   char *reply = GetReply(s, state, blocking, reply_size);
   if (reply == NULL) return false;
-  std::string req = std::string(reply);
+  if (reply_size < 1) {
+    std::cerr << "Error: Reply is not large enough" << std::endl;
+    delete [] reply;
+    return false;
+  }
+  std::string req = std::string(reply, reply_size-1);
   delete [] reply;
   if (req.find("ACK") != std::string::npos) {
     if (debug) std::cout << "Got ACK, thanks!" << std::endl;
@@ -180,9 +187,9 @@ char* ImageDisplayModule::GetReply(zmq::socket_t *s, bool & state, bool blocking
   if (state) {
     size_t msg_size = reply.size();
     result = new char[msg_size+1];
-    memcpy (result, (void *) reply.data(), msg_size);
+    memcpy(result, (void *) reply.data(), msg_size); // TODO: this copy should not be needed
     result[msg_size] = '\0';
-    reply_size = msg_size;
+    reply_size = msg_size+1;
     //std::cout << "Result: \"" << std::string(result) << "\"" << std::endl;
   }
   return result;
@@ -190,8 +197,8 @@ char* ImageDisplayModule::GetReply(zmq::socket_t *s, bool & state, bool blocking
 
 void ImageDisplayModule::SendRequest(zmq::socket_t *s, bool & state, bool blocking, std::string str) {
   if (state) {
-    zmq::message_t request(str.size()+1);
-    memcpy((void *) request.data(), str.c_str(), str.size()+1);
+    zmq::message_t request(str.size());
+    memcpy((void *) request.data(), str.c_str(), str.size());
     if (debug) std::cout << "Send request: " << str << std::endl;
     if (blocking)
       state = s->send(request);
@@ -208,14 +215,18 @@ void ImageDisplayModule::HandleCommand() {
   char *reply = GetReply(cmd_socket, state, true, reply_size);
   if (reply == NULL) return;
   std::cout << "HandleCommand: " << std::string(reply, reply_size) << std::endl;
-  if (reply_size < 2) std::cerr << "Error: Reply is not large for magic header + command string" << std::endl;
+  if (reply_size < 3) {
+    std::cerr << "Error: Reply is not large enough for magic header + command string" << std::endl;
+    delete [] reply;
+    return;
+  }
   char magic_value = reply[0];
-  reply[reply_size-1] = '\0';
   if (magic_value == 0x01) { // connect to command...
-    std::string name = std::string(reply+1);
+    std::string name = std::string(reply+1, reply_size-2);
     int pos = name.find("->");
     if (pos == std::string::npos) {
       std::cerr << "Error: no -> separator in connect command" << std::endl;
+      delete [] reply;
       return;
     }
     std::string source = name.substr(0, pos);
@@ -275,9 +286,13 @@ long_seq* ImageDisplayModule::readImage(bool blocking) {
   }
   SendAck(portImageIn.sock, portImageIn.ready);
   pthread_mutex_unlock(&cmdMutex);
-  if (reply_size < 2) std::cerr << "Error: Reply is not large enough to store a value!" << std::endl;
+  if (reply_size < 1) {
+    std::cerr << "Error: Reply is not large enough to store a value!" << std::endl;
+    delete [] reply;
+    return NULL;
+  }
   std::stringstream ss; ss.clear(); ss.str("");
-  ss << std::string(reply);
+  ss << std::string(reply, reply_size-1);
   int itemVal;
   std::stringstream ssItem;
   portImageValue.clear();
