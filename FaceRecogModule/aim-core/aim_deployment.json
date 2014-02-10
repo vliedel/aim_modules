@@ -1,0 +1,35 @@
+{
+	"name":"FaceRecogModule",
+	"type":"background",
+	"version":"1",
+	"category":"Image processing",
+	"description":"Classifies faces",
+	"long_description":"Feed this module with images of faces and it will classify them. Set train to true to train the model with the input images",
+	"supported_middleware":[ "yarp", "zeromq", "ros" ],
+	"supported_devices":[ "raspberrypi", "ubuntu" ],
+	"enable":"false",
+	"android": {
+		"package":"org.dobots.facerecogmodule",
+		"url":"https://play.google.com/store/apps/details?id=org.dobots.facerecogmodule"
+	},
+	"ports": [
+		{
+			"name":"faceimage",
+			"dir":"in",
+			"type":"intarray",
+			"middleware":"default"
+		},
+		{
+			"name":"classified",
+			"dir":"out",
+			"type":"int",
+			"middleware":"default"
+		},
+		{
+			"name":"cmd",
+			"dir":"in",
+			"type":"string",
+			"middleware":"default"
+		}
+	]
+}
