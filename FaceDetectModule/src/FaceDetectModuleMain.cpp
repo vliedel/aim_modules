@@ -33,6 +33,7 @@ int main(int argc, char *argv[])  {
 
 	std::string exe = argv[0];
 	size_t pos = exe.find_last_of('/');
+//	size_t pos = exe.find_last_of("/\\"); // search for last / or \ (windows style)
 
 	std::string path;
 	if (pos == std::string::npos)
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])  {
 	else
 		path = exe.substr(0, pos);
 
-	std::cout << "exe=" << exe << " pos=" << pos << " path=" << path << std::endl;
+//	std::cout << "exe=" << exe << " pos=" << pos << " path=" << path << std::endl;
 
 	stringstream ss;
 //	ss << getenv("PWD") << "/data/haarcascade_frontalface_alt.xml";
@@ -51,7 +52,6 @@ int main(int argc, char *argv[])  {
 //	ss << getenv("PWD") << "/data/haarcascade_eye_tree_eyeglasses.xml";
 	std::string nestedCascadeFilename = ss.str();
 	ss.clear(); ss.str("");
-
 
 	if (argc < 2) {
 		std::cout << "Use an identifier as argument for this instance" << endl;
