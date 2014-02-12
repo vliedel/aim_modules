@@ -57,7 +57,7 @@ using namespace rur;
 
 //! Replace with your own code
 BmpToJpgModuleExt::BmpToJpgModuleExt(): mQuality(75) {
-
+	mSerialization.setTag("[BmpToJpg]");
 }
 
 //! Replace with your own code
@@ -72,33 +72,36 @@ void BmpToJpgModuleExt::Tick() {
 	long_seq* read;
 
 	read = readBmp(false);
-	if (read != NULL && !read->empty()) {
-		// -- Read the image --
-		long_seq::const_iterator it = read->begin();
-		int dataType = *it++;
-		if (dataType != 0)
-			return;
-		int nArrays = *it++;
-		int nDims = *it++;
-		if (nDims != 3) {
-			std::cerr << "[BmpToJpg] nDims=" << nDims << ", should be 3" << std::endl;
-			read->clear();
-			return;
-		}
-		int height = *it++;
-		int width = *it++;
-		int channels = *it++;
-		if (channels != 3) {
-			std::cerr << "[BmpToJpg] channels=" << channels << ", should be 3" << std::endl;
-			read->clear();
-			return;
-		}
-		if (read->size() < 6+height*width*channels) {
-			std::cerr << "[BmpToJpg] read.size=" << read->size() << ", should be " << 6+height*width*channels << std::endl;
-			read->clear();
-			return;
-		}
-
+//	if (read != NULL && !read->empty()) {
+//		// -- Read the image --
+//		long_seq::const_iterator it = read->begin();
+//		int dataType = *it++;
+//		if (dataType != 0)
+//			return;
+//		int nArrays = *it++;
+//		int nDims = *it++;
+//		if (nDims != 3) {
+//			std::cerr << "[BmpToJpg] nDims=" << nDims << ", should be 3" << std::endl;
+//			read->clear();
+//			return;
+//		}
+//		int height = *it++;
+//		int width = *it++;
+//		int channels = *it++;
+//		if (channels != 3) {
+//			std::cerr << "[BmpToJpg] channels=" << channels << ", should be 3" << std::endl;
+//			read->clear();
+//			return;
+//		}
+//		if (read->size() < 6+height*width*channels) {
+//			std::cerr << "[BmpToJpg] read.size=" << read->size() << ", should be " << 6+height*width*channels << std::endl;
+//			read->clear();
+//			return;
+//		}
+	std::vector<int>::const_iterator it;
+	int height, width;
+	if (mSerialization.deserializeRgbImage(read, height, width, it)) {
+		int channels = 3;
 		unsigned char* bufIn = new unsigned char[width*channels];
 
 
@@ -205,6 +208,8 @@ void BmpToJpgModuleExt::Tick() {
 
 		readStr->clear();
 	}
+
+	usleep(10*1000);
 }
 
 //! Replace with your own code

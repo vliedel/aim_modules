@@ -28,12 +28,11 @@ FaceRecogModuleExt::FaceRecogModuleExt():
 //		,mGrayFrames(0)
 //		,mLabels(0)
 {
-
+	mSerialization.setTag("[FaceRecog]");
 	// Use local binary patterns histogram algorithm, only one that can be updated with new images
 	// Set a threshold, use defaults for other parameters.
 	mModel = cv::createLBPHFaceRecognizer(1, 8, 8, 8, DBL_MAX);
 	if (mModel.empty())
-//	if (mModel < 1)
 		std::cerr << "[FaceRecog] could not init model!" << std::endl;
 }
 
@@ -44,56 +43,12 @@ FaceRecogModuleExt::~FaceRecogModuleExt() {
 void FaceRecogModuleExt::Tick() {
 	std::vector<int>* readVec;
 	readVec = readFaceImage(false);
-	if (readVec != NULL && !readVec->empty()) {
-		// -- Read the image --
-		std::cout << "[FaceRecog] Received new image..." << std::endl;
-		long_seq::const_iterator it = readVec->begin();
-		int dataType = *it++;
-		if (dataType != 0) {
-			std::cerr << "[FaceRecog] WARNING: dataType=" << dataType << ", should be 0" << std::endl;
-			readVec->clear();
-			return;
-		}
-		int nTensors = *it++;
-		if (nTensors != 1) {
-			std::cerr << "[FaceRecog] WARNING: nTensors=" << nTensors << ", should be 1" << std::endl;
-			readVec->clear();
-			return;
-		}
-		int nDims = *it++;
-		if (nDims != 3) {
-			std::cerr << "[FaceRecog] WARNING: nDims=" << nDims << ", should be 3" << std::endl;
-			readVec->clear();
-			return;
-		}
-		int height = *it++;
-		int width = *it++;
-		int channels = *it++;
-		if (channels != 3) {
-			std::cerr << "[FaceRecog] WARNING: channels=" << channels << ", should be 3" << std::endl;
-			readVec->clear();
-			return;
-		}
-		if (readVec->size() < 6+height*width*channels) {
-			std::cerr << "[FaceRecog] read.size=" << readVec->size() << ", should be " << 6+height*width*channels << std::endl;
-			readVec->clear();
-			return;
-		}
-
-		cv::Mat frame(height, width, CV_8UC3); // 3 channel 8bit integer
-		//mFrame.create(height, width, CV_8UC3); // 3 channel 8bit integer
-		cv::Mat_<cv::Vec3b>::iterator itFrame = frame.begin<cv::Vec3b>(), itFrameEnd = frame.end<cv::Vec3b>();
-		for (; itFrame != itFrameEnd; ++itFrame) {
-			(*itFrame)[2] = *it++;
-			(*itFrame)[1] = *it++;
-			(*itFrame)[0] = *it++;
-		}
-		std::cout << "[FaceRecog] height=" << height << " width=" << width << std::endl;
-
+	if (mSerialization.deserializeRgbImage(readVec, mFrame)) {
+		std::cout << "[FaceRecog] height=" << mFrame.rows << " width=" << mFrame.cols << std::endl;
 
 		// Grayscale required
 		cv::Mat gray;
-		cv::cvtColor(frame, gray, CV_BGR2GRAY);
+		cv::cvtColor(mFrame, gray, CV_BGR2GRAY);
 
 		cv::Mat grayResized;
 		cv::resize(gray, grayResized, cv::Size(64, 64), 0, 0);
@@ -105,13 +60,13 @@ void FaceRecogModuleExt::Tick() {
 			frames[0] = grayResized;
 			labels[0] = mTrain;
 
-//			if (!mTrained) {
-//				mModel->train(frames, labels);
-//				mTrained = true;
-//			}
-//			else {
+			if (!mTrained) {
+				mModel->train(frames, labels);
+				mTrained = true;
+			}
+			else {
 				mModel->update(frames, labels);
-//			}
+			}
 
 //			mGrayFrames.push_back(gray);
 //			mLabels.push_back(mLabels.size());

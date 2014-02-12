@@ -15,6 +15,7 @@
 
 #include <JpgToBmpModule.h>
 #include <exif.h>
+#include <AimSerializationHeader.hpp>
 
 namespace rur {
 
@@ -38,6 +39,7 @@ public:
 private:
 	unsigned int mScaleNum;
 	unsigned int mScaleDenom;
+	AimSerializationHeader mSerialization;
 
 	int getRotatedIdx(int rotation, int row, int col, int width, int height);
 

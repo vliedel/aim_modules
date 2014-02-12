@@ -14,7 +14,9 @@
  */
 
 #include <MotionDetectionModule.h>
-#include "opencv2/video/background_segm.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/video/background_segm.hpp>
+#include <AimSerializationOpenCV.hpp>
 
 namespace rur {
 
@@ -40,6 +42,8 @@ private:
 	cv::Mat mBackground;
 	cv::Mat mForeground;
 	cv::BackgroundSubtractorMOG2 mBackGroundSubtractor;
+
+	AimSerializationOpenCV mSerialization;
 };
 
 }

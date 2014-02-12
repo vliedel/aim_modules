@@ -14,6 +14,7 @@
  */
 
 #include <BmpToJpgModule.h>
+#include <AimSerializationHeader.hpp>
 
 namespace rur {
 
@@ -37,6 +38,8 @@ public:
 private:
 	// Compression quality, ranging from 0 to 100
 	int mQuality;
+
+	AimSerializationHeader mSerialization;
 };
 
 }

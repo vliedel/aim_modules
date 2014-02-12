@@ -14,9 +14,9 @@
  */
 
 #include <FaceRecogModule.h>
-
-#include "opencv2/contrib/contrib.hpp"
-#include "opencv2/core/core.hpp"
+#include <AimSerializationOpenCV.hpp>
+#include <opencv2/contrib/contrib.hpp>
+#include <opencv2/core/core.hpp>
 
 namespace rur {
 
@@ -40,9 +40,11 @@ public:
 private:
 
 	cv::Ptr<cv::FaceRecognizer> mModel;
+	cv::Mat mFrame;
 	int mTrain; // Determines if the module should train or predict
 	int mThreshold;
-//	bool mTrained; // To keep up if the model has been trained, since you can't call update() before train()
+	bool mTrained; // To keep up if the model has been trained, since you can't call update() before train()
+	AimSerializationOpenCV mSerialization;
 //	std::vector<cv::Mat> mGrayFrames;
 //	std::vector<int> mLabels;
 };
