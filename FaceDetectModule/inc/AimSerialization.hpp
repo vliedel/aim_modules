@@ -130,7 +130,7 @@ public:
 		return it;
 	}
 
-	template <typename T, typename OutputIterator>
+	template <typename OutputIterator>
 	OutputIterator serializeData(const OutputIterator first, const OutputIterator last) {
 		serializeDataCheck(first, last);
 
@@ -139,7 +139,7 @@ public:
 		return it;
 	}
 
-	template <typename T, typename InputIterator>
+	template <typename InputIterator>
 	InputIterator deserializeData(const InputIterator first, const InputIterator last) {
 		deserializeDataCheck(first, last);
 
@@ -150,7 +150,13 @@ public:
 
 protected:
 
-	template <typename T, typename OutputIterator>
+	std::string mTag;
+	int mNumDims;
+	std::vector<size_t> mDimSizes;
+	int mHeaderSize;
+	int mDataSize;
+
+	template <typename OutputIterator>
 	void serializeDataCheck(const OutputIterator first, const OutputIterator last) {
 		__glibcxx_function_requires(_OutputIteratorConcept<OutputIterator>);
 		__glibcxx_requires_valid_range(first, last);
@@ -164,7 +170,7 @@ protected:
 		}
 	}
 
-	template <typename T, typename InputIterator>
+	template <typename InputIterator>
 	void deserializeDataCheck(const InputIterator first, const InputIterator last) {
 		__glibcxx_function_requires(_InputIteratorConcept<InputIterator>);
 		__glibcxx_requires_valid_range(first, last);
@@ -197,12 +203,6 @@ private:
 			mDataSize *= mDimSizes[i];
 		}
 	}
-
-	std::string mTag;
-	int mNumDims;
-	std::vector<size_t> mDimSizes;
-	int mHeaderSize;
-	int mDataSize;
 };
 
 
@@ -211,7 +211,12 @@ public:
 	AimSerialization(): mDataType(0), mNumTensors(0), mSerializedSize(0), mSerializations(0), mBaseSerializations(0) {}
 	~AimSerialization() {}
 
-	void setTag(std::string tag) { mTag = tag; };
+	void setTag(std::string tag) {
+		mTag = tag;
+		for (size_t i=0; i<mSerializations.size(); ++i) {
+			mSerializations[i]->setTag(tag);
+		}
+	};
 
 	void add(AimSerializationBase* serialization) {
 		serialization->setTag(mTag);
@@ -228,7 +233,7 @@ public:
 		return mSerializedSize;
 	}
 
-	template <typename OutputIterator, typename Size>
+	template <typename OutputIterator>
 	OutputIterator serialize(const OutputIterator first, const OutputIterator last) {
 		__glibcxx_function_requires(_OutputIteratorConcept<OutputIterator>);
 		__glibcxx_requires_valid_range(first, last);

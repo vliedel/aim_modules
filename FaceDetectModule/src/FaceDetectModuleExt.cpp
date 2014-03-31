@@ -28,7 +28,10 @@ using namespace rur;
 
 //! Replace with your own code
 FaceDetectModuleExt::FaceDetectModuleExt() {
-	mSerialization.setTag("[FaceDetect]");
+	mReadSerialization.add(&mReadSerializationImg);
+	mReadSerialization.setTag("[FaceDetect]");
+	mWriteSerialization.add(&mWriteSerializationImg);
+	mWriteSerialization.setTag("[FaceDetect]");
 }
 
 //! Replace with your own code
@@ -40,7 +43,10 @@ FaceDetectModuleExt::~FaceDetectModuleExt() {
 void FaceDetectModuleExt::Tick() {
 	std::vector<int>* readVec;
 	readVec = readImage(false);
-	if (mSerialization.deserializeRgbImage(readVec, mFrame)) {
+//	if (mSerialization.deserializeRgbImage(readVec, mFrame)) {
+	try {
+		mReadSerialization.deserialize(readVec->begin(), readVec->end());
+
 		std::cout << "[FaceDetect] height=" << mFrame.rows << " width=" << mFrame.cols << std::endl;
 
 		// For testing only
@@ -65,12 +71,16 @@ void FaceDetectModuleExt::Tick() {
 			std::cout << "[FaceDetect] Found a face!" << std::endl;
 			cv::Mat face(mFrame, faces[0]);
 
-			std::vector<int> out;
-			if (mSerialization.serializeRgbImage(out, face))
-				writeFaceImage(out);
+			std::vector<int> out(mWriteSerialization.getRequiredSize());
+//			if (mSerialization.serializeRgbImage(out, face))
+//				writeFaceImage(out);
+			mWriteSerializationImg.setImage(face);
+			mWriteSerialization.serialize(out.begin(), out.end());
 		}
-		readVec->clear();
+	} catch (AimException& e) {
+
 	}
+	readVec->clear();
 	usleep(10*1000);
 }
 

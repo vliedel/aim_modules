@@ -49,7 +49,7 @@ public:
 		return AimSerializationBase::serializeHeader(first, last);
 	}
 
-	template <typename T, typename OutputIterator>
+	template <typename OutputIterator>
 	OutputIterator serializeData(const OutputIterator first, const OutputIterator last) {
 		serializeDataCheck(first, last);
 
@@ -80,7 +80,7 @@ public:
 		return it;
 	}
 
-	template <typename T, typename InputIterator>
+	template <typename InputIterator>
 	InputIterator deserializeData(const InputIterator first, const InputIterator last) {
 		deserializeDataCheck(first, last);
 

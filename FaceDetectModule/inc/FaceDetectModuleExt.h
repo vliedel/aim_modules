@@ -15,6 +15,7 @@
 
 #include <FaceDetectModule.h>
 #include <AimSerializationOpenCV.hpp>
+#include <AimSerialization.hpp>
 #include <opencv2/core/core.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
 //#include <opencv2/opencv.hpp>
@@ -47,7 +48,10 @@ private:
 	cv::CascadeClassifier mCascade, mNestedCascade;
 	cv::Mat mFrame;
 
-	AimSerializationOpenCV mSerialization;
+	AimSerialization mReadSerialization;
+	AimSerializationOpenCvRgb mReadSerializationImg;
+	AimSerialization mWriteSerialization;
+	AimSerializationOpenCvRgb mWriteSerializationImg;
 
 	void detectAndDraw(cv::Mat& img, cv::CascadeClassifier& cascade, cv::CascadeClassifier& nestedCascade, double scale);
 };
