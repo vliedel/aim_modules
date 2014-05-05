@@ -43,6 +43,9 @@ typedef CGAL::Polygon_2<Kernel>           Polygon;
 
 class MonotoneSweepModuleExt: public MonotoneSweepModule {
 public:
+	MonotoneSweepModuleExt();
+	virtual ~MonotoneSweepModuleExt();
+
 	// The tick function will be called from the MonotoneSweepModuleMain file
 	void Tick();
 
@@ -53,14 +56,17 @@ public:
 private:
 	Polygon mPoly;
 	Ft mSweepWidth;
+	Ft mOffsetWidth;
 
-	Ft getMaxDistance(const Polygon& poly, const Segment& startSegment,
-			const Ft& norm, const Direction& perpendicularDir);
+	Ft getLength(const Polygon& poly);
 
-	Segment parallelSegment(const Polygon& poly, const Segment& startSegment, const Ft& offset,
-			const Ft& norm, const Direction& perpendicularDir);
+	Ft getDistance(const Point& p, const Point& q, const Vector& vec);
+	Ft getMaxDistance(const Polygon& poly, const Segment& startSegment, const Vector& perpVec);
 
-	void getSweepPoly(const Polygon& poly, const int sweepDirectionIndex, const Ft& sweepWidth, Polygon &sweepPoly);
+	Segment parallelSegment(const Polygon& poly, const Segment& startSegment, const Ft& offset, const Vector& perpVec);
+
+//	void getSweepPoly(const Polygon& poly, const int sweepDirectionIndex, const Ft& sweepWidth, Polygon &sweepPoly);
+	void getSweepPoly(const Polygon& poly, const int sweepDirectionIndex, const Ft& sweepWidth, std::vector<Point> &sweepPath);
 };
 }
 
