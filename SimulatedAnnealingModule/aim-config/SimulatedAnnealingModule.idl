@@ -1,0 +1,44 @@
+/**
+ * IDL description of the SimulatedAnnealingModule
+ *
+ * This file is automatically parsed by the rurbuilder backends for the omniidl compiler. The names of the functions
+ * will become port identifiers. The names of the function variables are not used. 
+ *
+ * The syntax of the IDL file also allows for "inout", but not all middlewares will accept this yet.
+ */
+
+#pragma author               Homer J. Simpson
+#pragma copyright            Springfield Power Company
+#pragma date                 nov  5, 2014
+#pragma license              State
+
+// Recommended namespace "rur"
+module rur {
+
+// The command-line parameter (this struct is required)
+struct Param {
+  // multiple modules can be addressed in parallel, killed, etc. using "module_id"
+  string module_id;
+};
+
+// Typedef for array of integers
+typedef sequence<long> long_seq;
+
+// The public interface of SimulatedAnnealingModule
+interface SimulatedAnnealingModule {
+
+  // Description of the search space
+  void Searchspace(in string json);
+
+  // Set parameters of the algorithm
+  void Command(in string json);
+
+  // Value of the cost function for previous candidate output, this value is minimized
+  void Cost(in float input);
+
+  // Candidate set of parameters to be fed to the costfunction, the cost is then expected to be sent
+  void Candidate(out string json);
+
+};
+
+};
