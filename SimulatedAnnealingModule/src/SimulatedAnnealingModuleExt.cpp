@@ -113,7 +113,7 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 			_state = _candidateState;
 			energyBest = energy;
 			numUpdates++;
-			deltaE_avg = (deltaE_avg * (numUpdates-1.0) +  deltaE_avg) / (double)numUpdates;
+			deltaE_avg = (deltaE_avg * (numUpdates-1.0) +  deltaE) / (double)numUpdates;
 		}
 
 		std::cout << k << " energy=" << energyBest << " state=";
