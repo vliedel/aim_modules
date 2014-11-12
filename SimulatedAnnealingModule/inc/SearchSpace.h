@@ -18,27 +18,40 @@
 
 #include <vector>
 
+enum StateVariableType {
+	STATE_VAR_NONE=0,
+	STATE_VAR_SET,
+	STATE_VAR_CONTINUOUS
+};
+
 template <class T>
 class StateVariable {
 public:
-	StateVariable() {}
+	StateVariable(StateVariableType type) : _type(type) {}
 	virtual ~StateVariable() {}
-	virtual const T& get() const { return _val; };
-	virtual void set(const T& val) { _val = val; };
+	virtual const T get() const { return _val; };
+	virtual void set(const T val) { _val = val; };
 	virtual void init(const std::vector<T>& values) {};
+//	virtual const size_t size() { return 0; }
+//	virtual const T min() { return 0; }
+//	virtual const T max() { return 0; }
+	StateVariableType type() { return _type; }
+	void type(StateVariableType type) { _type = type; }
 //private:
 	T _val;
+	StateVariableType _type;
 };
 
 
 template <class T>
 class StateVariableSet : public StateVariable<T> {
 public:
-	StateVariableSet() {}
+	StateVariableSet() : StateVariable<T>(STATE_VAR_SET) { }
 	~StateVariableSet() {}
 	void Init(const std::vector<T>& values) { _set = values; }
-	size_t size() { return _set.size(); }
-//private:
+	const size_t size() { return _set.size(); }
+	const std::vector<T>& getSet() { return _set; }
+private:
 	std::vector<T> _set;
 };
 
@@ -46,7 +59,7 @@ public:
 template <class T>
 class StateVariableContinuous : public StateVariable<T> {
 public:
-	StateVariableContinuous() {}
+	StateVariableContinuous() : StateVariable<T>(STATE_VAR_CONTINUOUS) { }
 	~StateVariableContinuous() {}
 	void Init(const std::vector<T>& values) {
 		if (values.size() > 1) {
@@ -54,8 +67,8 @@ public:
 			_max = values[1];
 		}
 	}
-	void Init(const T& min, const T& max) { _min = min; _max = max; };
-	void set(const T& val) {
+	void Init(const T min, const T max) { _min = min; _max = max; };
+	void set(const T val) {
 		if (val > _max)
 			StateVariable<T>::_val = _max;
 		else if (val < _min)
@@ -63,7 +76,9 @@ public:
 		else
 			StateVariable<T>::_val = val;
 	};
-//private:
+	const T min() { return _min; }
+	const T max() { return _max; }
+private:
 	T _min;
 	T _max;
 };
@@ -75,14 +90,14 @@ public:
 	State() { }
 	~State() { }
 
-	const T& getStateVal(const size_t index) const {
+	const T getStateVal(const size_t index) const {
 		if (index < _setStates.size())
 			return _setStates[index].get();
 		else
 			return _contStates[index-_setStates.size()].get();
 	}
 
-	void setStateVal(const size_t index, T& val) {
+	void setStateVal(const size_t index, T val) {
 		if (index < _setStates.size())
 			_setStates[index].set(val);
 		else
@@ -90,7 +105,7 @@ public:
 	}
 
 	// Read access only, use setStateVal to write
-	const T& operator[](const size_t index) const {
+	const T operator[](const size_t index) const {
 		return getStateVal(index);
 	}
 

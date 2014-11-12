@@ -22,6 +22,9 @@
 #include <vector>
 #include <string>
 #include <vector>
+#include <deque>
+#include <node.h>
+#include <pthread.h>
 
 namespace rur {
 
@@ -31,13 +34,52 @@ struct Param {
 
 typedef std::vector<int> long_seq;
 
-class SimulatedAnnealingModule {
+class SimulatedAnnealingModule : public node::ObjectWrap {
 private:
   Param *cliParam;
   
-  std::string dummySearchspace;
-  std::string dummyCommand;
-  float dummyCost;
+  pthread_t moduleThread;
+  bool DestroyFlag;
+  pthread_mutex_t destroyMutex;
+  
+  std::deque<std::string> readBufSearchspace;
+  std::string readValSearchspace;
+  pthread_mutex_t readMutexSearchspace;
+  
+  std::deque<std::string> readBufCommand;
+  std::string readValCommand;
+  pthread_mutex_t readMutexCommand;
+  
+  std::deque<float> readBufCost;
+  float readValCost;
+  pthread_mutex_t readMutexCost;
+  
+  std::deque<std::string> writeBufCandidate;
+  v8::Persistent<v8::Function> nodeCallBackCandidate;
+  uv_async_t asyncCandidate;
+  pthread_mutex_t writeMutexCandidate;
+  
+  static v8::Handle<v8::Value> NodeNew(const v8::Arguments& args);
+  
+  static v8::Handle<v8::Value> NodeDestroy(const v8::Arguments& args);
+  
+  bool Destroy();
+  
+  // Function to be used in NodeJS, not in your C++ code
+  static v8::Handle<v8::Value> NodeWriteSearchspace(const v8::Arguments& args);
+  
+  // Function to be used in NodeJS, not in your C++ code
+  static v8::Handle<v8::Value> NodeWriteCommand(const v8::Arguments& args);
+  
+  // Function to be used in NodeJS, not in your C++ code
+  static v8::Handle<v8::Value> NodeWriteCost(const v8::Arguments& args);
+  
+  // Function to be used in NodeJS, not in your C++ code
+  static v8::Handle<v8::Value> NodeRegReadCandidate(const v8::Arguments& args);
+  
+  // Function to be used internally, not in your C++ code
+  static void CallBackCandidate(uv_async_t *handle, int status);
+  
 protected:
   static const int channel_count = 4;
   const char* channel[4];
@@ -59,6 +101,11 @@ public:
   
   // Overwrite this function with your own code
   bool Stop() { return false; }
+  
+  void Run();
+  
+  // Function template for NodeJS, do not use in your own code
+  static void NodeRegister(v8::Handle<v8::Object> exports);
   
   // Read from this function and assume it means something
   // Remark: check if result is not NULL

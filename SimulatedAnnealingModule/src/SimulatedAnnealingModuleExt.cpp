@@ -19,9 +19,12 @@
 #include <cstdlib> // rand()
 //#include <ctime>
 #include <iostream>
+#include <sstream>
 
 #include <cmath>
 #define PI 3.14159265
+
+#include "json/json.h"
 
 using namespace rur;
 
@@ -49,12 +52,11 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 
 	// Initialize values randomly
 	for (SetStateArr::iterator itSet=_state._setStates.begin(); itSet!=_state._setStates.begin(); ++itSet) {
-		itSet->set(itSet->_set[rand() % itSet->size()]);
+		itSet->set(itSet->getSet()[rand() % itSet->size()]);
 		std::cout << itSet->get() << std::endl;
 	}
 	for (ContStateArr::iterator itCont=_state._contStates.begin(); itCont != _state._contStates.end(); ++itCont) {
-		itCont->set(randDouble(itCont->_min, itCont->_max));
-//		std::cout << itCont->_min << " " << itCont->_max << std::endl;
+		itCont->set(randDouble(itCont->min(), itCont->max()));
 		std::cout << itCont->get() << std::endl;
 	}
 
@@ -83,12 +85,12 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 	for (int k=0; k<numSteps; ++k) {
 
 		// generate random neighbour
-		// TODO: assuming only continuous statevars
 		for (size_t i=0; i<_state._contStates.size(); ++i) {
 			double val = _state[i] + randDouble(-0.5, 0.5);
 			_candidateState.setStateVal(i, val); // TODO: Fix this, should depend on min and max
 		}
 
+		// TODO: assuming only continuous statevars
 		// Calculate energy (writeCandidate())
 		double energy = 0.2 + _candidateState[0]*_candidateState[0] + _candidateState[1]*_candidateState[1]
 				- 0.1*cos(6.0*PI*_candidateState[0]) - 0.1*cos(6.0*PI*_candidateState[1]);
@@ -100,7 +102,7 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 			if (k==1)
 				deltaE_avg = deltaE;
 			double p = exp(-deltaE/(deltaE_avg*temp));
-			std::cout << "p=" << p << " deltaE=" << deltaE << " temp=" << temp << " deltaE_avg=" << deltaE_avg << std::endl;
+//			std::cout << "p=" << p << " deltaE=" << deltaE << " temp=" << temp << " deltaE_avg=" << deltaE_avg << std::endl;
 			if (randDouble(0.0, 1.0) < p) {
 				accept = true;
 			}
@@ -116,15 +118,19 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 			deltaE_avg = (deltaE_avg * (numUpdates-1.0) +  deltaE) / (double)numUpdates;
 		}
 
-		std::cout << k << " energy=" << energyBest << " state=";
-		for (size_t i=0; i<_state.size(); ++i) {
-			std::cout << " " << _state[i];
-		}
-		std::cout << std::endl;
+//		std::cout << k << " energy=" << energyBest << " state=";
+//		for (size_t i=0; i<_state.size(); ++i) {
+//			std::cout << " " << _state[i];
+//		}
+//		std::cout << std::endl;
 
 		// Lower the temperature
 		temp *= temp_frac;
 	}
+
+
+
+
 
 
 }
@@ -133,9 +139,44 @@ SimulatedAnnealingModuleExt::~SimulatedAnnealingModuleExt() {
 
 }
 
-//! Replace with your own code
 void SimulatedAnnealingModuleExt::Tick() {
+	std::string* readString;
+	readString = readSearchspace(false);
+	if (readString != NULL && !readString->empty()) {
+		std::cout << "Read: " << *readString << std::endl;
+		Json::Value root;
+		Json::Reader reader;
+		bool parsingSuccessful = reader.parse(*readString, root, false);
+		if (!parsingSuccessful) {
+			// report to the user the failure and their locations in the document.
+			std::cout << "Failed to parse configuration\n" << reader.getFormattedErrorMessages();
+		}
+		else {
+//			std::cout << root << std::endl;
 
+/* Shows how to loop over items in an object
+			// Root is always of type: object
+			Json::Value::Members members(root.getMemberNames());
+			Json::Value::Members::iterator it = members.begin();
+			for (; it != members.end(); ++it) {
+				const std::string& name = *it;
+				const Json::Value& childValue = root[name];
+				std::cout << name << "=" << childValue << std::endl;
+			}
+*/
+
+			const Json::Value jsonStateVars = root["statevars"];
+			for (int i=0; i<jsonStateVars.size(); ++i) {
+				std::cout << "Add state variable: " << jsonStateVars[i];
+			}
+
+			// Echo to test
+			std::stringstream ss;
+			ss << root;
+			writeCandidate(ss.str());
+		}
+		readString->clear();
+	}
 }
 
 //! Replace with your own code

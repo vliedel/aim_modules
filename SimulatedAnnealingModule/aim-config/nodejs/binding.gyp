@@ -27,6 +27,8 @@
 			],
 			
 			"cflags": [
+				"-DJSON_USE_EXCEPTION=0",
+				"-fexceptions"
 			],
 			
 			"libraries": [
@@ -39,7 +41,8 @@
 			"sources":[
 				"../../aim-core/src/SimulatedAnnealingModule.cpp",
 				"SimulatedAnnealingModuleNode.cc",
-				"../../src/SimulatedAnnealingModuleExt.cpp"
+				"../../src/SimulatedAnnealingModuleExt.cpp",
+				"../../src/jsoncpp.cpp"
 			],
 		}
 	]
