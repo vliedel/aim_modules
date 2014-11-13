@@ -15,7 +15,7 @@
 
 #include <SimulatedAnnealingModule.h>
 
-#include "SearchSpace.h"
+#include "StateVariable.hpp"
 
 namespace rur {
 
@@ -37,10 +37,16 @@ public:
 	//! As soon as Stop() returns "true", the SimulatedAnnealingModuleMain will stop the module
 	bool Stop();
 private:
-	typedef StateVariableSet<double> SetState;
-	typedef StateVariableContinuous<double> ContState;
+	typedef std::string SetStateType;
+	typedef int IntStateType;
+	typedef double RealStateType;
+
+	typedef StateVariableSet<SetStateType> SetState;
+	typedef StateVariableInt<IntStateType> IntState;
+	typedef StateVariableReal<RealStateType> RealState;
 	typedef std::vector<SetState> SetStateArr;
-	typedef std::vector<ContState> ContStateArr;
+	typedef std::vector<IntState> IntStateArr;
+	typedef std::vector<RealState> RealStateArr;
 
 	State<double> _state;
 	State<double> _candidateState;

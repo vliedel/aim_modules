@@ -27,6 +27,7 @@
 #include "json/json.h"
 
 using namespace rur;
+//using namespace StateVariable;
 
 SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 
@@ -38,26 +39,26 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 //	set.Init(setValues);
 //	_setStates.push_back(set);
 
-	ContState cont;
-	cont.Init(-1.0, 1.0);
+	RealState real;
+	real.init(-1.1, 1.1);
 //	_contStates.push_back(cont);
-	_state.addState(cont);
+	_state.addState(real);
 
-	ContState cont2;
-	cont2.Init(-1.0, 1.0);
+	RealState real2;
+	real2.init(-1.2, 1.2);
 //	_contStates.push_back(cont);
-	_state.addState(cont2);
+	_state.addState(real2);
 
 	srand(time(NULL));
 
 	// Initialize values randomly
 	for (SetStateArr::iterator itSet=_state._setStates.begin(); itSet!=_state._setStates.begin(); ++itSet) {
-		itSet->set(itSet->getSet()[rand() % itSet->size()]);
+		itSet->set(rand() % itSet->size());
 		std::cout << itSet->get() << std::endl;
 	}
-	for (ContStateArr::iterator itCont=_state._contStates.begin(); itCont != _state._contStates.end(); ++itCont) {
-		itCont->set(randDouble(itCont->min(), itCont->max()));
-		std::cout << itCont->get() << std::endl;
+	for (RealStateArr::iterator itReal=_state._realStates.begin(); itReal != _state._realStates.end(); ++itReal) {
+		itReal->set(randDouble(itReal->min(), itReal->max()));
+		std::cout << itReal->get() << std::endl;
 	}
 
 
@@ -85,7 +86,7 @@ SimulatedAnnealingModuleExt::SimulatedAnnealingModuleExt() {
 	for (int k=0; k<numSteps; ++k) {
 
 		// generate random neighbour
-		for (size_t i=0; i<_state._contStates.size(); ++i) {
+		for (size_t i=0; i<_state._realStates.size(); ++i) {
 			double val = _state[i] + randDouble(-0.5, 0.5);
 			_candidateState.setStateVal(i, val); // TODO: Fix this, should depend on min and max
 		}
@@ -166,14 +167,19 @@ void SimulatedAnnealingModuleExt::Tick() {
 */
 
 			const Json::Value jsonStateVars = root["statevars"];
-			for (int i=0; i<jsonStateVars.size(); ++i) {
-				std::cout << "Add state variable: " << jsonStateVars[i];
-			}
+			_state.readJson(jsonStateVars);
 
-			// Echo to test
-			std::stringstream ss;
-			ss << root;
-			writeCandidate(ss.str());
+			_candidateState = _state;
+
+			Json::Value output = _candidateState.writeJson();
+			Json::FastWriter jsonWriter;
+			std::string outStr = jsonWriter.write(output);
+			writeCandidate(outStr);
+
+//			// Echo to test
+//			std::stringstream ss;
+//			ss << root;
+//			writeCandidate(ss.str());
 		}
 		readString->clear();
 	}

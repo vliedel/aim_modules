@@ -45,6 +45,7 @@ void SimulatedAnnealingModule::Init(std::string & name) {
 
 static void* RunModule(void* object) {
   static_cast<SimulatedAnnealingModuleExt*>(object)->Run();
+  return 0;
 }
 
 void SimulatedAnnealingModule::Run() {

@@ -19,9 +19,9 @@ var searchSpace = {
 		},
 		{
 			"name" : "bar",
-			"type" : "float",
-			"min" : -1.0,
-			"max" : 1.0,
+			"type" : "real",
+			"min" : -1.5,
+			"max" : 1.5,
 		},
 		{
 			"name" : "lala",
