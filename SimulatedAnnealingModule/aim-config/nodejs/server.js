@@ -1,10 +1,10 @@
 var nodeModule = require('./build/Release/SimulatedAnnealingModule');
 //var nodeModule = require('./build/Debug/SimulatedAnnealingModule');
 
-var obj = new nodeModule.SimulatedAnnealingModule("0");
+var obj = new nodeModule.SimulatedAnnealingModule("0"); // 0 is the ID of the aim module, should be a positive integer
 
 var candidateCallBack = function(msg){
-	console.log("candidate:");
+	console.log("candidate:"); // Here you get a msg which should be sent to the DER agent
 	console.log(JSON.parse(msg));
 };
 obj.RegReadCandidate(candidateCallBack);
@@ -31,7 +31,8 @@ var searchSpace = {
 	],
 };
 
-obj.WriteSearchspace(JSON.stringify(searchSpace));
+obj.WriteSearchspace(JSON.stringify(searchSpace)); // Initialize the search space
+obj.WriteCost(..); // Response of the DER agent: the cost or error of how well the candidate matches the measure power
 //console.log(searchSpace);
 
 // Give some time to process stuff

@@ -247,6 +247,41 @@ public:
 		}
 	}
 
+//	Json::Value writeJson () {
+//		Json::Value json;
+//		json.resize(size());
+//		Json::ArrayIndex k=0;
+//		for (size_t i=0; i<_setStates.size(); ++i, ++k) {
+//			Json::Value jsonState;
+//			jsonState["name"] = _setStates[i].name();
+//			jsonState["type"] = "set";
+//			Json::Value jsonSet;
+//			jsonSet.resize(_setStates[i].size());
+//			for (unsigned int j=0; j<_setStates[i].size(); ++j) {
+//				jsonSet[j] = _setStates[i].getSet(j);
+//			}
+//			jsonState["set"] = jsonSet;
+//			json[k] = jsonState;
+//		}
+//		for (size_t i=0; i<_intStates.size(); ++i, ++k) {
+//			Json::Value jsonState;
+//			jsonState["name"] = _intStates[i].name();
+//			jsonState["type"] = "int";
+//			jsonState["min"] = _intStates[i].min();
+//			jsonState["max"] = _intStates[i].max();
+//			json[k] = jsonState;
+//		}
+//		for (size_t i=0; i<_realStates.size(); ++i, ++k) {
+//			Json::Value jsonState;
+//			jsonState["name"] = _realStates[i].name();
+//			jsonState["type"] = "real";
+//			jsonState["min"] = _realStates[i].min();
+//			jsonState["max"] = _realStates[i].max();
+//			json[k] = jsonState;
+//		}
+//		return json;
+//	}
+
 	Json::Value writeJson () {
 		Json::Value json;
 		json.resize(size());
@@ -255,28 +290,21 @@ public:
 			Json::Value jsonState;
 			jsonState["name"] = _setStates[i].name();
 			jsonState["type"] = "set";
-			Json::Value jsonSet;
-			jsonSet.resize(_setStates[i].size());
-			for (unsigned int j=0; j<_setStates[i].size(); ++j) {
-				jsonSet[j] = _setStates[i].getSet(j);
-			}
-			jsonState["set"] = jsonSet;
+			jsonState["val"] = _setStates[i].getSet(_setStates[i].get()); // Get the actual value, not index
 			json[k] = jsonState;
 		}
 		for (size_t i=0; i<_intStates.size(); ++i, ++k) {
 			Json::Value jsonState;
 			jsonState["name"] = _intStates[i].name();
 			jsonState["type"] = "int";
-			jsonState["min"] = _intStates[i].min();
-			jsonState["max"] = _intStates[i].max();
+			jsonState["val"] = _intStates[i].get();
 			json[k] = jsonState;
 		}
 		for (size_t i=0; i<_realStates.size(); ++i, ++k) {
 			Json::Value jsonState;
 			jsonState["name"] = _realStates[i].name();
 			jsonState["type"] = "real";
-			jsonState["min"] = _realStates[i].min();
-			jsonState["max"] = _realStates[i].max();
+			jsonState["val"] = _realStates[i].get();
 			json[k] = jsonState;
 		}
 		return json;
