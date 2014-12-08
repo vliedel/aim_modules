@@ -34,7 +34,7 @@ interface SimulatedAnnealingModule {
   void Command(in string json);
 
   // Value of the cost function for previous candidate output, this value is minimized
-  void Cost(in float input);
+  void Cost(in string json);
 
   // Candidate set of parameters to be fed to the costfunction, the cost is then expected to be sent
   void Candidate(out string json);

@@ -50,8 +50,8 @@ private:
   std::string readValCommand;
   pthread_mutex_t readMutexCommand;
   
-  std::deque<float> readBufCost;
-  float readValCost;
+  std::deque<std::string> readBufCost;
+  std::string readValCost;
   pthread_mutex_t readMutexCost;
   
   std::deque<std::string> writeBufCandidate;
@@ -117,7 +117,7 @@ public:
   
   // Read from this function and assume it means something
   // Remark: check if result is not NULL
-  float *readCost(bool blocking=false);
+  std::string *readCost(bool blocking=false);
   
   // Write to this function and assume it ends up at some receiving module
   bool writeCandidate(const std::string json);

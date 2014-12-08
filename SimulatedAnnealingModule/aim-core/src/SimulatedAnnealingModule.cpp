@@ -29,8 +29,7 @@ SimulatedAnnealingModule::SimulatedAnnealingModule():
   DestroyFlag = false;
   readBufSearchspace = std::deque<std::string>(0);
   readBufCommand = std::deque<std::string>(0);
-  readBufCost = std::deque<float>(0);
-  readValCost = float(0);
+  readBufCost = std::deque<std::string>(0);
   writeBufCandidate = std::deque<std::string>(0);
 }
 
@@ -194,12 +193,13 @@ v8::Handle<v8::Value> SimulatedAnnealingModule::NodeWriteCost(const v8::Argument
   if (args.Length() < 1)
     return scope.Close(v8::Boolean::New(false)); // Could also throw an exception
   pthread_mutex_lock(&(obj->readMutexCost));
-  obj->readBufCost.push_back(args[0]->NumberValue());
+  v8::String::Utf8Value v8str(args[0]->ToString());
+  obj->readBufCost.push_back(std::string(*v8str));
   pthread_mutex_unlock(&(obj->readMutexCost));
   return scope.Close(v8::Boolean::New(true));
 }
 
-float* SimulatedAnnealingModule::readCost(bool blocking) {
+std::string* SimulatedAnnealingModule::readCost(bool blocking) {
   pthread_mutex_lock(&destroyMutex);
   bool destroy = DestroyFlag;
   pthread_mutex_unlock(&destroyMutex);

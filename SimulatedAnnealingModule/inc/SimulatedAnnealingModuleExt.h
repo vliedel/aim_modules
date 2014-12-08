@@ -54,6 +54,28 @@ private:
 //	SetStateArr _setStates;
 //	ContStateArr _contStates;
 
+	std::string _stateVarsId;
+
+	/* Parameters */
+	// Probability of accepting worse solution at the start
+	double _p_start;// = 0.7;
+	// Probability of accepting worse solution at the end
+	double _p_end;// = 0.001;
+	// Number of iterations
+	double _numSteps;//= 2500;
+
+	/* algorithm vars */
+	double _avgDeltaE; // average delta energy
+	double _tempMult; // temperature is multiplied by this number each iteration
+	double _temp; // current temperature
+	double _energyBest; // current best energy
+	int _numIterations;
+	int _numUpdates;
+
+	void initCandidate();
+	void calcNewCandidate(double energy);
+	void sendCandidate();
+
 	double randDouble(double start, double end);
 };
 

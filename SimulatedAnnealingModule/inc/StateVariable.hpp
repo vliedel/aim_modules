@@ -175,11 +175,11 @@ public:
 	// Helper function
 	StateVariableType typeFromString(std::string typeStr) {
 		StateVariableType type = STATE_VAR_NONE;
-		if (!typeStr.compare("set"))
+		if (!typeStr.compare("ORDINAL") || !typeStr.compare("NOMINAL"))
 			type = STATE_VAR_SET;
 		if (!typeStr.compare("int"))
 			type = STATE_VAR_INT;
-		if (!typeStr.compare("real"))
+		if (!typeStr.compare("RATIO") || !typeStr.compare("INTERVAL"))
 			type = STATE_VAR_REAL;
 		return type;
 	}
@@ -289,22 +289,22 @@ public:
 		for (size_t i=0; i<_setStates.size(); ++i, ++k) {
 			Json::Value jsonState;
 			jsonState["name"] = _setStates[i].name();
-			jsonState["type"] = "set";
-			jsonState["val"] = _setStates[i].getSet(_setStates[i].get()); // Get the actual value, not index
+//			jsonState["type"] = "set";
+			jsonState["value"] = _setStates[i].getSet(_setStates[i].get()); // Get the actual value, not index
 			json[k] = jsonState;
 		}
 		for (size_t i=0; i<_intStates.size(); ++i, ++k) {
 			Json::Value jsonState;
 			jsonState["name"] = _intStates[i].name();
-			jsonState["type"] = "int";
-			jsonState["val"] = _intStates[i].get();
+//			jsonState["type"] = "int";
+			jsonState["value"] = _intStates[i].get();
 			json[k] = jsonState;
 		}
 		for (size_t i=0; i<_realStates.size(); ++i, ++k) {
 			Json::Value jsonState;
 			jsonState["name"] = _realStates[i].name();
-			jsonState["type"] = "real";
-			jsonState["val"] = _realStates[i].get();
+//			jsonState["type"] = "real";
+			jsonState["value"] = _realStates[i].get();
 			json[k] = jsonState;
 		}
 		return json;
@@ -322,6 +322,11 @@ public:
 		_realStates.push_back(state);
 	}
 	size_t size() { return _setStates.size() + _intStates.size() + _realStates.size(); }
+	void clear() {
+		_setStates.clear();
+		_intStates.clear();
+		_realStates.clear();
+	}
 
 	std::vector<StateVariableSet<SetType> > _setStates;
 	std::vector<StateVariableInt<IntType> > _intStates;
